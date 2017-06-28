@@ -1,3 +1,10 @@
+# Devel
+*.kdev4
+/*build*/
+CMakeLists.txt
+!/CMakeLists.txt
+
+
 # Prerequisites
 *.d
 
