@@ -31,9 +31,19 @@
 
 #pragma once
 
+#define USE_GLIBC     @CM_UNIX_GLIBC@
+#define USE_LIBUNWIND @CM_UNIX_LIBUNWIND@
+#define USE_WINDOWS   @CM_WIN32_WINDOWS@
+
+#if !USE_GLIBC && !USE_LIBUNWIND && !USE_WINDOWS
+#error "No Backend (tracer engine) enabled"
+#endif
+
 namespace tracer {
 
 namespace constants {
+
+const unsigned int MAX_FUNC_NAME = 1024;
 
 const int         VERSION_MAJOR     = @CM_VERSION_MAJOR@;
 const int         VERSION_MINOR     = @CM_VERSION_MINOR@;

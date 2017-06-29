@@ -24,18 +24,25 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#pragma once
+
+#define UNW_LOCAL_ONLY
+
 #include "defines.hpp"
-#include "Tracer.hpp"
+#include "AbstractTracer.hpp"
+#include <libunwind.h>
 
-using namespace tracer;
+namespace tracer {
 
-Tracer::Tracer() {}
+class LibUnwindTracer : public AbstractTracer {
+ private:
+  unw_context_t context;
+  unw_cursor_t  cursor;
 
-Tracer *Tracer::getTracer() {
-  if (!tracer)
-    tracer = new Tracer();
+ public:
+  LibUnwindTracer();
 
-  return tracer;
+  bool init() override;
+  void print() override;
+};
 }
-
-Tracer *Tracer::tracer = nullptr;

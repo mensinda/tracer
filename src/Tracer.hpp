@@ -25,3 +25,19 @@
  */
 
 #pragma once
+
+#include "defines.hpp"
+#include <memory>
+
+namespace tracer {
+
+class Tracer {
+ private:
+  static Tracer *tracer;
+
+  Tracer();
+
+ public:
+  static Tracer *getTracer();
+};
+}

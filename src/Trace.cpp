@@ -25,17 +25,51 @@
  */
 
 #include "defines.hpp"
-#include "Tracer.hpp"
+#include "Trace.hpp"
+#include <iostream>
+
+#if USE_LIBUNWIND
+#include "LibUnwindTracer.hpp"
+#endif
 
 using namespace tracer;
 
-Tracer::Tracer() {}
+Trace::Trace() : Trace(getAvaliableEngines()[0]) {}
 
-Tracer *Tracer::getTracer() {
-  if (!tracer)
-    tracer = new Tracer();
+Trace::Trace(TraceerEngines engine) {
+#if USE_LIBUNWIND
+  if (engine == TraceerEngines::LIBUNWIND)
+    tracerEngine = new LibUnwindTracer;
+#endif
 
-  return tracer;
+  if (!tracerEngine) {
+    std::cerr << "Unable to initialize tracer engine" << std::endl;
+    return;
+  }
+
+  tracerEngine->init();
 }
 
-Tracer *Tracer::tracer = nullptr;
+
+void Trace::print() {
+  if (!tracerEngine)
+    return;
+
+  tracerEngine->print();
+}
+
+std::vector<TraceerEngines> Trace::getAvaliableEngines() {
+  std::vector<TraceerEngines> engines;
+
+#if USE_LIBUNWIND
+  engines.emplace_back(TraceerEngines::LIBUNWIND);
+#endif
+#if USE_GLIBC
+  engines.emplace_back(TraceerEngines::GLIBC);
+#endif
+#if USE_WINDOWS
+  engines.emplace_back(TraceerEngines::WIN32);
+#endif
+
+  return engines;
+}

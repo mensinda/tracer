@@ -24,18 +24,26 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#pragma once
+
 #include "defines.hpp"
-#include "Tracer.hpp"
+#include "AbstractTracer.hpp"
+#include <memory>
+#include <vector>
 
-using namespace tracer;
+namespace tracer {
 
-Tracer::Tracer() {}
+enum class TraceerEngines { LIBUNWIND, GLIBC, WIN32 };
 
-Tracer *Tracer::getTracer() {
-  if (!tracer)
-    tracer = new Tracer();
+class Trace {
+ private:
+  AbstractTracer *tracerEngine = nullptr;
 
-  return tracer;
+ public:
+  Trace(TraceerEngines engine);
+  Trace();
+
+  void                               print();
+  static std::vector<TraceerEngines> getAvaliableEngines();
+};
 }
-
-Tracer *Tracer::tracer = nullptr;

@@ -24,18 +24,15 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#pragma once
+
 #include "defines.hpp"
-#include "Tracer.hpp"
 
-using namespace tracer;
+namespace tracer {
 
-Tracer::Tracer() {}
-
-Tracer *Tracer::getTracer() {
-  if (!tracer)
-    tracer = new Tracer();
-
-  return tracer;
+class AbstractTracer {
+ public:
+  virtual bool init()  = 0;
+  virtual void print() = 0;
+};
 }
-
-Tracer *Tracer::tracer = nullptr;

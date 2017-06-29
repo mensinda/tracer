@@ -25,15 +25,36 @@
  */
 
 #include "defines.hpp"
+#include "Trace.hpp"
 #include "Tracer.hpp"
 #include <iostream>
 
 using namespace std;
+using namespace tracer;
+
+int f1();
+int f2();
+int f3();
+int f4();
+int f5();
+
+int f1() { return f2(); }
+int f2() { return f3(); }
+int f3() { return f4(); }
+int f4() { return f5(); }
+int f5() {
+  Trace t1;
+  t1.print();
+  return 5;
+}
+
+
 
 int main(int argc, char *argv[]) {
   (void)argc;
   (void)argv;
 
-  cerr << "HELLO basicTest" << endl;
+  cerr << "HELLO basicTest: f1" << endl;
+  f1();
   return 0;
 }

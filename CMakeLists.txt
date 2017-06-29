@@ -101,6 +101,14 @@ endif( UNIX )
 
 run_git()
 
+############################
+# Setting build conditions #
+############################
+
+add_platform( OS WIN32 TARGET windows )
+add_platform( OS UNIX  TARGET libunwind glibc )
+check_platform()
+
 ####################
 # Generate subdirs #
 ####################
@@ -129,7 +137,7 @@ if( NOT DISABLE_TESTS )
       PATH         "${I}"
       NAME         "${J}"
       TEMPLATE     "${PROJECT_SOURCE_DIR}/cmake/templates/CMakeLists.exe.txt"
-      DEPENDENCIES ${DEPS}
+      DEPENDENCIES ${DEPS} tracer
     )
 
     add_dependencies( check ${J} )

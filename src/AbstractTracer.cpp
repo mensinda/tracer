@@ -25,17 +25,6 @@
  */
 
 #include "defines.hpp"
-#include "Tracer.hpp"
+#include "AbstractTracer.hpp"
 
 using namespace tracer;
-
-Tracer::Tracer() {}
-
-Tracer *Tracer::getTracer() {
-  if (!tracer)
-    tracer = new Tracer();
-
-  return tracer;
-}
-
-Tracer *Tracer::tracer = nullptr;

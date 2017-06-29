@@ -25,17 +25,49 @@
  */
 
 #include "defines.hpp"
-#include "Tracer.hpp"
+#include "LibUnwindTracer.hpp"
+#include <cxxabi.h>
+#include <iostream>
 
 using namespace tracer;
 
-Tracer::Tracer() {}
+LibUnwindTracer::LibUnwindTracer() {}
 
-Tracer *Tracer::getTracer() {
-  if (!tracer)
-    tracer = new Tracer();
+bool LibUnwindTracer::init() {
+  if (unw_getcontext(&context) != 0) {
+    std::cerr << "[TRACER] (libunwind) Failed to get context" << std::endl;
+    return false;
+  }
 
-  return tracer;
+  if (unw_init_local(&cursor, &context) != 0) {
+    std::cerr << "[TRACER] (libunwind) Failed to initialize" << std::endl;
+    return false;
+  }
+
+  while (unw_step(&cursor) > 0) {
+    unw_word_t ip;
+    unw_word_t offset;
+    unw_get_reg(&cursor, UNW_REG_IP, &ip);
+
+    char funcName[constants::MAX_FUNC_NAME];
+    unw_get_proc_name(&cursor, funcName, sizeof(funcName), &offset);
+
+    char   demangled[constants::MAX_FUNC_NAME];
+    int    status = 0;
+    size_t legth  = sizeof(demangled);
+    abi::__cxa_demangle(funcName, demangled, &legth, &status);
+
+    std::string funcNameStr;
+    if (status == 0) {
+      funcNameStr = demangled;
+    } else {
+      funcNameStr = funcName;
+    }
+
+    std::cout << "[TRACER] ADDR: " << ip << " -- " << funcNameStr << std::endl;
+  }
+
+  return true;
 }
 
-Tracer *Tracer::tracer = nullptr;
+void LibUnwindTracer::print() { std::cout << "BACKTRACE" << std::endl; }
