@@ -32,6 +32,8 @@ namespace tracer {
 
 class AbstractTracer {
  public:
+  virtual ~AbstractTracer();
+
   virtual bool init()  = 0;
   virtual void print() = 0;
 };

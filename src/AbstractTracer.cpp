@@ -28,3 +28,5 @@
 #include "AbstractTracer.hpp"
 
 using namespace tracer;
+
+AbstractTracer::~AbstractTracer() {}
