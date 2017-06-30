@@ -55,6 +55,9 @@ int main(int argc, char *argv[]) {
   (void)argv;
 
   cerr << "HELLO basicTest: f1" << endl;
+
   f1();
+
+
   return 0;
 }

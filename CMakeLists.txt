@@ -46,7 +46,10 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_C_STANDARD            11 )
 set( CMAKE_C_STANDARD_REQUIRED   ON )
 
-option( DISABLE_TESTS "Disables all tests" OFF )
+set( CMAKE_POSITION_INDEPENDENT_CODE ON )
+
+option( DISABLE_TESTS      "Disables all tests"            OFF )
+#option( PREFER_STATIC_LIBS "Prefer linking to static libs" ON  )
 
 ################################
 # Set up the build environment #
@@ -55,12 +58,12 @@ option( DISABLE_TESTS "Disables all tests" OFF )
 add_compiler(
   GNU MIN_VERSION "7.1"
   ALL        "-Wall -Wextra -Wfloat-equal -Wshadow -Wno-unknown-pragmas -Wno-implicit-fallthrough -fno-strict-aliasing -fdiagnostics-color=always ${GCC_STDLIB_FLAGS}"
-  DEBUG      "-O0 -Werror -fno-omit-frame-pointer" ${COVERAGE_COMPILER_FLAG}
-  RELEASE    "-O3"
+  DEBUG      "-Og -Werror -fno-omit-frame-pointer -rdynamic" ${COVERAGE_COMPILER_FLAG}
+  RELEASE    "-O3 -fno-omit-frame-pointer -rdynamic -g"
 
   C_ALL      "-Wall -Wextra -Wfloat-equal -Wshadow -Wno-unknown-pragmas -std=c11 -fdiagnostics-color=always"
-  C_DEBUG    "-O0 -Werror -fno-omit-frame-pointer" ${COVERAGE_COMPILER_FLAG}
-  C_RELEASE  "-O3"
+  C_DEBUG    "-Og -Werror -fno-omit-frame-pointer -rdynamic" ${COVERAGE_COMPILER_FLAG}
+  C_RELEASE  "-O3 -fno-omit-frame-pointer -rdynamic -g"
 
   SANITIZE   "-fsanitize=${SANITIZERS}"
 )
@@ -73,7 +76,7 @@ add_compiler(
              "-Wno-global-constructors -Wno-switch-enum -Wno-reserved-id-macro"
              "-Wno-documentation-unknown-command -Wno-unknown-pragmas"
              "-Wno-disabled-macro-expansion"
-  DEBUG      "-Werror -fno-omit-frame-pointer"
+  DEBUG      "-Werror -gline-tables-only -fstandalone-debug"
   RELEASE    "-O3"
 
   C_ALL      "-Weverything -ftemplate-backtrace-limit=0  -std=c11 -fcolor-diagnostics"
@@ -82,7 +85,7 @@ add_compiler(
              "-Wno-global-constructors -Wno-switch-enum -Wno-reserved-id-macro"
              "-Wno-documentation-unknown-command -Wno-unknown-pragmas"
              "-Wno-disabled-macro-expansion"
-  C_DEBUG    "-Werror -fno-omit-frame-pointer"
+  C_DEBUG    "-Werror -fno-omit-frame-pointer -g"
   C_RELEASE  "-O3"
 
   SANITIZE "-fsanitize=${SANITIZERS}"
@@ -96,7 +99,8 @@ set( DEPS )
 
 if( UNIX )
   find_package( LibUnwind 1.2.1 REQUIRED )
-  set( DEPS ${DEPS} LibUnwind::LibUnwind )
+  find_package( LibELF          REQUIRED )
+  set( DEPS ${DEPS} LibUnwind::LibUnwind LibELF::DW )
 endif( UNIX )
 
 run_git()

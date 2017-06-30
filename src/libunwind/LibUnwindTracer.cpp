@@ -28,6 +28,8 @@
 #include "LibUnwindTracer.hpp"
 #include <cxxabi.h>
 #include <iostream>
+#include <libdwfl.h>
+#include <unistd.h>
 
 using namespace tracer;
 
@@ -44,28 +46,69 @@ bool LibUnwindTracer::init() {
     return false;
   }
 
+  char *debuginfo_path = nullptr;
+
+  Dwfl_Callbacks callbacks;
+  callbacks.find_elf        = dwfl_linux_proc_find_elf;
+  callbacks.find_debuginfo  = dwfl_standard_find_debuginfo;
+  callbacks.section_address = dwfl_offline_section_address;
+  callbacks.debuginfo_path  = &debuginfo_path;
+
+  Dwfl *dwfl = dwfl_begin(&callbacks);
+  if (!dwfl) {
+    std::cerr << "[TRACER] (libunwind) Failed to initialize libdwfl" << std::endl;
+    return false;
+  }
+
+  dwfl_linux_proc_report(dwfl, getpid());
+  dwfl_report_end(dwfl, nullptr, nullptr);
+
   while (unw_step(&cursor) > 0) {
     unw_word_t ip;
-    unw_word_t offset;
     unw_get_reg(&cursor, UNW_REG_IP, &ip);
 
-    char funcName[constants::MAX_FUNC_NAME];
-    unw_get_proc_name(&cursor, funcName, sizeof(funcName), &offset);
+    Dwarf_Addr   addr = ip - 4;
+    GElf_Sym     sym;
+    GElf_Word    shndx;
+    Dwfl_Module *module        = dwfl_addrmodule(dwfl, addr);
+    Dwfl_Line *  line          = dwfl_module_getsrc(module, addr);
+    const char * function_name = dwfl_module_addrsym(module, addr, &sym, &shndx);
 
-    char   demangled[constants::MAX_FUNC_NAME];
-    int    status = 0;
-    size_t legth  = sizeof(demangled);
-    abi::__cxa_demangle(funcName, demangled, &legth, &status);
+    if (!line)
+      std::cerr << "NO LINE" << std::endl;
+
+    int         ln, col;
+    const char *file = dwfl_lineinfo(line, nullptr, &ln, &col, nullptr, nullptr);
 
     std::string funcNameStr;
-    if (status == 0) {
-      funcNameStr = demangled;
-    } else {
-      funcNameStr = funcName;
+    std::string fileNameStr;
+
+    if (file)
+      fileNameStr = file;
+
+    if (!file)
+      std::cerr << "NO FILE" << std::endl;
+
+    if (function_name) {
+      char   demangled[constants::MAX_FUNC_NAME];
+      int    status = 0;
+      size_t legth  = sizeof(demangled);
+      abi::__cxa_demangle(function_name, demangled, &legth, &status);
+
+      if (status == 0) {
+        funcNameStr = demangled;
+      } else {
+        funcNameStr = function_name;
+      }
     }
 
-    std::cout << "[TRACER] ADDR: " << ip << " -- " << funcNameStr << std::endl;
+    std::cout << "[TRACER] ADDR: " << /*ip << " -- " <<*/ funcNameStr << " ---- " << fileNameStr << ":" << ln << ":"
+              << col
+              << " ::: " << dwfl_module_info(module, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr)
+              << " - " << ip - 4 << std::endl;
   }
+
+  dwfl_end(dwfl);
 
   return true;
 }
