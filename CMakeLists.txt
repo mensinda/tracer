@@ -58,12 +58,12 @@ option( DISABLE_TESTS      "Disables all tests"            OFF )
 add_compiler(
   GNU MIN_VERSION "7.1"
   ALL        "-Wall -Wextra -Wfloat-equal -Wshadow -Wno-unknown-pragmas -Wno-implicit-fallthrough -fno-strict-aliasing -fdiagnostics-color=always ${GCC_STDLIB_FLAGS}"
-  DEBUG      "-Og -Werror -fno-omit-frame-pointer -rdynamic" ${COVERAGE_COMPILER_FLAG}
-  RELEASE    "-O3 -fno-omit-frame-pointer -rdynamic -g"
+  DEBUG      "-Og -Werror -fno-omit-frame-pointer -gcolumn-info" ${COVERAGE_COMPILER_FLAG}
+  RELEASE    "-O3 -fno-omit-frame-pointer -g -gcolumn-info"
 
   C_ALL      "-Wall -Wextra -Wfloat-equal -Wshadow -Wno-unknown-pragmas -std=c11 -fdiagnostics-color=always"
-  C_DEBUG    "-Og -Werror -fno-omit-frame-pointer -rdynamic" ${COVERAGE_COMPILER_FLAG}
-  C_RELEASE  "-O3 -fno-omit-frame-pointer -rdynamic -g"
+  C_DEBUG    "-Og -Werror -fno-omit-frame-pointer -gcolumn-info" ${COVERAGE_COMPILER_FLAG}
+  C_RELEASE  "-O3 -fno-omit-frame-pointer -g -gcolumn-info"
 
   SANITIZE   "-fsanitize=${SANITIZERS}"
 )
@@ -75,9 +75,9 @@ add_compiler(
              "-Wno-gnu-anonymous-struct -Wno-nested-anon-types -Wno-exit-time-destructors"
              "-Wno-global-constructors -Wno-switch-enum -Wno-reserved-id-macro"
              "-Wno-documentation-unknown-command -Wno-unknown-pragmas"
-             "-Wno-disabled-macro-expansion"
-  DEBUG      "-Werror -gline-tables-only -fstandalone-debug"
-  RELEASE    "-O3"
+             "-Wno-disabled-macro-expansion -save-temps"
+  DEBUG      "-Werror -gline-tables-only"
+  RELEASE    "-O3 -gline-tables-only"
 
   C_ALL      "-Weverything -ftemplate-backtrace-limit=0  -std=c11 -fcolor-diagnostics"
              "-Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-padded -Wno-float-equal"
@@ -85,8 +85,8 @@ add_compiler(
              "-Wno-global-constructors -Wno-switch-enum -Wno-reserved-id-macro"
              "-Wno-documentation-unknown-command -Wno-unknown-pragmas"
              "-Wno-disabled-macro-expansion"
-  C_DEBUG    "-Werror -fno-omit-frame-pointer -g"
-  C_RELEASE  "-O3"
+  C_DEBUG    "-Werror -gline-tables-only"
+  C_RELEASE  "-O3 -gline-tables-only"
 
   SANITIZE "-fsanitize=${SANITIZERS}"
 )

@@ -28,3 +28,9 @@ include("${CMAKE_CURRENT_LIST_DIR}/${CMAKE_FIND_PACKAGE_NAME}Targets.cmake")
 get_filename_component(PACKAGE_PREFIX_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../" ABSOLUTE)
 
 set( ${CMAKE_FIND_PACKAGE_NAME}_INCLUDE_DIRS "${PACKAGE_PREFIX_DIR}/include/tracer" )
+
+set( GCC_FLAGS_RELEASE   "-fno-omit-frame-pointer -rdynamic -g -gcolumn-info" )
+set( CLANG_FLAGS_RELEASE "-fno-omit-frame-pointer -g" )
+
+set( GCC_FLAGS_DEBUG   "-fno-omit-frame-pointer -rdynamic -g -gcolumn-info" )
+set( CLANG_FLAGS_DEBUG "-fno-omit-frame-pointer -gline-tables-only" )

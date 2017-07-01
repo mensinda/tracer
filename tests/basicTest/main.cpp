@@ -28,6 +28,7 @@
 #include "Trace.hpp"
 #include "Tracer.hpp"
 #include <iostream>
+#include <unistd.h>
 
 using namespace std;
 using namespace tracer;

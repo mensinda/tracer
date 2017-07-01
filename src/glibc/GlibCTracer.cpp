@@ -25,27 +25,21 @@
  */
 
 #include "defines.hpp"
-#include "LibUnwindTracer.hpp"
+#include "GlibCTracer.hpp"
 #include <cxxabi.h>
 #include <dwarf.h>
+#include <execinfo.h>
 #include <iostream>
 #include <libdwfl.h>
 #include <unistd.h>
 
 using namespace tracer;
 
-LibUnwindTracer::LibUnwindTracer() {}
+GlibCTracer::GlibCTracer() {}
 
-bool LibUnwindTracer::init() {
-  if (unw_getcontext(&context) != 0) {
-    std::cerr << "[TRACER] (libunwind) Failed to get context" << std::endl;
-    return false;
-  }
-
-  if (unw_init_local(&cursor, &context) != 0) {
-    std::cerr << "[TRACER] (libunwind) Failed to initialize" << std::endl;
-    return false;
-  }
+bool GlibCTracer::init() {
+  void *addrs[256];
+  int   numTrace = backtrace(addrs, 256);
 
   char *debuginfo_path = nullptr;
 
@@ -64,11 +58,8 @@ bool LibUnwindTracer::init() {
   dwfl_linux_proc_report(dwfl, getpid());
   dwfl_report_end(dwfl, nullptr, nullptr);
 
-  while (unw_step(&cursor) > 0) {
-    unw_word_t ip;
-    unw_get_reg(&cursor, UNW_REG_IP, &ip);
-
-    Dwarf_Addr   addr = ip - 4;
+  for (int i = 0; i < numTrace; ++i) {
+    Dwarf_Addr   addr = reinterpret_cast<Dwarf_Addr>(addrs[i]) - 4;
     GElf_Sym     sym;
     GElf_Word    shndx;
     Dwfl_Module *module = dwfl_addrmodule(dwfl, addr);
@@ -125,7 +116,7 @@ bool LibUnwindTracer::init() {
     std::cout << "[TRACER] ADDR: " << /*ip << " -- " <<*/ funcNameStr << " ---- " << fileNameStr << ":" << ln << ":"
               << col
               << " ::: " << dwfl_module_info(module, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr)
-              << " - " << ip - 4 << std::endl;
+              << " - " << addr << std::endl;
   }
 
   dwfl_end(dwfl);
@@ -133,4 +124,4 @@ bool LibUnwindTracer::init() {
   return true;
 }
 
-void LibUnwindTracer::print() { std::cout << "BACKTRACE" << std::endl; }
+void GlibCTracer::print() { std::cout << "BACKTRACE GLIBC" << std::endl; }

@@ -32,6 +32,10 @@
 #include "LibUnwindTracer.hpp"
 #endif
 
+#if USE_GLIBC
+#include "GlibCTracer.hpp"
+#endif
+
 using namespace tracer;
 
 Trace::Trace() : Trace(getAvaliableEngines()[0]) {}
@@ -40,6 +44,11 @@ Trace::Trace(TraceerEngines engine) {
 #if USE_LIBUNWIND
   if (engine == TraceerEngines::LIBUNWIND)
     tracerEngine = new LibUnwindTracer;
+#endif
+
+#if USE_GLIBC
+  if (engine == TraceerEngines::GLIBC)
+    tracerEngine = new GlibCTracer;
 #endif
 
   if (!tracerEngine) {

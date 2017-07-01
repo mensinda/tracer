@@ -24,64 +24,19 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#pragma once
+
 #include "defines.hpp"
-#include "Trace.hpp"
-#include "Tracer.hpp"
-#include <iostream>
-#include <signal.h>
-#include <unistd.h>
+#include "AbstractTracer.hpp"
 
-using namespace std;
-using namespace tracer;
+namespace tracer {
 
-void handler(int signum, siginfo_t *info, void *ctx) {
-  Trace t1;
-  t1.print();
-  (void)ctx;
-  (void)info;
+class GlibCTracer : public AbstractTracer {
+ private:
+ public:
+  GlibCTracer();
 
-  ucontext_t *cont = reinterpret_cast<ucontext_t *>(ctx);
-  std::cout << std::hex << cont->uc_mcontext.gregs[REG_RIP] << std::dec << std::endl;
-
-
-  struct sigaction act;
-  sigemptyset(&act.sa_mask);
-  act.sa_flags   = SA_RESTART;
-  act.sa_handler = SIG_DFL;
-  sigaction(signum, &act, nullptr);
-  kill(getpid(), signum);
-}
-
-int f1(int x);
-int f2(int x);
-int f3(int x);
-int f4(int x);
-int f5(int x);
-
-int f1(int x) { return f2(++x); }
-int f2(int x) { return f3(++x); }
-int f3(int x) { return f4(++x); }
-int f4(int x) { return f5(++x); }
-int f5(int x) {
-  int  i = 0;
-  int *p = &i;
-  p      = nullptr;
-  *p     = x; // SEGFAULT here
-  return i;
-}
-
-int main(int argc, char *argv[]) {
-  (void)argc;
-  (void)argv;
-
-  struct sigaction act;
-  sigemptyset(&act.sa_mask);
-  act.sa_flags   = SA_SIGINFO;
-  act.sa_handler = reinterpret_cast<__sighandler_t>(handler);
-  sigaction(SIGSEGV, &act, nullptr);
-
-  f1(42);
-
-  cout << "HELLO segFaultTest" << endl;
-  return 0;
+  bool init() override;
+  void print() override;
+};
 }
