@@ -33,6 +33,8 @@
 using namespace std;
 using namespace tracer;
 
+void handler(int signum, siginfo_t *info, void *ctx);
+
 void handler(int signum, siginfo_t *info, void *ctx) {
   Tracer t1;
   t1();
@@ -41,13 +43,16 @@ void handler(int signum, siginfo_t *info, void *ctx) {
   (void)info;
 
   ucontext_t *cont = reinterpret_cast<ucontext_t *>(ctx);
-  std::cout << std::hex << cont->uc_mcontext.gregs[REG_RIP] << std::dec << std::endl;
+  (void)cont;
 
 
   struct sigaction act;
   sigemptyset(&act.sa_mask);
-  act.sa_flags   = SA_RESTART;
+  act.sa_flags = SA_RESTART;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wold-style-cast"
   act.sa_handler = SIG_DFL;
+#pragma clang diagnostic pop
   sigaction(signum, &act, nullptr);
   kill(getpid(), signum);
 }
