@@ -110,7 +110,34 @@ run_git()
 ############################
 
 add_platform( OS WIN32 TARGET windows )
-add_platform( OS UNIX  TARGET libunwind glibc )
+
+add_platform(
+  OS UNIX
+  TARGET
+    libunwind glibc # Tracer
+    libdwlf         # Debug Info
+)
+
+
+# Automatically add a debug info platform target if non is set
+foreach( I IN ITEMS "UNIX_LIBUNWIND" "UNIX_GLIBC" )
+  if( "${I}" IN_LIST PLATFORM_TARGET )
+    set( FOUND OFF )
+    foreach( J IN ITEMS "UNIX_LIBDWLF" )
+      if( "${J}" IN_LIST PLATFORM_TARGET )
+        set( FOUND ON )
+        break()
+      endif()
+    endforeach()
+
+    if( NOT FOUND )
+      list( APPEND PLATFORM_TARGET "UNIX_LIBDWLF" )
+    endif()
+
+    break()
+  endif()
+endforeach()
+
 check_platform()
 
 ####################

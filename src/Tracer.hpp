@@ -27,17 +27,40 @@
 #pragma once
 
 #include "defines.hpp"
-#include <memory>
+#include "AbstractDebugInfo.hpp"
+#include "AbstractTracer.hpp"
+#include <vector>
 
 namespace tracer {
 
+enum class TraceerEngines { LIBUNWIND, GLIBC, WIN32 };
+enum class DebuggerEngines { LIBDWFL };
+
 class Tracer {
  private:
-  static Tracer *tracer;
+  AbstractTracer *   tracerEngine   = nullptr;
+  AbstractDebugInfo *debuggerEngine = nullptr;
 
-  Tracer();
+  std::vector<Frame> frames;
 
  public:
-  static Tracer *getTracer();
+  Tracer(TraceerEngines engine, DebuggerEngines debugger);
+  Tracer();
+  virtual ~Tracer();
+
+  Tracer(const Tracer &) = delete;
+  Tracer(Tracer &&)      = delete;
+
+  Tracer &operator=(const Tracer &) = delete;
+  Tracer &operator=(Tracer &&) = delete;
+
+  std::vector<Frame> *trace();
+  std::vector<Frame> *getFrames();
+
+  std::vector<Frame> *operator()() { return trace(); }
+
+  void                                print();
+  static std::vector<TraceerEngines>  getAvaliableEngines();
+  static std::vector<DebuggerEngines> getAvaliableDebuggers();
 };
 }

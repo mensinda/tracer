@@ -26,16 +26,103 @@
 
 #include "defines.hpp"
 #include "Tracer.hpp"
+#include <iostream>
+
+#if USE_LIBUNWIND
+#include "LibUnwindTracer.hpp"
+#endif
+
+#if USE_GLIBC
+#include "GlibCTracer.hpp"
+#endif
+
+#if USE_DWFL
+#include "DebugInfoDWLF.hpp"
+#endif
 
 using namespace tracer;
 
-Tracer::Tracer() {}
+Tracer::Tracer() : Tracer(getAvaliableEngines()[0], getAvaliableDebuggers()[0]) {}
 
-Tracer *Tracer::getTracer() {
-  if (!tracer)
-    tracer = new Tracer();
+Tracer::Tracer(TraceerEngines engine, DebuggerEngines debugger) {
+#if USE_LIBUNWIND
+  if (engine == TraceerEngines::LIBUNWIND)
+    tracerEngine = new LibUnwindTracer;
+#endif
 
-  return tracer;
+#if USE_GLIBC
+  if (engine == TraceerEngines::GLIBC)
+    tracerEngine = new GlibCTracer;
+#endif
+
+#if USE_DWFL
+  if (debugger == DebuggerEngines::LIBDWFL)
+    debuggerEngine = new DebugInfoDWFL;
+#endif
+
+  if (!tracerEngine) {
+    std::cerr << "[TRACER] Unable to initialize tracer engine" << std::endl;
+    return;
+  }
+
+  if (!debuggerEngine) {
+    std::cerr << "[TRACER] Unable to initialize debugger engine" << std::endl;
+    return;
+  }
 }
 
-Tracer *Tracer::tracer = nullptr;
+Tracer::~Tracer() {
+  if (tracerEngine)
+    delete tracerEngine;
+
+  if (debuggerEngine)
+    delete debuggerEngine;
+}
+
+std::vector<Frame> *Tracer::trace() {
+  if (!tracerEngine || !debuggerEngine) {
+    std::cerr << "[TRACER] Can not generate a backtrace without a tracerEngine or debuggerEngine" << std::endl;
+    return nullptr;
+  }
+
+  frames = tracerEngine->backtrace();
+  debuggerEngine->processFrames(frames);
+
+  return &frames;
+}
+
+std::vector<Frame> *Tracer::getFrames() { return &frames; }
+
+
+void Tracer::print() {
+  if (!tracerEngine)
+    return;
+
+  //   tracerEngine->print();
+}
+
+std::vector<TraceerEngines> Tracer::getAvaliableEngines() {
+  std::vector<TraceerEngines> engines;
+
+#if USE_LIBUNWIND
+  engines.emplace_back(TraceerEngines::LIBUNWIND);
+#endif
+#if USE_GLIBC
+  engines.emplace_back(TraceerEngines::GLIBC);
+#endif
+#if USE_WINDOWS
+  engines.emplace_back(TraceerEngines::WIN32);
+#endif
+
+  return engines;
+}
+
+std::vector<DebuggerEngines> Tracer::getAvaliableDebuggers() {
+  std::vector<DebuggerEngines> engines;
+
+#if USE_DWFL
+  engines.emplace_back(DebuggerEngines::LIBDWFL);
+#endif
+
+  return engines;
+}

@@ -25,22 +25,21 @@
  */
 
 #include "defines.hpp"
-#include "GlibCTracer.hpp"
+#include "DebugInfoDWLF.hpp"
 #include <cxxabi.h>
 #include <dwarf.h>
-#include <execinfo.h>
 #include <iostream>
 #include <libdwfl.h>
 #include <unistd.h>
 
 using namespace tracer;
 
-GlibCTracer::GlibCTracer() {}
+DebugInfoDWFL::DebugInfoDWFL() {}
 
-bool GlibCTracer::init() {
-  void *addrs[256];
-  int   numTrace = backtrace(addrs, 256);
+DebugInfoDWFL::~DebugInfoDWFL() {}
 
+
+bool DebugInfoDWFL::processFrames(std::vector<Frame> &frames) {
   char *debuginfo_path = nullptr;
 
   Dwfl_Callbacks callbacks;
@@ -51,20 +50,46 @@ bool GlibCTracer::init() {
 
   Dwfl *dwfl = dwfl_begin(&callbacks);
   if (!dwfl) {
-    std::cerr << "[TRACER] (libunwind) Failed to initialize libdwfl" << std::endl;
+    std::cerr << "[TRACER] (libdwfl) Failed to initialize libdwfl" << std::endl;
     return false;
   }
 
   dwfl_linux_proc_report(dwfl, getpid());
   dwfl_report_end(dwfl, nullptr, nullptr);
 
-  for (int i = 0; i < numTrace; ++i) {
-    Dwarf_Addr   addr = reinterpret_cast<Dwarf_Addr>(addrs[i]) - 4;
+  for (auto &i : frames) {
+    Dwarf_Addr   addr = reinterpret_cast<Dwarf_Addr>(i.frameAddr) - 4;
     GElf_Sym     sym;
     GElf_Word    shndx;
-    Dwfl_Module *module = dwfl_addrmodule(dwfl, addr);
-    //     Dwfl_Line *  line          = dwfl_module_getsrc(module, addr);
-    const char *function_name = dwfl_module_addrsym(module, addr, &sym, &shndx);
+    Dwfl_Module *module       = nullptr;
+    const char * functionName = nullptr;
+    const char * moduleName   = nullptr;
+
+    module = dwfl_addrmodule(dwfl, addr);
+    if (!module)
+      continue;
+
+    moduleName = dwfl_module_info(module, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
+    if (moduleName) {
+      i.flags |= static_cast<uint16_t>(FrameFlags::HAS_MODULE_INFO);
+      i.moduleName = moduleName;
+    }
+
+    functionName = dwfl_module_addrsym(module, addr, &sym, &shndx);
+    if (functionName) {
+      char   demangled[constants::MAX_FUNC_NAME];
+      int    status = 0;
+      size_t legth  = sizeof(demangled);
+      abi::__cxa_demangle(functionName, demangled, &legth, &status);
+
+      i.flags |= static_cast<uint16_t>(FrameFlags::HAS_FUNC_NAME);
+
+      if (status == 0) {
+        i.funcName = demangled;
+      } else {
+        i.funcName = functionName;
+      }
+    }
 
     Dwarf_Addr mod_bias = 0;
     Dwarf_Die *cudie    = dwfl_module_addrdie(module, addr, &mod_bias);
@@ -89,39 +114,19 @@ bool GlibCTracer::init() {
         cudie = nullptr;
     }
 
-    int         ln = 0, col = 0;
-    std::string fileNameStr;
     Dwarf_Line *line = dwarf_getsrc_die(cudie, addr - mod_bias);
     if (line) {
-      fileNameStr = dwarf_linesrc(line, nullptr, nullptr);
-      dwarf_lineno(line, &ln);
-      dwarf_linecol(line, &col);
+      i.fileName = dwarf_linesrc(line, nullptr, nullptr);
+      dwarf_lineno(line, &i.line);
+      dwarf_linecol(line, &i.column);
+      i.flags |= static_cast<uint16_t>(FrameFlags::HAS_LINE_INFO);
     }
 
-
-    std::string funcNameStr;
-    if (function_name) {
-      char   demangled[constants::MAX_FUNC_NAME];
-      int    status = 0;
-      size_t legth  = sizeof(demangled);
-      abi::__cxa_demangle(function_name, demangled, &legth, &status);
-
-      if (status == 0) {
-        funcNameStr = demangled;
-      } else {
-        funcNameStr = function_name;
-      }
-    }
-
-    std::cout << "[TRACER] ADDR: " << /*ip << " -- " <<*/ funcNameStr << " ---- " << fileNameStr << ":" << ln << ":"
-              << col
-              << " ::: " << dwfl_module_info(module, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr)
-              << " - " << addr << std::endl;
+    std::cout << "[TRACER] " << i.funcName << " -- " << i.fileName << ":" << i.line << ":" << i.column
+              << " ::: " << i.moduleName << std::endl;
   }
 
   dwfl_end(dwfl);
 
   return true;
 }
-
-void GlibCTracer::print() { std::cout << "BACKTRACE GLIBC" << std::endl; }

@@ -81,6 +81,6 @@ msg "START BUILD"
 
 testExec cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/tracer ..
 testExec make
-testExec make check
+#testExec make check
 
 exit $ERROR_COUNT

@@ -24,25 +24,37 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma once
-
-#define UNW_LOCAL_ONLY
-
 #include "defines.hpp"
-#include "AbstractTracer.hpp"
-#include <libunwind.h>
+#include "LibUnwindTracer.hpp"
+#include <iostream>
 
-namespace tracer {
+using namespace tracer;
 
-class LibUnwindTracer : public AbstractTracer {
- private:
-  unw_context_t context;
-  unw_cursor_t  cursor;
+LibUnwindTracer::LibUnwindTracer() {}
 
- public:
-  LibUnwindTracer();
+std::vector<Frame> LibUnwindTracer::backtrace() {
+  std::vector<Frame> frames;
 
-  bool init() override;
-  void print() override;
-};
+  if (unw_getcontext(&context) != 0) {
+    std::cerr << "[TRACER] (libunwind) Failed to get context" << std::endl;
+    return frames;
+  }
+
+  if (unw_init_local(&cursor, &context) != 0) {
+    std::cerr << "[TRACER] (libunwind) Failed to initialize" << std::endl;
+    return frames;
+  }
+
+  Frame temp;
+  temp.flags |= static_cast<uint16_t>(FrameFlags::HAS_ADDRESS);
+
+  while (unw_step(&cursor) > 0) {
+    unw_word_t ip;
+    unw_get_reg(&cursor, UNW_REG_IP, &ip);
+
+    temp.frameAddr = static_cast<Address>(ip);
+    frames.push_back(temp);
+  }
+
+  return frames;
 }

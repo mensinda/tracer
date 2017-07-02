@@ -25,7 +25,6 @@
  */
 
 #include "defines.hpp"
-#include "Trace.hpp"
 #include "Tracer.hpp"
 #include <iostream>
 #include <signal.h>
@@ -35,7 +34,8 @@ using namespace std;
 using namespace tracer;
 
 void handler(int signum, siginfo_t *info, void *ctx) {
-  Trace t1;
+  Tracer t1;
+  t1();
   t1.print();
   (void)ctx;
   (void)info;

@@ -25,7 +25,6 @@
  */
 
 #include "defines.hpp"
-#include "Trace.hpp"
 #include "Tracer.hpp"
 #include <iostream>
 #include <unistd.h>
@@ -44,7 +43,8 @@ int f2() { return f3(); }
 int f3() { return f4(); }
 int f4() { return f5(); }
 int f5() {
-  Trace t1;
+  Tracer t1(TraceerEngines::GLIBC, DebuggerEngines::LIBDWFL);
+  t1();
   t1.print();
   return 5;
 }

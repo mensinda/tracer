@@ -27,14 +27,15 @@
 #pragma once
 
 #include "defines.hpp"
+#include "AbstractDebugInfo.hpp"
 
 namespace tracer {
 
-class AbstractTracer {
+class DebugInfoDWFL : public AbstractDebugInfo {
  public:
-  virtual ~AbstractTracer();
+  DebugInfoDWFL();
+  virtual ~DebugInfoDWFL();
 
-  virtual bool init()  = 0;
-  virtual void print() = 0;
+  bool processFrames(std::vector<Frame> &frames) override;
 };
 }

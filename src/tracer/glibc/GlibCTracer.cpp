@@ -25,60 +25,24 @@
  */
 
 #include "defines.hpp"
-#include "Trace.hpp"
-#include <iostream>
-
-#if USE_LIBUNWIND
-#include "LibUnwindTracer.hpp"
-#endif
-
-#if USE_GLIBC
 #include "GlibCTracer.hpp"
-#endif
+#include <execinfo.h>
 
 using namespace tracer;
 
-Trace::Trace() : Trace(getAvaliableEngines()[0]) {}
+GlibCTracer::GlibCTracer() {}
 
-Trace::Trace(TraceerEngines engine) {
-#if USE_LIBUNWIND
-  if (engine == TraceerEngines::LIBUNWIND)
-    tracerEngine = new LibUnwindTracer;
-#endif
+std::vector<Frame> GlibCTracer::backtrace() {
+  void *addrs[constants::MAX_TRACE_DEPTH];
+  int   numTrace = ::backtrace(addrs, constants::MAX_TRACE_DEPTH);
 
-#if USE_GLIBC
-  if (engine == TraceerEngines::GLIBC)
-    tracerEngine = new GlibCTracer;
-#endif
-
-  if (!tracerEngine) {
-    std::cerr << "Unable to initialize tracer engine" << std::endl;
-    return;
+  std::vector<Frame> frames;
+  Frame              temp;
+  temp.flags |= static_cast<uint16_t>(FrameFlags::HAS_ADDRESS);
+  for (int i = 0; i < numTrace; ++i) {
+    temp.frameAddr = reinterpret_cast<Address>(addrs[i]);
+    frames.push_back(temp);
   }
 
-  tracerEngine->init();
-}
-
-
-void Trace::print() {
-  if (!tracerEngine)
-    return;
-
-  tracerEngine->print();
-}
-
-std::vector<TraceerEngines> Trace::getAvaliableEngines() {
-  std::vector<TraceerEngines> engines;
-
-#if USE_LIBUNWIND
-  engines.emplace_back(TraceerEngines::LIBUNWIND);
-#endif
-#if USE_GLIBC
-  engines.emplace_back(TraceerEngines::GLIBC);
-#endif
-#if USE_WINDOWS
-  engines.emplace_back(TraceerEngines::WIN32);
-#endif
-
-  return engines;
+  return frames;
 }

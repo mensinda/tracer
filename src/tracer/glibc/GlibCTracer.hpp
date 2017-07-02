@@ -32,11 +32,9 @@
 namespace tracer {
 
 class GlibCTracer : public AbstractTracer {
- private:
  public:
   GlibCTracer();
 
-  bool init() override;
-  void print() override;
+  std::vector<Frame> backtrace() override;
 };
 }
