@@ -41,7 +41,11 @@ void handler(int signum) {
   DefaultPrinter p1(&t1);
   p1.printToStdErr();
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wold-style-cast"
   signal(signum, SIG_DFL);
+#pragma clang diagnostic pop
+
   kill(getpid(), signum);
 }
 

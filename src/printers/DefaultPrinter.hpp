@@ -44,10 +44,10 @@ class DefaultPrinter : public AbstractPrinter {
   };
 
  private:
-  unsigned int maxModuleNameLegth = 5;
-  unsigned int maxLineInfoLength  = 5;
-  unsigned int maxAddressLength   = 5;
-  unsigned int maxFuncNameLegth   = 5;
+  size_t maxModuleNameLegth = 5;
+  size_t maxLineInfoLength  = 5;
+  size_t maxAddressLength   = 5;
+  size_t maxFuncNameLegth   = 5;
 
   bool calculatedMaxLengths = false;
 

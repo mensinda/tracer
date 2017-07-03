@@ -110,7 +110,7 @@ std::string DefaultPrinter::genStringForFrame(size_t frameNum) {
 
   if ((i.flags & FrameFlags::HAS_ADDRESS) == FrameFlags::HAS_ADDRESS) {
     stringstream addressStream;
-    addressStream << hex << "0x" << setfill('0') << setw(maxAddressLength) << i.frameAddr;
+    addressStream << hex << "0x" << setfill('0') << setw(static_cast<int>(maxAddressLength)) << i.frameAddr;
     address = addressStream.str();
   }
 
@@ -126,9 +126,9 @@ std::string DefaultPrinter::genStringForFrame(size_t frameNum) {
     module = moduleP;
   }
 
-  outStream << cfg.prefix << setfill(' ') << left << setw(maxFuncNameLegth) << funcName << cfg.seper1
-            << setw(maxLineInfoLength) << lineInfo << cfg.seper2 << setw(maxModuleNameLegth) << module << cfg.seper3
-            << address << cfg.suffix;
+  outStream << cfg.prefix << setfill(' ') << left << setw(static_cast<int>(maxFuncNameLegth)) << funcName << cfg.seper1
+            << setw(static_cast<int>(maxLineInfoLength)) << lineInfo << cfg.seper2
+            << setw(static_cast<int>(maxModuleNameLegth)) << module << cfg.seper3 << address << cfg.suffix;
 
   return outStream.str();
 }
