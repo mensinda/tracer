@@ -71,7 +71,7 @@ bool DebugInfoDWFL::processFrames(std::vector<Frame> &frames) {
 
     moduleName = dwfl_module_info(module, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
     if (moduleName) {
-      i.flags |= static_cast<uint16_t>(FrameFlags::HAS_MODULE_INFO);
+      i.flags |= FrameFlags::HAS_MODULE_INFO;
       i.moduleName = moduleName;
     }
 
@@ -82,7 +82,7 @@ bool DebugInfoDWFL::processFrames(std::vector<Frame> &frames) {
       size_t legth  = sizeof(demangled);
       abi::__cxa_demangle(functionName, demangled, &legth, &status);
 
-      i.flags |= static_cast<uint16_t>(FrameFlags::HAS_FUNC_NAME);
+      i.flags |= FrameFlags::HAS_FUNC_NAME;
 
       if (status == 0) {
         i.funcName = demangled;
@@ -119,11 +119,8 @@ bool DebugInfoDWFL::processFrames(std::vector<Frame> &frames) {
       i.fileName = dwarf_linesrc(line, nullptr, nullptr);
       dwarf_lineno(line, &i.line);
       dwarf_linecol(line, &i.column);
-      i.flags |= static_cast<uint16_t>(FrameFlags::HAS_LINE_INFO);
+      i.flags |= FrameFlags::HAS_LINE_INFO;
     }
-
-    std::cout << "[TRACER] " << i.funcName << " -- " << i.fileName << ":" << i.line << ":" << i.column
-              << " ::: " << i.moduleName << std::endl;
   }
 
   dwfl_end(dwfl);

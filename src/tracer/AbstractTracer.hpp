@@ -37,5 +37,6 @@ class AbstractTracer {
   virtual ~AbstractTracer();
 
   virtual std::vector<Frame> backtrace() = 0;
+  virtual void               setContext(void *);
 };
 }

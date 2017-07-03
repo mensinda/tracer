@@ -97,9 +97,11 @@ std::vector<Frame> *Tracer::getFrames() { return &frames; }
 void Tracer::print() {
   if (!tracerEngine)
     return;
-
-  //   tracerEngine->print();
 }
+
+AbstractTracer *   Tracer::getTracerEngine() { return tracerEngine; }
+AbstractDebugInfo *Tracer::getDebuggerEngine() { return debuggerEngine; }
+
 
 std::vector<TraceerEngines> Tracer::getAvaliableEngines() {
   std::vector<TraceerEngines> engines;

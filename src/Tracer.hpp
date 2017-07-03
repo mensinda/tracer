@@ -59,6 +59,9 @@ class Tracer {
 
   std::vector<Frame> *operator()() { return trace(); }
 
+  AbstractTracer *   getTracerEngine();
+  AbstractDebugInfo *getDebuggerEngine();
+
   void                                print();
   static std::vector<TraceerEngines>  getAvaliableEngines();
   static std::vector<DebuggerEngines> getAvaliableDebuggers();

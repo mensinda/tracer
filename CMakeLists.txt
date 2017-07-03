@@ -95,7 +95,7 @@ add_compiler(
 # Check Dependencies #
 ######################
 
-set( DEPS )
+set( DEPS stdc++fs )
 
 if( UNIX )
   find_package( LibUnwind 1.2.1 REQUIRED )

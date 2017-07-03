@@ -24,11 +24,46 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#pragma once
+
 #include "defines.hpp"
-#include "AbstractTracer.hpp"
+#include "AbstractPrinter.hpp"
 
-using namespace tracer;
+namespace tracer {
 
-AbstractTracer::~AbstractTracer() {}
+class DefaultPrinter : public AbstractPrinter {
+ public:
+  struct Config {
+    std::string prefix = " in ";
+    std::string seper1 = " at ";
+    std::string seper2 = " -- ";
+    std::string seper3 = " [";
+    std::string suffix = "]";
 
-void AbstractTracer::setContext(void *) {}
+    bool shortenFiles = true;
+  };
+
+ private:
+  unsigned int maxModuleNameLegth = 5;
+  unsigned int maxLineInfoLength  = 5;
+  unsigned int maxAddressLength   = 5;
+  unsigned int maxFuncNameLegth   = 5;
+
+  bool calculatedMaxLengths = false;
+
+  Config cfg;
+
+  void calcMaxNameLengths();
+
+ public:
+  DefaultPrinter() = delete;
+  DefaultPrinter(Tracer *t);
+  virtual ~DefaultPrinter();
+
+  void setConfig(Config newCfg) { cfg = newCfg; }
+
+  Config getConfig() const { return cfg; }
+
+  std::string genStringForFrame(size_t frameNum) override;
+};
+}

@@ -25,6 +25,7 @@
  */
 
 #include "defines.hpp"
+#include "DefaultPrinter.hpp"
 #include "Tracer.hpp"
 #include <iostream>
 #include <signal.h>
@@ -33,27 +34,14 @@
 using namespace std;
 using namespace tracer;
 
-void handler(int signum, siginfo_t *info, void *ctx);
-
-void handler(int signum, siginfo_t *info, void *ctx) {
+void handler(int signum);
+void handler(int signum) {
   Tracer t1;
   t1();
-  t1.print();
-  (void)ctx;
-  (void)info;
+  DefaultPrinter p1(&t1);
+  p1.printToStdErr();
 
-  ucontext_t *cont = reinterpret_cast<ucontext_t *>(ctx);
-  (void)cont;
-
-
-  struct sigaction act;
-  sigemptyset(&act.sa_mask);
-  act.sa_flags = SA_RESTART;
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wold-style-cast"
-  act.sa_handler = SIG_DFL;
-#pragma clang diagnostic pop
-  sigaction(signum, &act, nullptr);
+  signal(signum, SIG_DFL);
   kill(getpid(), signum);
 }
 
@@ -79,14 +67,8 @@ int main(int argc, char *argv[]) {
   (void)argc;
   (void)argv;
 
-  struct sigaction act;
-  sigemptyset(&act.sa_mask);
-  act.sa_flags   = SA_SIGINFO;
-  act.sa_handler = reinterpret_cast<__sighandler_t>(handler);
-  sigaction(SIGSEGV, &act, nullptr);
-
+  signal(SIGSEGV, handler);
   f1(42);
 
-  cout << "HELLO segFaultTest" << endl;
   return 0;
 }

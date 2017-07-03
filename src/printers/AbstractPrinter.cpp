@@ -25,10 +25,42 @@
  */
 
 #include "defines.hpp"
-#include "AbstractTracer.hpp"
+#include "AbstractPrinter.hpp"
+#include "Tracer.hpp"
+#include <fstream>
+#include <iostream>
 
 using namespace tracer;
+using namespace std;
 
-AbstractTracer::~AbstractTracer() {}
+AbstractPrinter::~AbstractPrinter() {}
 
-void AbstractTracer::setContext(void *) {}
+AbstractPrinter::AbstractPrinter(Tracer *t) : trace(t) {}
+
+std::string tracer::AbstractPrinter::generateString() {
+  std::string outSTR;
+  auto *      frames = trace->getFrames();
+
+  for (size_t i = 0; i < frames->size(); ++i)
+    outSTR += genStringForFrame(i) + '\n';
+
+  return outSTR;
+}
+
+void tracer::AbstractPrinter::printToFile(std::string file, bool append) {
+  auto mode = ios_base::app | ios_base::out;
+
+  if (!append)
+    mode |= ios_base::trunc;
+
+  ofstream outStream(file, mode);
+
+  if (!outStream.is_open())
+    return;
+
+  outStream << generateString() << endl;
+  outStream.close();
+}
+
+void tracer::AbstractPrinter::printToStdErr() { cerr << generateString() << endl; }
+void tracer::AbstractPrinter::printToStdOut() { cout << generateString() << endl; }

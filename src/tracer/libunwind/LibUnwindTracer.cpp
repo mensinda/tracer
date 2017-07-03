@@ -34,10 +34,13 @@ LibUnwindTracer::LibUnwindTracer() {}
 
 std::vector<Frame> LibUnwindTracer::backtrace() {
   std::vector<Frame> frames;
+  unw_cursor_t       cursor;
 
-  if (unw_getcontext(&context) != 0) {
-    std::cerr << "[TRACER] (libunwind) Failed to get context" << std::endl;
-    return frames;
+  if (!custonContext) {
+    if (unw_getcontext(&context) != 0) {
+      std::cerr << "[TRACER] (libunwind) Failed to get context" << std::endl;
+      return frames;
+    }
   }
 
   if (unw_init_local(&cursor, &context) != 0) {
@@ -46,7 +49,7 @@ std::vector<Frame> LibUnwindTracer::backtrace() {
   }
 
   Frame temp;
-  temp.flags |= static_cast<uint16_t>(FrameFlags::HAS_ADDRESS);
+  temp.flags |= FrameFlags::HAS_ADDRESS;
 
   while (unw_step(&cursor) > 0) {
     unw_word_t ip;
@@ -57,4 +60,11 @@ std::vector<Frame> LibUnwindTracer::backtrace() {
   }
 
   return frames;
+}
+
+void LibUnwindTracer::setContext(void *ctx) {
+  if (typeid(unw_context_t) == typeid(ucontext_t)) {
+    context       = *reinterpret_cast<unw_context_t *>(ctx);
+    custonContext = true;
+  }
 }

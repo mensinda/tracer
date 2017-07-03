@@ -37,11 +37,13 @@ namespace tracer {
 class LibUnwindTracer : public AbstractTracer {
  private:
   unw_context_t context;
-  unw_cursor_t  cursor;
+
+  bool custonContext = false;
 
  public:
   LibUnwindTracer();
 
   std::vector<Frame> backtrace() override;
+  void setContext(void *ctx) override;
 };
 }

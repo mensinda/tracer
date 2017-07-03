@@ -38,7 +38,7 @@ std::vector<Frame> GlibCTracer::backtrace() {
 
   std::vector<Frame> frames;
   Frame              temp;
-  temp.flags |= static_cast<uint16_t>(FrameFlags::HAS_ADDRESS);
+  temp.flags |= FrameFlags::HAS_ADDRESS;
   for (int i = 0; i < numTrace; ++i) {
     temp.frameAddr = reinterpret_cast<Address>(addrs[i]);
     frames.push_back(temp);

@@ -35,11 +35,33 @@ enum class FrameFlags : uint16_t {
   HAS_ADDRESS     = 0b0001, // Should always be set
   HAS_FUNC_NAME   = 0b0010,
   HAS_LINE_INFO   = 0b0100,
-  HAS_MODULE_INFO = 0b1000
+  HAS_MODULE_INFO = 0b1000,
+
+  NONE = 0
 };
 
+inline FrameFlags operator~(FrameFlags a) { return static_cast<FrameFlags>(~static_cast<uint16_t>(a)); }
+inline FrameFlags operator|(FrameFlags a, FrameFlags b) {
+  return static_cast<FrameFlags>(static_cast<uint16_t>(a) | static_cast<uint16_t>(b));
+}
+inline FrameFlags operator&(FrameFlags a, FrameFlags b) {
+  return static_cast<FrameFlags>(static_cast<uint16_t>(a) & static_cast<uint16_t>(b));
+}
+inline FrameFlags operator^(FrameFlags a, FrameFlags b) {
+  return static_cast<FrameFlags>(static_cast<uint16_t>(a) ^ static_cast<uint16_t>(b));
+}
+inline FrameFlags &operator|=(FrameFlags &a, FrameFlags b) {
+  return reinterpret_cast<FrameFlags &>(reinterpret_cast<uint16_t &>(a) |= static_cast<uint16_t>(b));
+}
+inline FrameFlags &operator&=(FrameFlags &a, FrameFlags b) {
+  return reinterpret_cast<FrameFlags &>(reinterpret_cast<uint16_t &>(a) &= static_cast<uint16_t>(b));
+}
+inline FrameFlags &operator^=(FrameFlags &a, FrameFlags b) {
+  return reinterpret_cast<FrameFlags &>(reinterpret_cast<uint16_t &>(a) ^= static_cast<uint16_t>(b));
+}
+
 struct Frame {
-  uint16_t flags = 0;
+  FrameFlags flags = FrameFlags::NONE;
 
   Address     frameAddr = 0;
   std::string funcName;

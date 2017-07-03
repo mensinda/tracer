@@ -25,6 +25,7 @@
  */
 
 #include "defines.hpp"
+#include "DefaultPrinter.hpp"
 #include "Tracer.hpp"
 #include <iostream>
 #include <unistd.h>
@@ -45,7 +46,8 @@ int f4() { return f5(); }
 int f5() {
   Tracer t1(TraceerEngines::GLIBC, DebuggerEngines::LIBDWFL);
   t1();
-  t1.print();
+  DefaultPrinter p1(&t1);
+  p1.printToStdOut();
   return 5;
 }
 
@@ -55,10 +57,7 @@ int main(int argc, char *argv[]) {
   (void)argc;
   (void)argv;
 
-  cerr << "HELLO basicTest: f1" << endl;
-
   f1();
-
 
   return 0;
 }

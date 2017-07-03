@@ -24,11 +24,29 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#pragma once
+
 #include "defines.hpp"
-#include "AbstractTracer.hpp"
+#include <string>
 
-using namespace tracer;
+namespace tracer {
 
-AbstractTracer::~AbstractTracer() {}
+class Tracer;
 
-void AbstractTracer::setContext(void *) {}
+class AbstractPrinter {
+ protected:
+  Tracer *trace;
+
+ public:
+  virtual ~AbstractPrinter();
+  AbstractPrinter() = delete;
+  AbstractPrinter(Tracer *t);
+
+  virtual std::string genStringForFrame(size_t frameNum) = 0;
+
+  std::string generateString();
+  void printToFile(std::string file, bool append = true);
+  void printToStdOut();
+  void printToStdErr();
+};
+}
