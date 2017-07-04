@@ -40,7 +40,7 @@ class DefaultPrinter : public AbstractPrinter {
     std::string seper3 = " [";
     std::string suffix = "]";
 
-    bool shortenFiles = true;
+    bool shortenFiles = false;
   };
 
  private:

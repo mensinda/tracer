@@ -48,8 +48,9 @@ set( CMAKE_C_STANDARD_REQUIRED   ON )
 
 set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 
-option( DISABLE_TESTS      "Disables all tests"            OFF )
-#option( PREFER_STATIC_LIBS "Prefer linking to static libs" ON  )
+option( DISABLE_TESTS       "Disables all tests"                      OFF )
+option( AUTO_ENABLE_MODULES "Automatically enable modules when found" ON )
+#option( PREFER_STATIC_LIBS  "Prefer linking to static libs"           ON  )
 
 ################################
 # Set up the build environment #
@@ -61,7 +62,7 @@ add_compiler(
   DEBUG      "-Og -Werror -fno-omit-frame-pointer -gcolumn-info" ${COVERAGE_COMPILER_FLAG}
   RELEASE    "-O3 -fno-omit-frame-pointer -g -gcolumn-info"
 
-  C_ALL      "-Wall -Wextra -Wfloat-equal -Wshadow -Wno-unknown-pragmas -std=c11 -fdiagnostics-color=always"
+  C_ALL      "-Wall -std=c11 -fdiagnostics-color=always"
   C_DEBUG    "-Og -Werror -fno-omit-frame-pointer -gcolumn-info" ${COVERAGE_COMPILER_FLAG}
   C_RELEASE  "-O3 -fno-omit-frame-pointer -g -gcolumn-info"
 
@@ -79,13 +80,8 @@ add_compiler(
   DEBUG      "-Werror -gline-tables-only"
   RELEASE    "-O3 -gline-tables-only"
 
-  C_ALL      "-Weverything -ftemplate-backtrace-limit=0  -std=c11 -fcolor-diagnostics"
-             "-Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-padded -Wno-float-equal"
-             "-Wno-gnu-anonymous-struct -Wno-nested-anon-types -Wno-exit-time-destructors"
-             "-Wno-global-constructors -Wno-switch-enum -Wno-reserved-id-macro"
-             "-Wno-documentation-unknown-command -Wno-unknown-pragmas"
-             "-Wno-disabled-macro-expansion"
-  C_DEBUG    "-Werror -gline-tables-only"
+  C_ALL      "-Wall"
+  C_DEBUG    ""
   C_RELEASE  "-O3 -gline-tables-only"
 
   SANITIZE "-fsanitize=${SANITIZERS}"
@@ -96,12 +92,19 @@ add_compiler(
 ######################
 
 set( DEPS stdc++fs )
+set( ALL_MODULES )
 
-if( UNIX )
-  find_package( LibUnwind 1.2.1 REQUIRED )
-  find_package( LibELF          REQUIRED )
-  set( DEPS ${DEPS} LibUnwind::LibUnwind LibELF::DW )
-endif( UNIX )
+macro( ADD_MODULE_DEP NAME PL_TARGET DEP )
+  find_package( ${NAME} )
+  set( ${NAME}_MOD_DEP   ${DEP} )
+  set( ${NAME}_PL_TARGET ${PL_TARGET} )
+  list( APPEND ALL_MODULES ${NAME} )
+endmacro( ADD_MODULE_DEP )
+
+ADD_MODULE_DEP( LibUnwind UNIX_LIBUNWIND LibUnwind::LibUnwind )
+ADD_MODULE_DEP( LibELF    UNIX_LIBDWLF   LibELF::DW )
+ADD_MODULE_DEP( LibBFD    UNIX_LIBBFD    LibBFD::LibBFD )
+ADD_MODULE_DEP( Execinfo  UNIX_GLIBC    "Execinfo::Execinfo DLFCN::DLFCN")
 
 run_git()
 
@@ -115,28 +118,27 @@ add_platform(
   OS UNIX
   TARGET
     libunwind glibc # Tracer
-    libdwlf         # Debug Info
+    libdwlf libbfd  # Debug Info
 )
 
+if( AUTO_ENABLE_MODULES )
+  set( PLATFORM_TARGET "" )
+endif( AUTO_ENABLE_MODULES )
 
-# Automatically add a debug info platform target if non is set
-foreach( I IN ITEMS "UNIX_LIBUNWIND" "UNIX_GLIBC" )
-  if( "${I}" IN_LIST PLATFORM_TARGET )
-    set( FOUND OFF )
-    foreach( J IN ITEMS "UNIX_LIBDWLF" )
-      if( "${J}" IN_LIST PLATFORM_TARGET )
-        set( FOUND ON )
-        break()
-      endif()
-    endforeach()
+foreach( I IN LISTS ALL_MODULES )
+  if( AUTO_ENABLE_MODULES )
+    if( ${I}_FOUND )
+      list( APPEND PLATFORM_TARGET ${${I}_PL_TARGET} )
+      list( APPEND DEPS            ${${I}_MOD_DEP} )
+    endif( ${I}_FOUND )
+  endif( AUTO_ENABLE_MODULES )
 
-    if( NOT FOUND )
-      list( APPEND PLATFORM_TARGET "UNIX_LIBDWLF" )
-    endif()
-
-    break()
-  endif()
-endforeach()
+  if( ${${I}_PL_TARGET} IN_LIST PLATFORM_TARGET )
+    if( NOT ${I}_FOUND )
+      message( SEND_ERROR "${${I}_PL_TARGET} is in list PLATFORM_TARGET but ${I} is not found!" )
+    endif( NOT ${I}_FOUND )
+  endif( ${${I}_PL_TARGET} IN_LIST PLATFORM_TARGET )
+endforeach( I IN LISTS ALL_MODULES )
 
 check_platform()
 
@@ -149,6 +151,7 @@ new_project_library(
   NAME         "tracer"
   TEMPLATE     "${PROJECT_SOURCE_DIR}/cmake/templates/CMakeLists.lib.txt"
   DEPENDENCIES ${DEPS}
+  EXCLUDE      ".*/whereami/example/.*"
 )
 
 if( NOT DISABLE_TESTS )

@@ -40,6 +40,10 @@
 #include "DebugInfoDWLF.hpp"
 #endif
 
+#if USE_BFD
+#include "DebugInfoBFD.hpp"
+#endif
+
 using namespace tracer;
 
 Tracer::Tracer() : Tracer(getAvaliableEngines()[0], getAvaliableDebuggers()[0]) {}
@@ -58,6 +62,11 @@ Tracer::Tracer(TraceerEngines engine, DebuggerEngines debugger) {
 #if USE_DWFL
   if (debugger == DebuggerEngines::LIBDWFL)
     debuggerEngine = new DebugInfoDWFL;
+#endif
+
+#if USE_BFD
+  if (debugger == DebuggerEngines::LIBBFD)
+    debuggerEngine = new DebugInfoBFD;
 #endif
 
   if (!tracerEngine) {
@@ -124,6 +133,10 @@ std::vector<DebuggerEngines> Tracer::getAvaliableDebuggers() {
 
 #if USE_DWFL
   engines.emplace_back(DebuggerEngines::LIBDWFL);
+#endif
+
+#if USE_BFD
+  engines.emplace_back(DebuggerEngines::LIBBFD);
 #endif
 
   return engines;

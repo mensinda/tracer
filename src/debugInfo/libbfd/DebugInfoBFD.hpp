@@ -24,40 +24,67 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#pragma once
+
+#define PACKAGE // required by bfd.h
+
 #include "defines.hpp"
-#include "DefaultPrinter.hpp"
-#include "Tracer.hpp"
-#include <iostream>
-#include <unistd.h>
+#include "AbstractDebugInfo.hpp"
+#include <bfd.h>
 
-using namespace std;
-using namespace tracer;
+namespace tracer {
 
-int f1();
-int f2();
-int f3();
-int f4();
-int f5();
+namespace internal {
+class abfdRAII {
+ public:
+  bfd *abfd = nullptr;
 
-int f1() { return f2(); }
-int f2() { return f3(); }
-int f3() { return f4(); }
-int f4() { return f5(); }
-int f5() {
-  Tracer t1;
-  t1();
-  DefaultPrinter p1(&t1);
-  p1.printToStdOut();
-  return 5;
+  ~abfdRAII() {
+    if (abfd)
+      bfd_close(abfd);
+  }
+
+  inline bfd *operator()() const noexcept { return abfd; }
+};
+
+class asymbolRAII {
+ public:
+  bfd_symbol **symbols = nullptr;
+
+  ~asymbolRAII() {
+    if (symbols)
+      free(symbols);
+  }
+
+  inline bfd_symbol **operator()() const noexcept { return symbols; }
+};
 }
 
+class DebugInfoBFD : public AbstractDebugInfo {
+ private:
+  static bool isBfdInit;
 
+  static void findInSection(bfd *abfd, bfd_section *sec, void *ctx);
 
-int main(int argc, char *argv[]) {
-  (void)argc;
-  (void)argv;
+  struct FindInSectionContext {
+    bool found = false;
 
-  f1();
+    Address addr     = 0;
+    Address baseAddr = 0;
 
-  return 0;
+    internal::asymbolRAII *secSym    = nullptr;
+    internal::asymbolRAII *dynSecSym = nullptr;
+
+    std::string fileName;
+    std::string funcName;
+    int         line = 0;
+    int         col  = 0;
+  } ctx;
+
+ public:
+  DebugInfoBFD();
+  virtual ~DebugInfoBFD();
+
+  bool processFrames(std::vector<Frame> &frames) override;
+};
 }

@@ -38,12 +38,13 @@
 #define USE_WINDOWS   @CM_WIN32_WINDOWS@
 
 #define USE_DWFL      @CM_UNIX_LIBDWLF@
+#define USE_BFD       @CM_UNIX_LIBBFD@
 
 #if !USE_GLIBC && !USE_LIBUNWIND && !USE_WINDOWS
 #error "No Backend (tracer engine) enabled"
 #endif
 
-#if !USE_DWFL
+#if !USE_DWFL && !USE_BFD
 #error "No Backend (debugging engine) enabled"
 #endif
 

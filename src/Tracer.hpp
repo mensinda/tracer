@@ -34,7 +34,7 @@
 namespace tracer {
 
 enum class TraceerEngines { LIBUNWIND, GLIBC, WIN32 };
-enum class DebuggerEngines { LIBDWFL };
+enum class DebuggerEngines { LIBDWFL, LIBBFD };
 
 class Tracer {
  private:
