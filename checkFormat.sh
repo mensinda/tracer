@@ -102,7 +102,7 @@ checkFormat() {
       done
     done
   else
-    SOURCE_LIST=( $(find "${SOURCE_DIRS[@]}" -type f) )
+    SOURCE_LIST=( $(find "${SOURCE_DIRS[@]}" -type f -not -path "src/whereami/*") )
   fi
 
   for I in "${SOURCE_LIST[@]}"; do
