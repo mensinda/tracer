@@ -44,7 +44,7 @@
 #error "No Backend (tracer engine) enabled"
 #endif
 
-#if !USE_DWFL && !USE_BFD
+#if !USE_DWFL && !USE_BFD && !USE_WINDOWS
 #error "No Backend (debugging engine) enabled"
 #endif
 

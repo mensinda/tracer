@@ -31,8 +31,10 @@
 #include <regex>
 
 #if _WIN32
-#include <VersionHelpers.h>
 #include <windows.h>
+
+#include <VersionHelpers.h>
+#include <strsafe.h>
 #endif
 
 #if USE_DWFL
@@ -60,7 +62,8 @@ using namespace std;
 
 SystemInfoPrinter::SystemInfoPrinter(Tracer *t) : DefaultPrinter(t) {
 #ifdef _WIN32
-  // clang-format off
+// clang-format off
+#if 0
   if (false) {}
   else if (IsWindows10OrGreater())        { OS = "Windows 10";          }
   else if (IsWindows8Point1OrGreater())   { OS = "Windows 8.1";         }
@@ -75,7 +78,43 @@ SystemInfoPrinter::SystemInfoPrinter(Tracer *t) : DefaultPrinter(t) {
   else if (IsWindowsXPSP1OrGreater())     { OS = "Windows XP SP1";      }
   else if (IsWindowsXPOrGreater())        { OS = "Windows XP";          }
   else { OS = "Windows (older than Windows XP)"; }
+#endif
 
+  // This shit is required because MS thought it was a good idea to deprecate all
+  // other useful version info functions
+  DWORD length = GetFileVersionInfoSize("Kernel32.dll", nullptr);
+  LPVOID rawData = malloc(length);
+
+  struct LANGANDCODEPAGE {
+    WORD wLanguage;
+    WORD wCodePage;
+  } *lpTranslate;
+
+  UINT cbTranslate;
+
+  BOOL retVal = GetFileVersionInfo("Kernel32.dll", 0, length, rawData);
+  if (retVal != 0) {
+    BOOL retVal2 = VerQueryValue(rawData, TEXT("\\VarFileInfo\\Translation"), (LPVOID*)&lpTranslate, &cbTranslate);
+
+    for (int i = 0; i < (cbTranslate / sizeof(struct LANGANDCODEPAGE)); i++) {
+       char SubBlock[100];
+       char *outStr = nullptr;
+       UINT len;
+
+      StringCchPrintf(SubBlock, 100,
+        TEXT("\\StringFileInfo\\%04x%04x\\ProductVersion"),
+        lpTranslate[i].wLanguage,
+        lpTranslate[i].wCodePage);
+
+      VerQueryValue(rawData, SubBlock, (LPVOID *)&outStr, &len);
+      if (outStr) {
+        OS = string("Windows ") + outStr;
+        break;
+      }
+    }
+  }
+
+  
   if(IsWindowsServer()) { OS += " Server"; }
 // clang-format on
 #elif __APPLE__
@@ -181,6 +220,14 @@ SystemInfoPrinter::SystemInfoPrinter(Tracer *t) : DefaultPrinter(t) {
 
 string SystemInfoPrinter::sigNum2Str(int sNum) {
   switch (sNum) {
+#if _WIN32
+    case SIGINT: return "SIGINT";
+    case SIGILL: return "SIGILL";
+    case SIGABRT: return "SIGABRT";
+    case SIGFPE: return "SIGFPE";
+    case SIGSEGV: return "SIGSEGV";
+    case SIGTERM: return "SIGTERM";
+#else
     case SIGHUP: return "SIGHUP";
     case SIGINT: return "SIGINT";
     case SIGQUIT: return "SIGQUIT";
@@ -212,6 +259,7 @@ string SystemInfoPrinter::sigNum2Str(int sNum) {
     case SIGIO: return "SIGIO";
     case SIGPWR: return "SIGPWR";
     case SIGSYS: return "SIGSYS";
+#endif
     default: return "Invalid signal number";
   }
 }

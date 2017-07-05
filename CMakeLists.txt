@@ -46,7 +46,8 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_C_STANDARD            11 )
 set( CMAKE_C_STANDARD_REQUIRED   ON )
 
-set( CMAKE_POSITION_INDEPENDENT_CODE ON )
+set( CMAKE_POSITION_INDEPENDENT_CODE  ON )
+set( CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON )
 
 option( DISABLE_TESTS       "Disables all tests"                      OFF )
 option( AUTO_ENABLE_MODULES "Automatically enable modules when found" ON )
@@ -91,7 +92,13 @@ add_compiler(
 # Check Dependencies #
 ######################
 
-set( DEPS stdc++fs )
+if( UNIX )
+  set( DEPS stdc++fs )
+elseif( WIN32 )
+  set( DEPS version Dbghelp )
+else()
+  set( DEPS )
+endif()
 set( ALL_MODULES )
 
 macro( ADD_MODULE_DEP NAME PL_TARGET DEP )
@@ -124,6 +131,10 @@ add_platform(
 if( AUTO_ENABLE_MODULES )
   set( PLATFORM_TARGET "" )
 endif( AUTO_ENABLE_MODULES )
+
+if( WIN32 )
+  list( APPEND PLATFORM_TARGET "WIN32_WINDOWS" )
+endif( WIN32 )
 
 foreach( I IN LISTS ALL_MODULES )
   if( AUTO_ENABLE_MODULES )

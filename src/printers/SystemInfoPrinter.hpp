@@ -31,6 +31,10 @@
 #include <signal.h>
 #include <vector>
 
+#if _WIN32
+#define _NSIG NSIG
+#endif
+
 namespace tracer {
 
 class SystemInfoPrinter : public DefaultPrinter {

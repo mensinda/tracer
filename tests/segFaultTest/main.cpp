@@ -30,7 +30,10 @@
 #include "Tracer.hpp"
 #include <iostream>
 #include <signal.h>
+
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 
 using namespace std;
 using namespace tracer;
@@ -43,12 +46,18 @@ void handler(int signum) {
   p1.setSignum(signum);
   p1.printToStdErr();
 
+#if defined(__GNUC__) || defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wold-style-cast"
+#endif
   signal(signum, SIG_DFL);
+#if defined(__GNUC__) || defined(__clang__)
 #pragma clang diagnostic pop
+#endif
 
+#ifndef _WIN32
   kill(getpid(), signum);
+#endif
 }
 
 int f1(int x);

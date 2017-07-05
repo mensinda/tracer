@@ -54,8 +54,8 @@ void DefaultPrinter::calcMaxNameLengths() {
       fs::path modulePath(module);
       fs::path fileNamePath(fileName);
 
-      module   = modulePath.filename();
-      fileName = fileNamePath.filename();
+      module   = modulePath.filename().string();
+      fileName = fileNamePath.filename().string();
     }
 
     if (module.length() > maxModuleNameLegth)
@@ -103,8 +103,8 @@ std::string DefaultPrinter::genStringForFrame(size_t frameNum) {
     fs::path modulePath(moduleP);
     fs::path fileNamePath(fileName);
 
-    moduleP  = modulePath.filename();
-    fileName = fileNamePath.filename();
+    moduleP  = modulePath.filename().string();
+    fileName = fileNamePath.filename().string();
   }
 
 

@@ -44,6 +44,11 @@
 #include "DebugInfoBFD.hpp"
 #endif
 
+#if USE_WINDOWS
+#include "DebugInfoWIN32.hpp"
+#include "Win32Tracer.hpp"
+#endif
+
 using namespace tracer;
 using namespace std;
 
@@ -60,6 +65,11 @@ Tracer::Tracer(TraceerEngines engine, DebuggerEngines debugger) {
     tracerEngine = new GlibCTracer;
 #endif
 
+#if USE_WINDOWS
+  if (engine == TraceerEngines::WIN32_TRACER)
+    tracerEngine = new Win32Tracer;
+#endif
+
 #if USE_DWFL
   if (debugger == DebuggerEngines::LIBDWFL)
     debuggerEngine = new DebugInfoDWFL;
@@ -68,6 +78,11 @@ Tracer::Tracer(TraceerEngines engine, DebuggerEngines debugger) {
 #if USE_BFD
   if (debugger == DebuggerEngines::LIBBFD)
     debuggerEngine = new DebugInfoBFD;
+#endif
+
+#if USE_WINDOWS
+  if (debugger == DebuggerEngines::WIN32_INFO)
+    debuggerEngine = new DebugInfoWIN32;
 #endif
 
   if (!tracerEngine) {
@@ -123,7 +138,7 @@ vector<TraceerEngines> Tracer::getAvaliableEngines() {
   engines.emplace_back(TraceerEngines::GLIBC);
 #endif
 #if USE_WINDOWS
-  engines.emplace_back(TraceerEngines::WIN32);
+  engines.emplace_back(TraceerEngines::WIN32_TRACER);
 #endif
 
   return engines;
@@ -138,6 +153,10 @@ vector<DebuggerEngines> Tracer::getAvaliableDebuggers() {
 
 #if USE_BFD
   engines.emplace_back(DebuggerEngines::LIBBFD);
+#endif
+
+#if USE_WINDOWS
+  engines.emplace_back(DebuggerEngines::WIN32_INFO);
 #endif
 
   return engines;

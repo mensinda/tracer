@@ -3,7 +3,7 @@
 /*build*/
 CMakeLists.txt
 !/CMakeLists.txt
-
+.vs
 
 # Prerequisites
 *.d

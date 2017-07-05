@@ -29,7 +29,6 @@
 #include "SystemInfoPrinter.hpp"
 #include "Tracer.hpp"
 #include <iostream>
-#include <unistd.h>
 
 using namespace std;
 using namespace tracer;
@@ -48,7 +47,7 @@ int f5() {
   Tracer t1;
   t1();
   SystemInfoPrinter p1(&t1);
-  p1.setSignum(SIGQUIT);
+  p1.setSignum(SIGILL);
   p1.printToStdOut();
   return 5;
 }
