@@ -26,7 +26,6 @@
 
 #include "defines.hpp"
 #include "DebugInfoBFD.hpp"
-#include "whereami.h"
 #include <cxxabi.h>
 #include <dlfcn.h>
 #include <iostream>
@@ -54,17 +53,15 @@ void DebugInfoBFD::findInSection(bfd *abfd, bfd_section *section, void *ctx) {
   bfd_vma       vma  = bfd_get_section_vma(abfd, section);
   bfd_size_type size = bfd_get_section_size(section);
 
-  //   cout << "aaa " << vma << ":" << size << " " << obj->ctx.addr << endl;
+  auto addressToUse = obj->ctx.addr;
 
   // Check boundaries
-  if (obj->ctx.addr < vma || obj->ctx.addr >= vma + size) {
-    auto tempAddr = obj->ctx.addr - obj->ctx.baseAddr; // Try again with adjusted values
-    if (tempAddr < vma || tempAddr >= vma + size) {
+  if (addressToUse < vma || addressToUse >= vma + size) {
+    addressToUse = obj->ctx.addr - obj->ctx.baseAddr; // Try again with adjusted values
+    if (addressToUse < vma || addressToUse >= vma + size) {
       return;
     }
   }
-
-  //   cout << "bbb" << endl;
 
   const char * fileName_CSTR = nullptr;
   const char * funcName_CSTR = nullptr;
@@ -75,7 +72,7 @@ void DebugInfoBFD::findInSection(bfd *abfd, bfd_section *section, void *ctx) {
   if (bfd_find_nearest_line_discriminator(abfd,
                                           section,
                                           obj->ctx.secSym->symbols,
-                                          obj->ctx.addr - vma,
+                                          addressToUse - vma,
                                           &fileName_CSTR,
                                           &funcName_CSTR,
                                           &lineNumber,
@@ -83,7 +80,7 @@ void DebugInfoBFD::findInSection(bfd *abfd, bfd_section *section, void *ctx) {
     if (bfd_find_nearest_line_discriminator(abfd,
                                             section,
                                             obj->ctx.dynSecSym->symbols,
-                                            obj->ctx.addr - vma,
+                                            addressToUse - vma,
                                             &fileName_CSTR,
                                             &funcName_CSTR,
                                             &lineNumber,
@@ -122,20 +119,6 @@ bool DebugInfoBFD::processFrames(std::vector<Frame> &frames) {
     isBfdInit = true;
   }
 
-  int exePathLength = wai_getExecutablePath(nullptr, 0, nullptr);
-  if (exePathLength < 0) {
-    cerr << "[TRACER] (libbfd) unable to determine the current executable path" << endl;
-    return false;
-  }
-
-  char *exePath = reinterpret_cast<char *>(malloc(static_cast<size_t>(exePathLength + 1)));
-  if (!exePath) {
-    cerr << "[TRACER] (libbfd) malloc failed....." << endl;
-    return false;
-  }
-
-  wai_getExecutablePath(exePath, exePathLength, nullptr);
-
   for (auto &i : frames) {
     Dl_info dlInfo;
 
@@ -161,6 +144,8 @@ bool DebugInfoBFD::processFrames(std::vector<Frame> &frames) {
     if (dlInfo.dli_fname) {
       i.flags |= FrameFlags::HAS_MODULE_INFO;
       i.moduleName = dlInfo.dli_fname;
+    } else {
+      continue; // dlInfo.dli_fname is required for the next step
     }
 
     // Start getting line info
@@ -168,7 +153,7 @@ bool DebugInfoBFD::processFrames(std::vector<Frame> &frames) {
     asymbolRAII symbols;
     asymbolRAII dynSymbols;
 
-    abfd.abfd = bfd_openr(exePath, nullptr);
+    abfd.abfd = bfd_openr(dlInfo.dli_fname, nullptr);
     if (abfd() == nullptr)
       continue;
 
@@ -219,8 +204,6 @@ bool DebugInfoBFD::processFrames(std::vector<Frame> &frames) {
       }
     }
   }
-
-  free(exePath);
 
   return true;
 }

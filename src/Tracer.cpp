@@ -45,6 +45,7 @@
 #endif
 
 using namespace tracer;
+using namespace std;
 
 Tracer::Tracer() : Tracer(getAvaliableEngines()[0], getAvaliableDebuggers()[0]) {}
 
@@ -70,12 +71,12 @@ Tracer::Tracer(TraceerEngines engine, DebuggerEngines debugger) {
 #endif
 
   if (!tracerEngine) {
-    std::cerr << "[TRACER] Unable to initialize tracer engine" << std::endl;
+    cerr << "[TRACER] Unable to initialize tracer engine" << endl;
     return;
   }
 
   if (!debuggerEngine) {
-    std::cerr << "[TRACER] Unable to initialize debugger engine" << std::endl;
+    cerr << "[TRACER] Unable to initialize debugger engine" << endl;
     return;
   }
 }
@@ -88,9 +89,9 @@ Tracer::~Tracer() {
     delete debuggerEngine;
 }
 
-std::vector<Frame> *Tracer::trace() {
+vector<Frame> *Tracer::trace() {
   if (!tracerEngine || !debuggerEngine) {
-    std::cerr << "[TRACER] Can not generate a backtrace without a tracerEngine or debuggerEngine" << std::endl;
+    cerr << "[TRACER] Can not generate a backtrace without a tracerEngine or debuggerEngine" << endl;
     return nullptr;
   }
 
@@ -100,7 +101,7 @@ std::vector<Frame> *Tracer::trace() {
   return &frames;
 }
 
-std::vector<Frame> *Tracer::getFrames() { return &frames; }
+vector<Frame> *Tracer::getFrames() { return &frames; }
 
 
 void Tracer::print() {
@@ -112,8 +113,8 @@ AbstractTracer *   Tracer::getTracerEngine() { return tracerEngine; }
 AbstractDebugInfo *Tracer::getDebuggerEngine() { return debuggerEngine; }
 
 
-std::vector<TraceerEngines> Tracer::getAvaliableEngines() {
-  std::vector<TraceerEngines> engines;
+vector<TraceerEngines> Tracer::getAvaliableEngines() {
+  vector<TraceerEngines> engines;
 
 #if USE_LIBUNWIND
   engines.emplace_back(TraceerEngines::LIBUNWIND);
@@ -128,11 +129,11 @@ std::vector<TraceerEngines> Tracer::getAvaliableEngines() {
   return engines;
 }
 
-std::vector<DebuggerEngines> Tracer::getAvaliableDebuggers() {
-  std::vector<DebuggerEngines> engines;
+vector<DebuggerEngines> Tracer::getAvaliableDebuggers() {
+  vector<DebuggerEngines> engines;
 
 #if USE_DWFL
-  engines.emplace_back(DebuggerEngines::LIBDWFL);
+//   engines.emplace_back(DebuggerEngines::LIBDWFL);
 #endif
 
 #if USE_BFD
