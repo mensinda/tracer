@@ -128,7 +128,7 @@ std::string DefaultPrinter::genStringForFrame(size_t frameNum) {
 
   outStream << cfg.prefix << setfill(' ') << left << setw(static_cast<int>(maxFuncNameLegth)) << funcName << cfg.seper1
             << setw(static_cast<int>(maxLineInfoLength)) << lineInfo << cfg.seper2
-            << setw(static_cast<int>(maxModuleNameLegth)) << module << cfg.seper3 << address << cfg.suffix;
+            << setw(static_cast<int>(maxModuleNameLegth)) << module << cfg.seper3 << address << cfg.suffix << endl;
 
   return outStream.str();
 }

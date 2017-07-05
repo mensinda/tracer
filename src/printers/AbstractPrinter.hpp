@@ -36,17 +36,23 @@ class Tracer;
 class AbstractPrinter {
  protected:
   Tracer *trace;
+  bool    disableColorB = false;
 
  public:
   virtual ~AbstractPrinter();
   AbstractPrinter() = delete;
   AbstractPrinter(Tracer *t);
 
+  virtual std::string genStringPreFrame(size_t frameNum);
   virtual std::string genStringForFrame(size_t frameNum) = 0;
+  virtual std::string genStringPostFrame(size_t frameNum);
 
   std::string generateString();
   void printToFile(std::string file, bool append = true);
   void printToStdOut();
   void printToStdErr();
+
+  void enableColor() { disableColorB = false; }
+  void disableColor() { disableColorB = true; }
 };
 }

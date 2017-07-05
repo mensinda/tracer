@@ -24,56 +24,40 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#pragma once
+
 #include "defines.hpp"
-#include "AbstractPrinter.hpp"
-#include "Tracer.hpp"
-#include <fstream>
-#include <iostream>
-#include <regex>
+#include "DefaultPrinter.hpp"
+#include <signal.h>
+#include <vector>
 
-using namespace tracer;
-using namespace std;
+namespace tracer {
 
-AbstractPrinter::~AbstractPrinter() {}
+class SystemInfoPrinter : public DefaultPrinter {
+ public:
+  struct InfoEntry {
+    std::string name;
+    std::string value;
+  };
 
-AbstractPrinter::AbstractPrinter(Tracer *t) : trace(t) {}
+ private:
+  int         sigNum = _NSIG;
+  std::string OS;
 
-std::string tracer::AbstractPrinter::generateString() {
-  std::string outSTR;
-  auto *      frames = trace->getFrames();
+  std::vector<InfoEntry> entries;
 
-  for (size_t i = 0; i < frames->size(); ++i) {
-    outSTR += genStringPreFrame(i);
-    outSTR += genStringForFrame(i);
-    outSTR += genStringPostFrame(i);
-  }
+ public:
+  SystemInfoPrinter() = delete;
+  SystemInfoPrinter(Tracer *t);
 
-  if (disableColorB) {
-    regex escRemover("\x1b\\[[0-9;]*m");
-    outSTR = regex_replace(outSTR, escRemover, "");
-  }
+  static std::string sigNum2Str(int sNum);
 
-  return outSTR;
+  std::string genStringPreFrame(size_t frameNum) override;
+  void setSignum(int sNum) { sigNum = sNum; }
+
+  void addSystemEntry(InfoEntry e) { entries.push_back(e); }
+
+
+  std::string getOSString() { return OS; }
+};
 }
-
-string AbstractPrinter::genStringPreFrame(size_t) { return ""; }
-string AbstractPrinter::genStringPostFrame(size_t) { return ""; }
-
-
-void tracer::AbstractPrinter::printToFile(std::string file, bool append) {
-  auto mode = ios_base::app | ios_base::out;
-
-  if (!append)
-    mode |= ios_base::trunc;
-
-  ofstream outStream(file, mode);
-
-  if (!outStream.is_open())
-    return;
-
-  outStream << generateString() << endl;
-  outStream.close();
-}
-
-void tracer::AbstractPrinter::printToStdErr() { cerr << generateString() << endl; }
-void tracer::AbstractPrinter::printToStdOut() { cout << generateString() << endl; }

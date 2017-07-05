@@ -26,6 +26,7 @@
 
 #include "defines.hpp"
 #include "DefaultPrinter.hpp"
+#include "SystemInfoPrinter.hpp"
 #include "Tracer.hpp"
 #include <iostream>
 #include <signal.h>
@@ -38,7 +39,8 @@ void handler(int signum);
 void handler(int signum) {
   Tracer t1;
   t1();
-  DefaultPrinter p1(&t1);
+  SystemInfoPrinter p1(&t1);
+  p1.setSignum(signum);
   p1.printToStdErr();
 
 #pragma clang diagnostic push

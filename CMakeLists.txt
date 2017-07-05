@@ -76,7 +76,7 @@ add_compiler(
              "-Wno-gnu-anonymous-struct -Wno-nested-anon-types -Wno-exit-time-destructors"
              "-Wno-global-constructors -Wno-switch-enum -Wno-reserved-id-macro"
              "-Wno-documentation-unknown-command -Wno-unknown-pragmas"
-             "-Wno-disabled-macro-expansion -save-temps"
+             "-Wno-disabled-macro-expansion -Wno-undef -save-temps"
   DEBUG      "-Werror -gline-tables-only"
   RELEASE    "-O3 -gline-tables-only"
 

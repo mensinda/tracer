@@ -26,6 +26,7 @@
 
 #include "defines.hpp"
 #include "DefaultPrinter.hpp"
+#include "SystemInfoPrinter.hpp"
 #include "Tracer.hpp"
 #include <iostream>
 #include <unistd.h>
@@ -46,7 +47,8 @@ int f4() { return f5(); }
 int f5() {
   Tracer t1;
   t1();
-  DefaultPrinter p1(&t1);
+  SystemInfoPrinter p1(&t1);
+  p1.setSignum(SIGQUIT);
   p1.printToStdOut();
   return 5;
 }

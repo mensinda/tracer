@@ -33,13 +33,14 @@
 #include <unistd.h>
 
 using namespace tracer;
+using namespace std;
 
 DebugInfoDWFL::DebugInfoDWFL() {}
 
 DebugInfoDWFL::~DebugInfoDWFL() {}
 
 
-bool DebugInfoDWFL::processFrames(std::vector<Frame> &frames) {
+bool DebugInfoDWFL::processFrames(vector<Frame> &frames) {
   char *debuginfo_path = nullptr;
 
   Dwfl_Callbacks callbacks;
@@ -50,7 +51,7 @@ bool DebugInfoDWFL::processFrames(std::vector<Frame> &frames) {
 
   Dwfl *dwfl = dwfl_begin(&callbacks);
   if (!dwfl) {
-    std::cerr << "[TRACER] (libdwfl) Failed to initialize libdwfl" << std::endl;
+    cerr << "[TRACER] (libdwfl) Failed to initialize libdwfl" << endl;
     return false;
   }
 

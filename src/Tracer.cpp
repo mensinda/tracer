@@ -133,7 +133,7 @@ vector<DebuggerEngines> Tracer::getAvaliableDebuggers() {
   vector<DebuggerEngines> engines;
 
 #if USE_DWFL
-//   engines.emplace_back(DebuggerEngines::LIBDWFL);
+  engines.emplace_back(DebuggerEngines::LIBDWFL);
 #endif
 
 #if USE_BFD
