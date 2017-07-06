@@ -259,7 +259,6 @@ string SystemInfoPrinter::sigNum2Str(int sNum) {
     case SIGPROF: return "SIGPROF";
     case SIGWINCH: return "SIGWINCH";
     case SIGIO: return "SIGIO";
-    case SIGPWR: return "SIGPWR";
     case SIGSYS: return "SIGSYS";
 #endif
     default: return "Invalid signal number";
