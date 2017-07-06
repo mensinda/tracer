@@ -60,7 +60,7 @@ namespace fs = std::filesystem;
 using namespace tracer;
 using namespace std;
 
-SystemInfoPrinter::SystemInfoPrinter(Tracer *t) : DefaultPrinter(t) {
+SystemInfoPrinter::SystemInfoPrinter(Tracer *t) : AbstractPrinter(t), DefaultPrinter(t) {
 #ifdef _WIN32
 // clang-format off
 #if 0
@@ -116,7 +116,7 @@ SystemInfoPrinter::SystemInfoPrinter(Tracer *t) : DefaultPrinter(t) {
     }
   }
 
-  
+
   if(IsWindowsServer()) { OS += " Server"; }
 // clang-format on
 #elif __APPLE__

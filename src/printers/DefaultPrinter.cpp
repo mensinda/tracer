@@ -50,15 +50,18 @@ void DefaultPrinter::calcMaxNameLengths() {
     string module   = i.moduleName;
     string fileName = i.fileName;
 
-    if (cfg.shortenFiles) {
-      fs::path fileNamePath(fileName);
-      fileName = fileNamePath.filename().string();
-    }
+    try {
+      if (cfg.canonicalizePaths) {
+        module   = fs::canonical(fs::path(module)).native();
+        fileName = fs::canonical(fs::path(fileName)).native();
+      }
+    } catch (...) {}
 
-    if (cfg.shortenModules) {
-      fs::path modulePath(module);
-      module = modulePath.filename().string();
-    }
+    if (cfg.shortenFiles)
+      fileName = fs::path(fileName).filename().string();
+
+    if (cfg.shortenModules)
+      module = fs::path(module).filename().string();
 
     if (module.length() > maxModuleNameLegth)
       maxModuleNameLegth = module.length();
@@ -106,15 +109,18 @@ std::string DefaultPrinter::genStringForFrame(size_t frameNum) {
   string moduleP  = i.moduleName;
   string fileName = i.fileName;
 
-  if (cfg.shortenFiles) {
-    fs::path fileNamePath(fileName);
-    fileName = fileNamePath.filename().string();
-  }
+  try {
+    if (cfg.canonicalizePaths) {
+      moduleP  = fs::canonical(fs::path(moduleP)).native();
+      fileName = fs::canonical(fs::path(fileName)).native();
+    }
+  } catch (...) {}
 
-  if (cfg.shortenModules) {
-    fs::path modulePath(moduleP);
-    moduleP = modulePath.filename().string();
-  }
+  if (cfg.shortenFiles)
+    fileName = fs::path(fileName).filename().string();
+
+  if (cfg.shortenModules)
+    moduleP = fs::path(moduleP).filename().string();
 
 
   if ((i.flags & FrameFlags::HAS_ADDRESS) == FrameFlags::HAS_ADDRESS) {

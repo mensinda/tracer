@@ -37,7 +37,7 @@
 
 namespace tracer {
 
-class SystemInfoPrinter : public DefaultPrinter {
+class SystemInfoPrinter : virtual public DefaultPrinter {
  public:
   struct InfoEntry {
     std::string name;

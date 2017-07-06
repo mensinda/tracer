@@ -40,12 +40,4 @@ set( @CM_CURRENT_EXE_INC@
 add_executable( @CM_CURRENT_EXE_LC@ ${@CM_CURRENT_EXE_SRC@} ${@CM_CURRENT_EXE_INC@} )
 target_link_libraries( @CM_CURRENT_EXE_LC@ @CM_CURRENT_EXE_DEP@ )
 
-string( REGEX REPLACE "^[^:]+::" "" OUT_EXE_NAME "@CM_CURRENT_EXE_LC@" )
-
-set_target_properties(
-  @CM_CURRENT_EXE_LC@
-  PROPERTIES
-    OUTPUT_NAME "${OUT_EXE_NAME}"
-)
-
 add_test( NAME @CM_CURRENT_EXE_LC@ COMMAND @CM_CURRENT_EXE_LC@ )

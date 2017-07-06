@@ -26,7 +26,7 @@
 
 #include "defines.hpp"
 #include "DefaultPrinter.hpp"
-#include "SystemInfoPrinter.hpp"
+#include "FancyPrinter.hpp"
 #include "Tracer.hpp"
 #include <iostream>
 #include <signal.h>
@@ -42,7 +42,7 @@ void handler(int signum);
 void handler(int signum) {
   Tracer t1;
   t1();
-  SystemInfoPrinter p1(&t1);
+  FancyPrinter p1(&t1);
   p1.setSignum(signum);
   p1.printToStdErr();
 

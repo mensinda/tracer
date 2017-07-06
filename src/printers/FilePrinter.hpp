@@ -24,40 +24,53 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#pragma once
+
 #include "defines.hpp"
 #include "DefaultPrinter.hpp"
-#include "FancyPrinter.hpp"
-#include "Tracer.hpp"
-#include <iostream>
+#include <vector>
 
-using namespace std;
-using namespace tracer;
+#if __cplusplus <= 201402L
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+#else
+#include <filesystem>
+namespace fs = std::filesystem;
+#endif
 
-int f1();
-int f2();
-int f3();
-int f4();
-int f5();
+namespace tracer {
 
-int f1() { return f2(); }
-int f2() { return f3(); }
-int f3() { return f4(); }
-int f4() { return f5(); }
-int f5() {
-  Tracer t1;
-  t1.trace();
-  FancyPrinter p1(&t1);
-  p1.printToStdOut();
-  return 5;
-}
+/*!
+ * \brief Prints file contents when line information is avaliable in the frame
+ */
+class FilePrinter : virtual public DefaultPrinter {
+ public:
+  struct FileConfig {
+    unsigned int maxRecursionDepth = 4;
+    unsigned int linesBefore       = 4;
+    unsigned int linesAfter        = 4;
 
+    std::string lineHighlightColor = "\x1b[1;31m";
+  };
 
+ private:
+  std::vector<fs::path> pathCache;
 
-int main(int argc, char *argv[]) {
-  (void)argc;
-  (void)argv;
+  FileConfig fCFG;
 
-  f1();
+  bool findPath(unsigned int depth, fs::path current, fs::path &out, fs::path const &file);
 
-  return 0;
+ public:
+  FilePrinter() = delete;
+  FilePrinter(Tracer *t);
+  virtual ~FilePrinter();
+
+  std::string genStringPostFrame(size_t frameNum) override;
+
+  fs::path findFile(std::string file);
+
+  void setFilePrinterConfig(FileConfig d) { fCFG = d; }
+
+  FileConfig getFilePrinterConfig() { return fCFG; }
+};
 }

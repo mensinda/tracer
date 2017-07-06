@@ -25,39 +25,11 @@
  */
 
 #include "defines.hpp"
-#include "DefaultPrinter.hpp"
 #include "FancyPrinter.hpp"
-#include "Tracer.hpp"
-#include <iostream>
 
-using namespace std;
 using namespace tracer;
+using namespace std;
 
-int f1();
-int f2();
-int f3();
-int f4();
-int f5();
-
-int f1() { return f2(); }
-int f2() { return f3(); }
-int f3() { return f4(); }
-int f4() { return f5(); }
-int f5() {
-  Tracer t1;
-  t1.trace();
-  FancyPrinter p1(&t1);
-  p1.printToStdOut();
-  return 5;
-}
-
-
-
-int main(int argc, char *argv[]) {
-  (void)argc;
-  (void)argv;
-
-  f1();
-
-  return 0;
-}
+FancyPrinter::FancyPrinter(tracer::Tracer *t)
+    : AbstractPrinter(t), DefaultPrinter(t), FilePrinter(t), SystemInfoPrinter(t) {}
+FancyPrinter::~FancyPrinter() {}

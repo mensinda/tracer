@@ -24,40 +24,21 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#pragma once
+
 #include "defines.hpp"
-#include "DefaultPrinter.hpp"
-#include "FancyPrinter.hpp"
-#include "Tracer.hpp"
-#include <iostream>
+#include "FilePrinter.hpp"
+#include "SystemInfoPrinter.hpp"
 
-using namespace std;
-using namespace tracer;
+namespace tracer {
 
-int f1();
-int f2();
-int f3();
-int f4();
-int f5();
-
-int f1() { return f2(); }
-int f2() { return f3(); }
-int f3() { return f4(); }
-int f4() { return f5(); }
-int f5() {
-  Tracer t1;
-  t1.trace();
-  FancyPrinter p1(&t1);
-  p1.printToStdOut();
-  return 5;
-}
-
-
-
-int main(int argc, char *argv[]) {
-  (void)argc;
-  (void)argv;
-
-  f1();
-
-  return 0;
+/*!
+ * \brief Wrapper for both FilePrinter and SystemInfoPrinter
+ */
+class FancyPrinter : public FilePrinter, public SystemInfoPrinter {
+ public:
+  FancyPrinter() = delete;
+  FancyPrinter(Tracer *t);
+  virtual ~FancyPrinter();
+};
 }

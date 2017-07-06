@@ -31,7 +31,7 @@
 
 namespace tracer {
 
-class DefaultPrinter : public AbstractPrinter {
+class DefaultPrinter : virtual public AbstractPrinter {
  public:
   struct Config {
     std::string prefix = " \x1b[0;33min ";
@@ -47,8 +47,9 @@ class DefaultPrinter : public AbstractPrinter {
     std::string colorLineInfo = "\x1b[1;32m";
     std::string colorModule   = "\x1b[1;35m";
 
-    bool shortenFiles   = false; // The source file path
-    bool shortenModules = true;  // The executable module (.so/.dll/.exe)
+    bool shortenFiles      = false; // The source file path
+    bool shortenModules    = true;  // The executable module (.so/.dll/.exe)
+    bool canonicalizePaths = true;
   };
 
  private:
