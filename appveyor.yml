@@ -13,6 +13,9 @@ os: Visual Studio 2017
 install:
   - cmd: git submodule update --init --recursive
 
+build:
+  project: tracer.sln
+
 before_build:
   - cmd: md build
   - cmd: cd build
