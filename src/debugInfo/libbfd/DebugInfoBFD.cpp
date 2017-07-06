@@ -29,6 +29,7 @@
 #include <cxxabi.h>
 #include <dlfcn.h>
 #include <iostream>
+#include <stdlib.h>
 #include <unistd.h>
 
 using namespace tracer;
