@@ -14,7 +14,7 @@ install:
   - cmd: git submodule update --init --recursive
 
 build:
-  project: ALL_BUILD.vcxproj
+  project: c:\projects\tracer\build\ALL_BUILD.vcxproj
 
 before_build:
   - cmd: md build
