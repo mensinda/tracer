@@ -52,8 +52,8 @@ void DefaultPrinter::calcMaxNameLengths() {
 
     try {
       if (cfg.canonicalizePaths) {
-        module   = fs::canonical(fs::path(module)).native();
-        fileName = fs::canonical(fs::path(fileName)).native();
+        module   = fs::canonical(fs::path(module)).string();
+        fileName = fs::canonical(fs::path(fileName)).string();
       }
     } catch (...) {}
 
@@ -111,8 +111,8 @@ std::string DefaultPrinter::genStringForFrame(size_t frameNum) {
 
   try {
     if (cfg.canonicalizePaths) {
-      moduleP  = fs::canonical(fs::path(moduleP)).native();
-      fileName = fs::canonical(fs::path(fileName)).native();
+      moduleP  = fs::canonical(fs::path(moduleP)).string();
+      fileName = fs::canonical(fs::path(fileName)).string();
     }
   } catch (...) {}
 

@@ -97,7 +97,7 @@ SystemInfoPrinter::SystemInfoPrinter(Tracer *t) : AbstractPrinter(t), DefaultPri
     BOOL retVal2 = VerQueryValue(rawData, TEXT("\\VarFileInfo\\Translation"), (LPVOID*)&lpTranslate, &cbTranslate);
 
     if (retVal2) {
-      for (int i = 0; i < (cbTranslate / sizeof(struct LANGANDCODEPAGE)); i++) {
+      for (unsigned int i = 0; i < (cbTranslate / sizeof(struct LANGANDCODEPAGE)); i++) {
         char SubBlock[100];
         char *outStr = nullptr;
         UINT len;
