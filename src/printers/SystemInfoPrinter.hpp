@@ -35,6 +35,14 @@
 #define _NSIG NSIG
 #endif
 
+#ifndef _NSIG
+#ifdef NSIG
+#define _NSIG NSIG
+#else // NSIG
+#define _NSIG 0
+#endif // NSIG
+#endif // _NSIG
+
 namespace tracer {
 
 class SystemInfoPrinter : virtual public DefaultPrinter {
