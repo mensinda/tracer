@@ -51,7 +51,29 @@ set( CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON )
 
 option( DISABLE_TESTS       "Disables all tests"                      OFF )
 option( AUTO_ENABLE_MODULES "Automatically enable modules when found" ON )
+option( USE_CLANG_LIBCXX    "Build with libc++ instead of stdlibc++"  OFF )
 #option( PREFER_STATIC_LIBS  "Prefer linking to static libs"           ON  )
+
+#####################
+# Check std C++ lib #
+#####################
+
+if( UNIX )
+  if( USE_CLANG_LIBCXX )
+    set( GCC_STDLIB_FLAGS   "-nodefaultlibs -lc++ -lc++abi" )
+    set( CLANG_STDLIB_FLAGS "-stdlib=libc++" )
+    set( DEPS c++experimental )
+  else( USE_CLANG_LIBCXX )
+    set( GCC_STDLIB_FLAGS   "" )
+    set( CLANG_STDLIB_FLAGS "" )
+    set( DEPS stdc++fs )
+  endif( USE_CLANG_LIBCXX )
+elseif( WIN32 )
+  set( DEPS version Dbghelp )
+else()
+  set( DEPS )
+endif()
+set( ALL_MODULES )
 
 ################################
 # Set up the build environment #
@@ -102,15 +124,6 @@ add_compiler(
 ######################
 # Check Dependencies #
 ######################
-
-if( UNIX )
-  set( DEPS stdc++fs )
-elseif( WIN32 )
-  set( DEPS version Dbghelp )
-else()
-  set( DEPS )
-endif()
-set( ALL_MODULES )
 
 macro( ADD_MODULE_DEP NAME PL_TARGET DEP )
   find_package( ${NAME} )
