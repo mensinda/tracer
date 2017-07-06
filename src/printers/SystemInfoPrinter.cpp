@@ -245,7 +245,6 @@ string SystemInfoPrinter::sigNum2Str(int sNum) {
     case SIGPIPE: return "SIGPIPE";
     case SIGALRM: return "SIGALRM";
     case SIGTERM: return "SIGTERM";
-    case SIGSTKFLT: return "SIGSTKFLT";
     case SIGCHLD: return "SIGCHLD";
     case SIGCONT: return "SIGCONT";
     case SIGSTOP: return "SIGSTOP";
