@@ -88,6 +88,17 @@ add_compiler(
   SANITIZE "-fsanitize=${SANITIZERS}"
 )
 
+add_compiler(
+  MSVC MIN_VERSION "19.10"
+  ALL        "/W4"
+  DEBUG      ""
+  RELEASE    "/O2"
+
+  C_ALL      "/W4"
+  C_DEBUG    ""
+  C_RELEASE  "/O2"
+)
+
 ######################
 # Check Dependencies #
 ######################

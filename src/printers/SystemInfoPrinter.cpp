@@ -96,20 +96,22 @@ SystemInfoPrinter::SystemInfoPrinter(Tracer *t) : DefaultPrinter(t) {
   if (retVal != 0) {
     BOOL retVal2 = VerQueryValue(rawData, TEXT("\\VarFileInfo\\Translation"), (LPVOID*)&lpTranslate, &cbTranslate);
 
-    for (int i = 0; i < (cbTranslate / sizeof(struct LANGANDCODEPAGE)); i++) {
-       char SubBlock[100];
-       char *outStr = nullptr;
-       UINT len;
+    if (retVal2) {
+      for (int i = 0; i < (cbTranslate / sizeof(struct LANGANDCODEPAGE)); i++) {
+        char SubBlock[100];
+        char *outStr = nullptr;
+        UINT len;
 
-      StringCchPrintf(SubBlock, 100,
-        TEXT("\\StringFileInfo\\%04x%04x\\ProductVersion"),
-        lpTranslate[i].wLanguage,
-        lpTranslate[i].wCodePage);
+        StringCchPrintf(SubBlock, 100,
+          TEXT("\\StringFileInfo\\%04x%04x\\ProductVersion"),
+          lpTranslate[i].wLanguage,
+          lpTranslate[i].wCodePage);
 
-      VerQueryValue(rawData, SubBlock, (LPVOID *)&outStr, &len);
-      if (outStr) {
-        OS = string("Windows ") + outStr;
-        break;
+        VerQueryValue(rawData, SubBlock, (LPVOID *)&outStr, &len);
+        if (outStr) {
+          OS = string("Windows ") + outStr;
+          break;
+        }
       }
     }
   }

@@ -1,0 +1,19 @@
+clone_folder: c:\projects\tracer
+
+configuration:
+  - Debug
+  - Release
+
+platform:
+  - x86
+  - x64
+
+configuration:
+  - 15 2017
+
+build_script:
+  - cd c:\projects\tracer
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cmake --build .
