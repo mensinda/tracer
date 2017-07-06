@@ -4,6 +4,7 @@
 CMakeLists.txt
 !/CMakeLists.txt
 .vs
+private.cmake
 
 # Prerequisites
 *.d

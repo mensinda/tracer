@@ -75,6 +75,10 @@ else()
 endif()
 set( ALL_MODULES )
 
+if( EXISTS "${CMAKE_CURRENT_LIST_DIR}/private.cmake" )
+  include( "${CMAKE_CURRENT_LIST_DIR}/private.cmake" )
+endif( EXISTS "${CMAKE_CURRENT_LIST_DIR}/private.cmake" )
+
 ################################
 # Set up the build environment #
 ################################
