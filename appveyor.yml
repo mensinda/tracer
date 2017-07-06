@@ -10,6 +10,9 @@ platform:
 
 os: Visual Studio 2017
 
+install:
+  - cmd: git submodule update --init --recursive
+
 before_build:
   - cmd: md build
   - cmd: cd build
