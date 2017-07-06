@@ -28,7 +28,6 @@
 #include "DebugInfoWIN32.hpp"
 #include <dbghelp.h>
 #include <iostream>
-#include <windows.h>
 
 using namespace tracer;
 using namespace std;
@@ -54,9 +53,12 @@ bool DebugInfoWIN32::processFrames(vector<Frame> &frames) {
 
   for (auto &i : frames) {
     DWORD64           displacement;
-    DWORD64           addr = static_cast<DWORD64>(i.frameAddr);
+    DWORD             displacement2;
+    DWORD64           addr = static_cast<DWORD64>(i.frameAddr) - 4;
     IMAGEHLP_MODULE64 modInfo;
-    modInfo.SizeOfStruct = sizeof(IMAGEHLP_MODULE64);
+    IMAGEHLP_LINE64   lineInfo;
+    modInfo.SizeOfStruct  = sizeof(IMAGEHLP_MODULE64);
+    lineInfo.SizeOfStruct = sizeof(IMAGEHLP_LINE64);
 
     if (SymFromAddr(process, addr, &displacement, pSymbol)) {
       if (pSymbol->Name) {
@@ -65,10 +67,19 @@ bool DebugInfoWIN32::processFrames(vector<Frame> &frames) {
       }
     }
 
-    if (SymGetModuleInfo(process, addr, &modInfo)) {
+    if (SymGetModuleInfo64(process, addr, &modInfo)) {
       if (modInfo.ImageName) {
         i.flags |= FrameFlags::HAS_MODULE_INFO;
         i.moduleName = modInfo.ImageName;
+      }
+    }
+
+    if (SymGetLineFromAddr64(process, addr, &displacement2, &lineInfo)) {
+      if (lineInfo.FileName) {
+        i.flags |= FrameFlags::HAS_LINE_INFO;
+        i.fileName = lineInfo.FileName;
+        i.line     = lineInfo.LineNumber;
+        i.column   = 0; // Column not supported :(
       }
     }
   }

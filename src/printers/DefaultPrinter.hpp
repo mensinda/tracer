@@ -34,13 +34,21 @@ namespace tracer {
 class DefaultPrinter : public AbstractPrinter {
  public:
   struct Config {
-    std::string prefix = " in ";
-    std::string seper1 = " at ";
-    std::string seper2 = " -- ";
-    std::string seper3 = " [";
-    std::string suffix = "]";
+    std::string prefix = " \x1b[0;33min ";
+    std::string seper1 = " \x1b[0;33mat ";
+    std::string seper2 = " \x1b[0;33m-- ";
+    std::string seper3 = " \x1b[0;33m[";
+    std::string suffix = "\x1b[0;33m]\x1b[0m";
 
-    bool shortenFiles = false;
+    std::string colorFrameNum = "\x1b[1;36m";
+    std::string colorNotFound = "\x1b[1;33m";
+    std::string colorAddress  = "\x1b[0;36m";
+    std::string colorFuncName = "\x1b[1;31m";
+    std::string colorLineInfo = "\x1b[1;32m";
+    std::string colorModule   = "\x1b[1;35m";
+
+    bool shortenFiles   = false; // The source file path
+    bool shortenModules = true;  // The executable module (.so/.dll/.exe)
   };
 
  private:

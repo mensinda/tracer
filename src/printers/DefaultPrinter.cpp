@@ -51,11 +51,13 @@ void DefaultPrinter::calcMaxNameLengths() {
     string fileName = i.fileName;
 
     if (cfg.shortenFiles) {
-      fs::path modulePath(module);
       fs::path fileNamePath(fileName);
-
-      module   = modulePath.filename().string();
       fileName = fileNamePath.filename().string();
+    }
+
+    if (cfg.shortenModules) {
+      fs::path modulePath(module);
+      module = modulePath.filename().string();
     }
 
     if (module.length() > maxModuleNameLegth)
@@ -95,40 +97,55 @@ std::string DefaultPrinter::genStringForFrame(size_t frameNum) {
   string lineInfo = "<N/A>";
   string module   = "<N/A>";
 
+  string colorAddress  = cfg.colorNotFound;
+  string colorFuncName = cfg.colorNotFound;
+  string colorLineInfo = cfg.colorNotFound;
+  string colorModule   = cfg.colorNotFound;
+
 
   string moduleP  = i.moduleName;
   string fileName = i.fileName;
 
   if (cfg.shortenFiles) {
-    fs::path modulePath(moduleP);
     fs::path fileNamePath(fileName);
-
-    moduleP  = modulePath.filename().string();
     fileName = fileNamePath.filename().string();
+  }
+
+  if (cfg.shortenModules) {
+    fs::path modulePath(moduleP);
+    moduleP = modulePath.filename().string();
   }
 
 
   if ((i.flags & FrameFlags::HAS_ADDRESS) == FrameFlags::HAS_ADDRESS) {
     stringstream addressStream;
     addressStream << hex << "0x" << setfill('0') << setw(static_cast<int>(maxAddressLength)) << i.frameAddr;
-    address = addressStream.str();
+    address      = addressStream.str();
+    colorAddress = cfg.colorAddress;
   }
 
   if ((i.flags & FrameFlags::HAS_FUNC_NAME) == FrameFlags::HAS_FUNC_NAME) {
-    funcName = i.funcName;
+    funcName      = i.funcName;
+    colorFuncName = cfg.colorFuncName;
   }
 
   if ((i.flags & FrameFlags::HAS_LINE_INFO) == FrameFlags::HAS_LINE_INFO) {
-    lineInfo = fileName + ":" + to_string(i.line) + ":" + to_string(i.column);
+    lineInfo      = fileName + ":" + to_string(i.line) + ":" + to_string(i.column);
+    colorLineInfo = cfg.colorLineInfo;
   }
 
   if ((i.flags & FrameFlags::HAS_MODULE_INFO) == FrameFlags::HAS_MODULE_INFO) {
-    module = moduleP;
+    module      = moduleP;
+    colorModule = cfg.colorModule;
   }
 
-  outStream << cfg.prefix << setfill(' ') << left << setw(static_cast<int>(maxFuncNameLegth)) << funcName << cfg.seper1
-            << setw(static_cast<int>(maxLineInfoLength)) << lineInfo << cfg.seper2
-            << setw(static_cast<int>(maxModuleNameLegth)) << module << cfg.seper3 << address << cfg.suffix << endl;
+  outStream << setfill(' ') << left                                                                 // Setup
+            << cfg.colorFrameNum << "#" << setw(4) << frameNum                                      // Frame number
+            << cfg.prefix << colorFuncName << setw(static_cast<int>(maxFuncNameLegth)) << funcName  // Function Name
+            << cfg.seper1 << colorLineInfo << setw(static_cast<int>(maxLineInfoLength)) << lineInfo // Line Info
+            << cfg.seper2 << colorModule << setw(static_cast<int>(maxModuleNameLegth)) << module    // Module
+            << cfg.seper3 << colorAddress << address                                                // Address
+            << cfg.suffix << endl;
 
   return outStream.str();
 }

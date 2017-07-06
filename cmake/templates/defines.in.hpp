@@ -48,6 +48,10 @@
 #error "No Backend (debugging engine) enabled"
 #endif
 
+#if _WIN32
+#include <Windows.h>
+#endif
+
 namespace tracer {
 
 #if UINTPTR_MAX == 0xffffffff            // 32-bit
