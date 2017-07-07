@@ -65,7 +65,6 @@ class TracerHandler final {
                                 SIGTRAP,
                                 SIGBUS,
                                 SIGPIPE,
-                                SIGSTKFLT,
                                 SIGSYS
 #endif
     };
