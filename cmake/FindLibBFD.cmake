@@ -27,23 +27,54 @@ include(FindPackageHandleStandardArgs)
 
 find_package( DLFCN )
 
+if( BUILD_STATIC )
+  set( BFD_STATIC_LIB libbfd.a )
+endif( BUILD_STATIC )
+
 find_path(
   LibBFD_INC
     NAMES bfd.h
-    HINTS ${LibBFD_ROOT}/include
+    HINTS
+      /usr/include/
+      /usr/local/include
+      ${LibBFD_ROOT}/include
 )
 
 find_library(
   LibBFD_DW_LIB
-    NAMES bfd
+    NAMES ${BFD_STATIC_LIB} bfd
     HINTS
       /usr/lib
+      /usr/local/lib
       ${LibBFD_ROOT}/lib
 )
 
+if( BUILD_STATIC )
+  find_library(
+    LibBFD_LIBZ
+      NAMES libz.a
+      HINTS
+        /usr/lib
+        /usr/local/lib
+        ${LibBFD_ROOT}/lib
+  )
+
+  find_library(
+    LibBFD_LIBIBERTY
+      NAMES libiberty.a
+      HINTS
+        /usr/lib
+        /usr/local/lib
+        ${LibBFD_ROOT}/lib
+  )
+
+  set( LINK_INTERFACE_LIBS ${DLFCN_LIBRARIES} ${DLFCN_DW_LIB_STATIC} ${LibBFD_LIBZ} ${LibBFD_LIBIBERTY} )
+  set( STATIC_REQUIRED LibBFD_LIBZ LibBFD_LIBIBERTY )
+endif( BUILD_STATIC )
+
 find_package_handle_standard_args(
   LibBFD
-  REQUIRED_VARS LibBFD_INC LibBFD_DW_LIB DLFCN_FOUND
+  REQUIRED_VARS LibBFD_INC LibBFD_DW_LIB DLFCN_FOUND ${STATIC_REQUIRED}
 )
 
 if( LibBFD_FOUND )
@@ -55,6 +86,7 @@ if( LibBFD_FOUND )
     set_target_properties( LibBFD::LibBFD
       PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${LibBFD_INCLUDE_DIRS}"
+        INTERFACE_LINK_LIBRARIES      "${LINK_INTERFACE_LIBS};"
         IMPORTED_LOCATION             "${LibBFD_LIBRARIES}"
     )
   endif( NOT TARGET LibBFD::LibBFD )

@@ -52,6 +52,7 @@ set( CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON )
 option( DISABLE_TESTS       "Disables all tests"                      OFF )
 option( AUTO_ENABLE_MODULES "Automatically enable modules when found" ON )
 option( USE_CLANG_LIBCXX    "Build with libc++ instead of stdlibc++"  OFF )
+option( BUILD_STATIC        "Build and link tracer static"            OFF )
 #option( PREFER_STATIC_LIBS  "Prefer linking to static libs"           ON  )
 
 #####################
@@ -139,7 +140,7 @@ endmacro( ADD_MODULE_DEP )
 ADD_MODULE_DEP( LibUnwind UNIX_LIBUNWIND LibUnwind::LibUnwind )
 ADD_MODULE_DEP( LibELF    UNIX_LIBDWLF   LibELF::DW )
 ADD_MODULE_DEP( LibBFD    UNIX_LIBBFD    LibBFD::LibBFD )
-ADD_MODULE_DEP( Execinfo  UNIX_GLIBC    "Execinfo::Execinfo DLFCN::DLFCN")
+ADD_MODULE_DEP( Execinfo  UNIX_GLIBC     "Execinfo::Execinfo dl" )
 
 run_git()
 

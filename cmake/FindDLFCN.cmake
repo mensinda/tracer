@@ -32,8 +32,16 @@ find_path(
 )
 
 find_library(
-  DLFCN_DW_LIB
+  DLFCN_DW_LIB_SHARED
     NAMES dl
+    HINTS
+      /usr/lib
+      ${DLFCN_ROOT}/lib
+)
+
+find_library(
+  DLFCN_DW_LIB_STATIC
+    NAMES libdl.a
     HINTS
       /usr/lib
       ${DLFCN_ROOT}/lib
@@ -41,12 +49,13 @@ find_library(
 
 find_package_handle_standard_args(
   DLFCN
-  REQUIRED_VARS DLFCN_INC DLFCN_DW_LIB
+  REQUIRED_VARS DLFCN_INC DLFCN_DW_LIB_SHARED DLFCN_DW_LIB_STATIC
 )
 
 if( DLFCN_FOUND )
   set( DLFCN_INCLUDE_DIRS ${DLFCN_INC} )
-  set( DLFCN_LIBRARIES    ${DLFCN_DW_LIB})
+  set( DLFCN_LIBRARIES    ${DLFCN_DW_LIB_SHARED} )
+  set( DLFCN_STATIC_LIB   ${DLFCN_DW_LIB_STATIC} )
 
   if( NOT TARGET DLFCN::DLFCN )
     add_library(DLFCN::DLFCN UNKNOWN IMPORTED)
