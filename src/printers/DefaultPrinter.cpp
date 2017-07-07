@@ -28,6 +28,7 @@
 #include "DefaultPrinter.hpp"
 #include "Tracer.hpp"
 #include <iomanip>
+#include <regex>
 #include <sstream>
 
 #if !DISABLE_STD_FILESYSTEM
@@ -44,7 +45,10 @@ using namespace tracer;
 using namespace std;
 
 DefaultPrinter::DefaultPrinter(Tracer *t) : AbstractPrinter(t) {}
+DefaultPrinter::DefaultPrinter() {}
 DefaultPrinter::~DefaultPrinter() {}
+
+void tracer::DefaultPrinter::setupTrace() { calculatedMaxLengths = false; }
 
 void DefaultPrinter::calcMaxNameLengths() {
   auto *frames = trace->getFrames();
@@ -65,6 +69,14 @@ void DefaultPrinter::calcMaxNameLengths() {
 
     if (cfg.shortenModules)
       module = fs::path(module).filename().string();
+#else
+    regex shortenRegex(".*/");
+
+    if (cfg.shortenFiles)
+      fileName = regex_replace(fileName, shortenRegex, "");
+
+    if (cfg.shortenModules)
+      module = regex_replace(module, shortenRegex, "");
 #endif
 
     if (module.length() > maxModuleNameLegth)
@@ -87,7 +99,7 @@ void DefaultPrinter::calcMaxNameLengths() {
 }
 
 
-std::string DefaultPrinter::genStringForFrame(size_t frameNum) {
+std::string DefaultPrinter::genStringForFrameIMPL(size_t frameNum) {
   stringstream outStream;
   auto *       frames = trace->getFrames();
 
@@ -126,6 +138,14 @@ std::string DefaultPrinter::genStringForFrame(size_t frameNum) {
 
   if (cfg.shortenModules)
     moduleP = fs::path(moduleP).filename().string();
+#else
+  regex shortenRegex(".*/");
+
+  if (cfg.shortenFiles)
+    fileName = regex_replace(fileName, shortenRegex, "");
+
+  if (cfg.shortenModules)
+    moduleP = regex_replace(moduleP, shortenRegex, "");
 #endif
 
   if ((i.flags & FrameFlags::HAS_ADDRESS) == FrameFlags::HAS_ADDRESS) {

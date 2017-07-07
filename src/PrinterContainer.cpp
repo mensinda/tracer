@@ -24,43 +24,36 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma once
-
 #include "defines.hpp"
-#include <string>
+#include "PrinterContainer.hpp"
 
-namespace tracer {
+using namespace tracer;
+using namespace std;
 
-class Tracer;
-
-class AbstractPrinter {
- protected:
-  Tracer *trace         = nullptr;
-  bool    disableColorB = false;
-
-  virtual void setupTrace();
-
-  virtual std::string genStringPreFrameIMPL(size_t frameNum);
-  virtual std::string genStringForFrameIMPL(size_t frameNum) = 0;
-  virtual std::string genStringPostFrameIMPL(size_t frameNum);
-
- public:
-  virtual ~AbstractPrinter();
-  AbstractPrinter();
-  AbstractPrinter(Tracer *t);
-
-  std::string genStringPreFrame(size_t frameNum);
-  std::string genStringForFrame(size_t frameNum);
-  std::string genStringPostFrame(size_t frameNum);
-
-  std::string generateString();
-  void printToFile(std::string file, bool append = true);
-  void printToStdOut();
-  void printToStdErr();
-
-  void enableColor() { disableColorB = false; }
-  void disableColor() { disableColorB = true; }
-
-  void setTrace(Tracer *t);
-};
+PrinterContainer::PrinterContainer(AbstractPrinter *p) : printer(p) {}
+PrinterContainer::~PrinterContainer() {
+  if (printer)
+    delete printer;
 }
+
+PrinterContainer::PrinterContainer(PrinterContainer &&moveFrom) {
+  printer          = moveFrom.printer;
+  moveFrom.printer = nullptr;
+}
+
+PrinterContainer &PrinterContainer::operator=(PrinterContainer &&moveFrom) {
+  if (this != &moveFrom) {
+    printer          = moveFrom.printer;
+    moveFrom.printer = nullptr;
+  }
+  return *this;
+}
+
+
+PrinterContainer PrinterContainer::fancy() { return PrinterContainer(new FancyPrinter); }
+PrinterContainer PrinterContainer::file() { return PrinterContainer(new FilePrinter); }
+PrinterContainer PrinterContainer::system() { return PrinterContainer(new SystemInfoPrinter); }
+PrinterContainer PrinterContainer::plain() { return PrinterContainer(new DefaultPrinter); }
+
+AbstractPrinter *PrinterContainer::get() { return printer; }
+AbstractPrinter *PrinterContainer::operator()() { return printer; }

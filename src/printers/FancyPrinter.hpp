@@ -37,7 +37,7 @@ namespace tracer {
  */
 class FancyPrinter : public FilePrinter, public SystemInfoPrinter {
  public:
-  FancyPrinter() = delete;
+  FancyPrinter();
   FancyPrinter(Tracer *t);
   virtual ~FancyPrinter();
 };

@@ -27,17 +27,70 @@
 #pragma once
 
 #include "defines.hpp"
-#include <memory>
+#include "AbstractPrinter.hpp"
+#include "PrinterContainer.hpp"
+#include "Tracer.hpp"
+#include <signal.h>
+#include <vector>
 
 namespace tracer {
 
-class TracerHandler {
+class TracerHandler final {
+ public:
+  typedef void (*callBackPTR)(Tracer *tracer, AbstractPrinter *printer, void *userData);
+
+  struct Config {
+    std::vector<TraceerEngines>  preferredTracerEngines;   //!< List of preferred engines; First try them for the Tracer
+    std::vector<DebuggerEngines> preferredDebuggerEngines; //!< List of preferred engines; First try them for the Tracer
+
+    bool        autoPrintToStdErr = true;        //!< Prints the stack trace to stderr when enabled
+    bool        autoPrintToFile   = false;       //!< Automatically writes the stack trace to a file when enabled
+    std::string logFile           = "trace.log"; //!< The file to automatically print to; Requires autoPrintToFile
+    bool        appendToFile      = true;        //!< Overides file co; Requires autoPrintToFile
+
+    callBackPTR callback     = nullptr; //!< Function pointer to be called in the internal signal handler (MUST return)
+    void *      callbackData = nullptr; //!< User defined data to be send to the callback function
+
+    bool callDefultHandlerWhenDone = true; //!< The signal handler will call the default signal handler when done
+
+    //! List of signals to handle
+    std::vector<int> signums = {SIGINT,
+                                SIGILL,
+                                SIGABRT,
+                                SIGFPE,
+                                SIGSEGV,
+                                SIGTERM,
+#ifndef _WIN32
+                                SIGQUIT,
+                                SIGTRAP,
+                                SIGBUS,
+                                SIGPIPE,
+                                SIGSTKFLT,
+                                SIGSYS
+#endif
+    };
+  };
+
  private:
   static TracerHandler *tracer;
+  PrinterContainer      printer;
+
+  Config cfg;
+
+  static void sigHandler(int sigNum);
 
   TracerHandler();
 
  public:
+  ~TracerHandler();
+
   static TracerHandler *getTracer();
+  static void           reset();
+
+  Config getConfig() const { return cfg; }
+  void setConfig(Config c) { cfg = c; }
+
+  bool setup(PrinterContainer printerToUse);
+  bool defaultSetup();
 };
 }

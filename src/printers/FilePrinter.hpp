@@ -63,12 +63,13 @@ class FilePrinter : virtual public DefaultPrinter {
   bool findPath(unsigned int depth, fs::path current, fs::path &out, fs::path const &file);
 #endif
 
+ protected:
+  std::string genStringPostFrameIMPL(size_t frameNum) override;
+
  public:
-  FilePrinter() = delete;
+  FilePrinter();
   FilePrinter(Tracer *t);
   virtual ~FilePrinter();
-
-  std::string genStringPostFrame(size_t frameNum) override;
 
 #if !DISABLE_STD_FILESYSTEM
   fs::path findFile(std::string file);

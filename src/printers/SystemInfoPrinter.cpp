@@ -62,7 +62,10 @@ namespace fs = std::filesystem;
 using namespace tracer;
 using namespace std;
 
-SystemInfoPrinter::SystemInfoPrinter(Tracer *t) : AbstractPrinter(t), DefaultPrinter(t) {
+SystemInfoPrinter::SystemInfoPrinter(Tracer *t) : AbstractPrinter(t), DefaultPrinter(t) { setupOsInfo(); }
+SystemInfoPrinter::SystemInfoPrinter() { setupOsInfo(); }
+
+void tracer::SystemInfoPrinter::setupOsInfo() {
 #ifdef _WIN32
 // clang-format off
 #if 0
@@ -270,7 +273,7 @@ string SystemInfoPrinter::sigNum2Str(int sNum) {
   }
 }
 
-string SystemInfoPrinter::genStringPreFrame(size_t frameNum) {
+string SystemInfoPrinter::genStringPreFrameIMPL(size_t frameNum) {
   if (frameNum != 0)
     return "";
 

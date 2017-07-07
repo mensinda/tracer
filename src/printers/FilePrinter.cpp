@@ -36,6 +36,7 @@ using namespace tracer;
 using namespace std;
 
 FilePrinter::FilePrinter(Tracer *t) : AbstractPrinter(t), DefaultPrinter(t) {}
+FilePrinter::FilePrinter() {}
 FilePrinter::~FilePrinter() {}
 
 #if !DISABLE_STD_FILESYSTEM
@@ -107,7 +108,7 @@ fs::path FilePrinter::findFile(string file) {
 #endif
 
 
-string FilePrinter::genStringPostFrame(size_t frameNum) {
+string FilePrinter::genStringPostFrameIMPL(size_t frameNum) {
   string fileStr;
   auto * frames = trace->getFrames();
 

@@ -26,10 +26,29 @@
 
 #include "defines.hpp"
 #include "TracerHandler.hpp"
+#include "FancyPrinter.hpp"
+#include <iostream>
+
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 
 using namespace tracer;
+using namespace std;
 
-TracerHandler::TracerHandler() {}
+TracerHandler::TracerHandler() : printer(nullptr) {}
+TracerHandler::~TracerHandler() { tracer = nullptr; }
+
+/*!
+ * \brief Resets the singelton
+ */
+void TracerHandler::reset() {
+  if (tracer)
+    delete tracer;
+
+  tracer = nullptr;
+}
+
 
 TracerHandler *TracerHandler::getTracer() {
   if (!tracer)
@@ -37,5 +56,89 @@ TracerHandler *TracerHandler::getTracer() {
 
   return tracer;
 }
+
+void TracerHandler::sigHandler(int sigNum) {
+  TracerHandler *th  = TracerHandler::getTracer();
+  auto           cfg = th->getConfig();
+
+  if (cfg.callDefultHandlerWhenDone) {
+#if defined(__GNUC__) || defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wold-style-cast"
+#endif
+    signal(sigNum, SIG_DFL);
+#if defined(__GNUC__) || defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+  }
+
+  auto tracerEngines   = Tracer::getAvaliableEngines();
+  auto debuggerEngines = Tracer::getAvaliableDebuggers();
+
+  TraceerEngines  tEngine  = tracerEngines[0];
+  DebuggerEngines tDebuger = debuggerEngines[0];
+
+  for (auto i : cfg.preferredTracerEngines) {
+    for (auto j : tracerEngines) {
+      if (i == j) {
+        tEngine = i;
+        break;
+      }
+    }
+  }
+
+  for (auto i : cfg.preferredDebuggerEngines) {
+    for (auto j : debuggerEngines) {
+      if (i == j) {
+        tDebuger = i;
+        break;
+      }
+    }
+  }
+
+  Tracer t(tEngine, tDebuger);
+
+  t.trace();
+
+  AbstractPrinter *p = th->printer.get();
+  if (!p) {
+    cerr << "[TRACER] (sigHandler) Fatal error: Printer not set (this code should never be executed)" << endl;
+    goto error;
+  }
+
+  p->setTrace(&t);
+
+  if (cfg.autoPrintToStdErr) {
+    p->printToStdErr();
+  }
+
+  if (cfg.autoPrintToFile) {
+    p->printToFile(cfg.logFile, cfg.appendToFile);
+  }
+
+  if (cfg.callback)
+    cfg.callback(&t, p, cfg.callbackData);
+
+error:
+  if (!cfg.callDefultHandlerWhenDone)
+    return;
+
+#ifndef _WIN32
+  kill(getpid(), sigNum);
+#endif
+}
+
+
+bool TracerHandler::defaultSetup() { return setup(PrinterContainer::fancy()); }
+bool TracerHandler::setup(PrinterContainer printerToUse) {
+  printer = std::move(printerToUse);
+
+  for (int i : cfg.signums) {
+    signal(i, TracerHandler::sigHandler);
+  }
+
+  return true;
+}
+
 
 TracerHandler *TracerHandler::tracer = nullptr;

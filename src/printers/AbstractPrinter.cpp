@@ -34,18 +34,24 @@
 using namespace tracer;
 using namespace std;
 
+AbstractPrinter::AbstractPrinter() {}
+AbstractPrinter::AbstractPrinter(Tracer *t) : trace(t) {}
 AbstractPrinter::~AbstractPrinter() {}
 
-AbstractPrinter::AbstractPrinter(Tracer *t) : trace(t) {}
+void AbstractPrinter::setupTrace() {}
+
 
 std::string tracer::AbstractPrinter::generateString() {
+  if (!trace)
+    return "";
+
   std::string outSTR;
   auto *      frames = trace->getFrames();
 
   for (size_t i = 0; i < frames->size(); ++i) {
-    outSTR += genStringPreFrame(i);
-    outSTR += genStringForFrame(i);
-    outSTR += genStringPostFrame(i);
+    outSTR += genStringPreFrameIMPL(i);
+    outSTR += genStringForFrameIMPL(i);
+    outSTR += genStringPostFrameIMPL(i);
   }
 
   if (disableColorB) {
@@ -56,11 +62,36 @@ std::string tracer::AbstractPrinter::generateString() {
   return outSTR;
 }
 
-string AbstractPrinter::genStringPreFrame(size_t) { return ""; }
-string AbstractPrinter::genStringPostFrame(size_t) { return ""; }
+string AbstractPrinter::genStringPreFrameIMPL(size_t) { return ""; }
+string AbstractPrinter::genStringPostFrameIMPL(size_t) { return ""; }
+
+std::string tracer::AbstractPrinter::genStringPreFrame(size_t frameNum) {
+  if (!trace)
+    return "";
+
+  return genStringPreFrameIMPL(frameNum);
+}
+
+std::string tracer::AbstractPrinter::genStringForFrame(size_t frameNum) {
+  if (!trace)
+    return "";
+
+  return genStringForFrameIMPL(frameNum);
+}
+
+std::string tracer::AbstractPrinter::genStringPostFrame(size_t frameNum) {
+  if (!trace)
+    return "";
+
+  return genStringPostFrameIMPL(frameNum);
+}
+
 
 
 void tracer::AbstractPrinter::printToFile(std::string file, bool append) {
+  if (!trace)
+    return;
+
   auto mode = ios_base::app | ios_base::out;
 
   if (!append)
@@ -77,3 +108,7 @@ void tracer::AbstractPrinter::printToFile(std::string file, bool append) {
 
 void tracer::AbstractPrinter::printToStdErr() { cerr << generateString() << endl; }
 void tracer::AbstractPrinter::printToStdOut() { cout << generateString() << endl; }
+void tracer::AbstractPrinter::setTrace(tracer::Tracer *t) {
+  trace = t;
+  setupTrace();
+}

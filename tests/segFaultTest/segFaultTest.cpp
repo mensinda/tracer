@@ -25,9 +25,7 @@
  */
 
 #include "defines.hpp"
-#include "DefaultPrinter.hpp"
-#include "FancyPrinter.hpp"
-#include "Tracer.hpp"
+#include "TracerHandler.hpp"
 #include <iostream>
 #include <signal.h>
 
@@ -38,27 +36,6 @@
 using namespace std;
 using namespace tracer;
 
-void handler(int signum);
-void handler(int signum) {
-  Tracer t1;
-  t1();
-  FancyPrinter p1(&t1);
-  p1.setSignum(signum);
-  p1.printToStdErr();
-
-#if defined(__GNUC__) || defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wold-style-cast"
-#endif
-  signal(signum, SIG_DFL);
-#if defined(__GNUC__) || defined(__clang__)
-#pragma clang diagnostic pop
-#endif
-
-#ifndef _WIN32
-  kill(getpid(), signum);
-#endif
-}
 
 int f1(int x);
 int f2(int x);
@@ -82,7 +59,7 @@ int main(int argc, char *argv[]) {
   (void)argc;
   (void)argv;
 
-  signal(SIGSEGV, handler);
+  TracerHandler::getTracer()->defaultSetup();
   f1(42);
 
   return 0;

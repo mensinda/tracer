@@ -47,6 +47,7 @@ bool DebugInfoExternalFallback::processFrames(vector<Frame> &frames) {
   string temp;
 
   for (auto &i : frames) {
+    cout << "==================================================" << endl;
     Dl_info dlInfo;
     Address addr1 = i.frameAddr - 4;
 
@@ -60,6 +61,8 @@ bool DebugInfoExternalFallback::processFrames(vector<Frame> &frames) {
     } else {
       continue; // dlInfo.dli_fname is required for the next step
     }
+
+    cout << "dladdr passed: " << dlInfo.dli_fname << endl;
 
     Address addr2 = addr1 - reinterpret_cast<Address>(dlInfo.dli_fbase);
 
@@ -76,6 +79,8 @@ bool DebugInfoExternalFallback::processFrames(vector<Frame> &frames) {
     contents[3].stream << "addr2line -fC -e " << dlInfo.dli_fname << " 0x" << hex << addr2 << " 2>&1" << endl;
 
     for (auto &j : contents) {
+      cout << "--------------------------------------------------" << endl;
+      cout << "NEW PASS: " << dlInfo.dli_fname << endl;
       FILE *fd = popen(j.stream.str().c_str(), "r");
 
       if (fd) {
@@ -84,26 +89,35 @@ bool DebugInfoExternalFallback::processFrames(vector<Frame> &frames) {
         }
 
         if (pclose(fd) != 0) {
+          cerr << "INVALID RETURN VALUE" << endl;
           continue;
         }
       } else {
+        cerr << "NO FD" << endl;
         continue;
       }
 
+      cout << "---------" << endl << j.output << endl << "---------" << endl;
+
       if (regex_search(j.output, match, regFunc)) {
+        cout << "FNAME MATCH" << endl;
         temp = regex_replace(match.str(), regFunc, "$1");
 
         if (!temp.empty() && temp != "??") {
           i.flags |= FrameFlags::HAS_FUNC_NAME;
           i.funcName = temp;
+          cout << "Valid func name: " << temp << endl;
         }
       }
 
       if (regex_search(j.output, match, regLine)) {
+        cout << "LINE MATCH " << match.size() << endl;
         if (match.size() >= 5) {
           string file = match[1];
           string line = match[2];
           string colm = match[4];
+
+          cout << "LN: '" << file << "' '" << line << "' '" << colm << "'" << endl;
 
           if (!file.empty() && file != "??") {
             i.flags |= FrameFlags::HAS_LINE_INFO;

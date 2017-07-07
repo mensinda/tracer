@@ -32,4 +32,5 @@ using namespace std;
 
 FancyPrinter::FancyPrinter(tracer::Tracer *t)
     : AbstractPrinter(t), DefaultPrinter(t), FilePrinter(t), SystemInfoPrinter(t) {}
+tracer::FancyPrinter::FancyPrinter() {}
 FancyPrinter::~FancyPrinter() {}

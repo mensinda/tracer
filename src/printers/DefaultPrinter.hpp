@@ -64,15 +64,17 @@ class DefaultPrinter : virtual public AbstractPrinter {
 
   void calcMaxNameLengths();
 
+ protected:
+  std::string genStringForFrameIMPL(size_t frameNum) override;
+  void setupTrace() override;
+
  public:
-  DefaultPrinter() = delete;
+  DefaultPrinter();
   DefaultPrinter(Tracer *t);
   virtual ~DefaultPrinter();
 
   void setConfig(Config newCfg) { cfg = newCfg; }
 
   Config getConfig() const { return cfg; }
-
-  std::string genStringForFrame(size_t frameNum) override;
 };
 }

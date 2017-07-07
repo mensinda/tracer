@@ -27,40 +27,33 @@
 #pragma once
 
 #include "defines.hpp"
-#include <string>
+#include "FancyPrinter.hpp"
 
 namespace tracer {
 
-class Tracer;
-
-class AbstractPrinter {
- protected:
-  Tracer *trace         = nullptr;
-  bool    disableColorB = false;
-
-  virtual void setupTrace();
-
-  virtual std::string genStringPreFrameIMPL(size_t frameNum);
-  virtual std::string genStringForFrameIMPL(size_t frameNum) = 0;
-  virtual std::string genStringPostFrameIMPL(size_t frameNum);
+class PrinterContainer final {
+ private:
+  AbstractPrinter *printer = nullptr;
 
  public:
-  virtual ~AbstractPrinter();
-  AbstractPrinter();
-  AbstractPrinter(Tracer *t);
+  PrinterContainer() = delete;
+  PrinterContainer(AbstractPrinter *p);
+  ~PrinterContainer();
 
-  std::string genStringPreFrame(size_t frameNum);
-  std::string genStringForFrame(size_t frameNum);
-  std::string genStringPostFrame(size_t frameNum);
+  PrinterContainer(const PrinterContainer &) = delete;
+  PrinterContainer(PrinterContainer &&);
 
-  std::string generateString();
-  void printToFile(std::string file, bool append = true);
-  void printToStdOut();
-  void printToStdErr();
+  PrinterContainer &operator=(const PrinterContainer &) = delete;
 
-  void enableColor() { disableColorB = false; }
-  void disableColor() { disableColorB = true; }
+  PrinterContainer &operator=(PrinterContainer &&);
 
-  void setTrace(Tracer *t);
+  AbstractPrinter *get();
+  AbstractPrinter *operator()();
+  AbstractPrinter *operator->() { return printer; }
+
+  static PrinterContainer fancy();
+  static PrinterContainer file();
+  static PrinterContainer system();
+  static PrinterContainer plain();
 };
 }

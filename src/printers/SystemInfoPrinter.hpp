@@ -58,13 +58,17 @@ class SystemInfoPrinter : virtual public DefaultPrinter {
 
   std::vector<InfoEntry> entries;
 
+  void setupOsInfo();
+
+ protected:
+  std::string genStringPreFrameIMPL(size_t frameNum) override;
+
  public:
-  SystemInfoPrinter() = delete;
+  SystemInfoPrinter();
   SystemInfoPrinter(Tracer *t);
 
   static std::string sigNum2Str(int sNum);
 
-  std::string genStringPreFrame(size_t frameNum) override;
   void setSignum(int sNum) { sigNum = sNum; }
 
   void addSystemEntry(InfoEntry e) { entries.push_back(e); }
