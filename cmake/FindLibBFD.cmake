@@ -52,7 +52,7 @@ find_library(
 if( BUILD_STATIC )
   find_library(
     LibBFD_LIBZ
-      NAMES libz.a
+      NAMES z
       HINTS
         /usr/lib
         /usr/local/lib
@@ -61,14 +61,14 @@ if( BUILD_STATIC )
 
   find_library(
     LibBFD_LIBIBERTY
-      NAMES libiberty.a
+      NAMES iberty
       HINTS
         /usr/lib
         /usr/local/lib
         ${LibBFD_ROOT}/lib
   )
 
-  set( LINK_INTERFACE_LIBS ${DLFCN_LIBRARIES} ${DLFCN_DW_LIB_STATIC} ${LibBFD_LIBZ} ${LibBFD_LIBIBERTY} )
+  set( LINK_INTERFACE_LIBS ${DLFCN_LIBRARIES} ${LibBFD_LIBZ} ${LibBFD_LIBIBERTY} )
   set( STATIC_REQUIRED LibBFD_LIBZ LibBFD_LIBIBERTY )
 endif( BUILD_STATIC )
 

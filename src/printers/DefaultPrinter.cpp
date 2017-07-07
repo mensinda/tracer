@@ -30,12 +30,14 @@
 #include <iomanip>
 #include <sstream>
 
+#if !DISABLE_STD_FILESYSTEM
 #if __cplusplus <= 201402L
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
 #else
 #include <filesystem>
 namespace fs = std::filesystem;
+#endif
 #endif
 
 using namespace tracer;
@@ -50,6 +52,7 @@ void DefaultPrinter::calcMaxNameLengths() {
     string module   = i.moduleName;
     string fileName = i.fileName;
 
+#if !DISABLE_STD_FILESYSTEM
     try {
       if (cfg.canonicalizePaths) {
         module   = fs::canonical(fs::path(module)).string();
@@ -62,6 +65,7 @@ void DefaultPrinter::calcMaxNameLengths() {
 
     if (cfg.shortenModules)
       module = fs::path(module).filename().string();
+#endif
 
     if (module.length() > maxModuleNameLegth)
       maxModuleNameLegth = module.length();
@@ -109,6 +113,7 @@ std::string DefaultPrinter::genStringForFrame(size_t frameNum) {
   string moduleP  = i.moduleName;
   string fileName = i.fileName;
 
+#if !DISABLE_STD_FILESYSTEM
   try {
     if (cfg.canonicalizePaths) {
       moduleP  = fs::canonical(fs::path(moduleP)).string();
@@ -121,7 +126,7 @@ std::string DefaultPrinter::genStringForFrame(size_t frameNum) {
 
   if (cfg.shortenModules)
     moduleP = fs::path(moduleP).filename().string();
-
+#endif
 
   if ((i.flags & FrameFlags::HAS_ADDRESS) == FrameFlags::HAS_ADDRESS) {
     stringstream addressStream;

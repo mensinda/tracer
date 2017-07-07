@@ -30,12 +30,14 @@
 #include "DefaultPrinter.hpp"
 #include <vector>
 
+#if !DISABLE_STD_FILESYSTEM
 #if __cplusplus <= 201402L
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
 #else
 #include <filesystem>
 namespace fs = std::filesystem;
+#endif
 #endif
 
 namespace tracer {
@@ -54,11 +56,12 @@ class FilePrinter : virtual public DefaultPrinter {
   };
 
  private:
-  std::vector<fs::path> pathCache;
-
   FileConfig fCFG;
 
+#if !DISABLE_STD_FILESYSTEM
+  std::vector<fs::path> pathCache;
   bool findPath(unsigned int depth, fs::path current, fs::path &out, fs::path const &file);
+#endif
 
  public:
   FilePrinter() = delete;
@@ -67,7 +70,9 @@ class FilePrinter : virtual public DefaultPrinter {
 
   std::string genStringPostFrame(size_t frameNum) override;
 
+#if !DISABLE_STD_FILESYSTEM
   fs::path findFile(std::string file);
+#endif
 
   void setFilePrinterConfig(FileConfig d) { fCFG = d; }
 

@@ -52,6 +52,8 @@
 #include <Windows.h>
 #endif
 
+#define DISABLE_STD_FILESYSTEM @CM_DISABLE_FILESYSTEM@
+
 namespace tracer {
 
 #if UINTPTR_MAX == 0xffffffff            // 32-bit

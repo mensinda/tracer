@@ -49,12 +49,14 @@
 #include <sys/utsname.h>
 #endif
 
+#if !DISABLE_STD_FILESYSTEM
 #if __cplusplus <= 201402L
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
 #else
 #include <filesystem>
 namespace fs = std::filesystem;
+#endif
 #endif
 
 using namespace tracer;
@@ -122,7 +124,7 @@ SystemInfoPrinter::SystemInfoPrinter(Tracer *t) : AbstractPrinter(t), DefaultPri
 #elif __APPLE__
 #include "TargetConditionals.h"
 #if TARGET_IPHONE_SIMULATOR
-  OS         = "iOS Simulator"; // iOS Simulator
+  OS = "iOS Simulator"; // iOS Simulator
 #elif TARGET_OS_IPHONE
   OS = "iOS Device"; // iOS device
 #elif TARGET_OS_MAC
@@ -164,9 +166,13 @@ SystemInfoPrinter::SystemInfoPrinter(Tracer *t) : AbstractPrinter(t), DefaultPri
     }
   }
 
-  // Try /etc/os-release if this fails
+// Try /etc/os-release if this fails
+#if !DISABLE_STD_FILESYSTEM
   fs::path relInfoP("/etc/os-release");
   if (fs::exists(relInfoP) && !releaseInfoFound) {
+#else
+  if (!releaseInfoFound) {
+#endif
     ifstream relInfoFile("/etc/os-release", ios::in);
     if (relInfoFile) {
       regex  nameReg("NAME=\"([^\"]*)\"");

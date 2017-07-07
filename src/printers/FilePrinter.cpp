@@ -38,6 +38,7 @@ using namespace std;
 FilePrinter::FilePrinter(Tracer *t) : AbstractPrinter(t), DefaultPrinter(t) {}
 FilePrinter::~FilePrinter() {}
 
+#if !DISABLE_STD_FILESYSTEM
 bool FilePrinter::findPath(unsigned int depth, fs::path current, fs::path &out, fs::path const &file) {
   if (depth > fCFG.maxRecursionDepth)
     return false;
@@ -103,11 +104,12 @@ fs::path FilePrinter::findFile(string file) {
 
   return "";
 }
+#endif
 
 
 string FilePrinter::genStringPostFrame(size_t frameNum) {
-  fs::path file;
-  auto *   frames = trace->getFrames();
+  string fileStr;
+  auto * frames = trace->getFrames();
 
   if (frameNum >= frames->size())
     return "";
@@ -116,6 +118,11 @@ string FilePrinter::genStringPostFrame(size_t frameNum) {
   if ((f.flags & FrameFlags::HAS_LINE_INFO) != FrameFlags::HAS_LINE_INFO)
     return "";
 
+  fileStr = f.fileName;
+
+#if !DISABLE_STD_FILESYSTEM
+  fs::path file;
+
   try {
     file = findFile(f.fileName);
   } catch (...) { return ""; }
@@ -123,7 +130,10 @@ string FilePrinter::genStringPostFrame(size_t frameNum) {
   if (file.empty() || !fs::is_regular_file(file))
     return "";
 
-  ifstream fileStream(file.string(), ios::in);
+  fileStr = file.string();
+#endif
+
+  ifstream fileStream(fileStr, ios::in);
   if (!fileStream.is_open())
     return "";
 

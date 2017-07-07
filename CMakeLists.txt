@@ -49,17 +49,25 @@ set( CMAKE_C_STANDARD_REQUIRED   ON )
 set( CMAKE_POSITION_INDEPENDENT_CODE  ON )
 set( CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON )
 
-option( DISABLE_TESTS       "Disables all tests"                      OFF )
-option( AUTO_ENABLE_MODULES "Automatically enable modules when found" ON )
-option( USE_CLANG_LIBCXX    "Build with libc++ instead of stdlibc++"  OFF )
-option( BUILD_STATIC        "Build and link tracer static"            OFF )
-#option( PREFER_STATIC_LIBS  "Prefer linking to static libs"           ON  )
+option( DISABLE_TESTS       "Disables all tests"                                      OFF )
+option( AUTO_ENABLE_MODULES "Automatically enable modules when found"                 ON )
+option( USE_CLANG_LIBCXX    "Build with libc++ instead of stdlibc++"                  OFF )
+option( BUILD_STATIC        "Build and link tracer static"                            OFF )
+option( DISABLE_FILESYSTEM  "Disables std::filesystem -- then only C++11 is required" OFF )
+#option( PREFER_STATIC_LIBS  "Prefer linking to static libs"                           ON  )
 
 #####################
 # Check std C++ lib #
 #####################
 
-if( UNIX )
+if( DISABLE_FILESYSTEM )
+  set( CM_DISABLE_FILESYSTEM 1  )
+  set( CMAKE_CXX_STANDARD    11 ) # No need for c++17 without std::filesystem
+else( DISABLE_FILESYSTEM )
+  set( CM_DISABLE_FILESYSTEM 0 )
+endif( DISABLE_FILESYSTEM )
+
+if( UNIX AND NOT DISABLE_FILESYSTEM )
   if( USE_CLANG_LIBCXX )
     set( GCC_STDLIB_FLAGS   "-nodefaultlibs -lc++ -lc++abi" )
     set( CLANG_STDLIB_FLAGS "-stdlib=libc++" )
@@ -85,7 +93,7 @@ endif( EXISTS "${CMAKE_CURRENT_LIST_DIR}/private.cmake" )
 ################################
 
 add_compiler(
-  GNU MIN_VERSION "7.1"
+  GNU MIN_VERSION "5.1"
   ALL        "-Wall -Wextra -Wfloat-equal -Wshadow -Wno-unknown-pragmas -Wno-implicit-fallthrough -fno-strict-aliasing -fdiagnostics-color=always ${GCC_STDLIB_FLAGS}"
   DEBUG      "-Og -Werror -fno-omit-frame-pointer -gcolumn-info" ${COVERAGE_COMPILER_FLAG}
   RELEASE    "-O3 -fno-omit-frame-pointer -g -gcolumn-info"
