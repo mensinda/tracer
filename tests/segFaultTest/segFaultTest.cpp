@@ -34,12 +34,17 @@
 #ifndef _WIN32
 #include <unistd.h>
 #endif
+#ifdef __GNUC__
+#define noinline __attribute__ ((noinline))
+#else
+#define noinline
+#endif
 
 using namespace std;
 using namespace tracer;
 
-void handler(int signum);
-void handler(int signum) {
+static void handler(int signum);
+static void handler(int signum) {
   Tracer t1;
   t1();
   FancyPrinter p1(&t1);
@@ -66,21 +71,17 @@ int f3(int x);
 int f4(int x);
 int f5(int x);
 
-int f1(int x) { return f2(++x); }
-int f2(int x) { return f3(++x); }
-int f3(int x) { return f4(++x); }
-int f4(int x) { return f5(++x); }
-int f5(int x) {
-  int  i = 0;
-  int *p = &i;
-  p      = nullptr;
+int noinline f1(int x) { return f2(++x); }
+int noinline f2(int x) { return f3(++x); }
+int noinline f3(int x) { return f4(++x); }
+int noinline f4(int x) { return f5(++x); }
+int noinline f5(int x) {
+  int *volatile p = nullptr;
   *p     = x; // SEGFAULT here
   return i;
 }
 
-int main(int argc, char *argv[]) {
-  (void)argc;
-  (void)argv;
+int main() {
 
   signal(SIGSEGV, handler);
   f1(42);
