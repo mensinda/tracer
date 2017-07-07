@@ -35,7 +35,7 @@ namespace tracer {
 /*!
  * \brief Wrapper for both FilePrinter and SystemInfoPrinter
  */
-class FancyPrinter : virtual public FilePrinter, virtual public SystemInfoPrinter {
+class FancyPrinter : public FilePrinter, public SystemInfoPrinter {
  public:
   FancyPrinter() = delete;
   FancyPrinter(Tracer *t);
