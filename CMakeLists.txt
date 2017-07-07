@@ -94,7 +94,7 @@ endif( EXISTS "${CMAKE_CURRENT_LIST_DIR}/private.cmake" )
 
 add_compiler(
   GNU MIN_VERSION "5.1"
-  ALL        "-Wall -Wextra -Wfloat-equal -Wshadow -Wno-unknown-pragmas -Wno-implicit-fallthrough -fno-strict-aliasing -fdiagnostics-color=always ${GCC_STDLIB_FLAGS}"
+  ALL        "-Wall -Wextra -Wfloat-equal -Wshadow -Wno-unknown-pragmas -fdiagnostics-color=always ${GCC_STDLIB_FLAGS}"
   DEBUG      "-Og -Werror -fno-omit-frame-pointer -gcolumn-info" ${COVERAGE_COMPILER_FLAG}
   RELEASE    "-O3 -fno-omit-frame-pointer -g -gcolumn-info"
 
@@ -107,7 +107,7 @@ add_compiler(
 
 add_compiler(
   Clang MIN_VERSION 3.9
-  ALL        "-Weverything -ftemplate-backtrace-limit=0 -fno-strict-aliasing -fcolor-diagnostics"
+  ALL        "-Weverything -ftemplate-backtrace-limit=0 -fcolor-diagnostics"
              "-Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-padded ${CLANG_STDLIB_FLAGS}"
              "-Wno-gnu-anonymous-struct -Wno-nested-anon-types -Wno-exit-time-destructors"
              "-Wno-global-constructors -Wno-switch-enum -Wno-reserved-id-macro"
@@ -140,15 +140,16 @@ add_compiler(
 
 macro( ADD_MODULE_DEP NAME PL_TARGET DEP )
   find_package( ${NAME} )
-  set( ${NAME}_MOD_DEP   ${DEP} )
-  set( ${NAME}_PL_TARGET ${PL_TARGET} )
+  set( ${NAME}_MOD_DEP   ${${NAME}_MOD_DEP}   ${DEP} )
+  set( ${NAME}_PL_TARGET ${${NAME}_PL_TARGET} ${PL_TARGET} )
   list( APPEND ALL_MODULES ${NAME} )
 endmacro( ADD_MODULE_DEP )
 
-ADD_MODULE_DEP( LibUnwind UNIX_LIBUNWIND LibUnwind::LibUnwind )
-ADD_MODULE_DEP( LibELF    UNIX_LIBDWLF   LibELF::DW )
-ADD_MODULE_DEP( LibBFD    UNIX_LIBBFD    LibBFD::LibBFD )
-ADD_MODULE_DEP( Execinfo  UNIX_GLIBC     "Execinfo::Execinfo dl" )
+ADD_MODULE_DEP( LibUnwind UNIX_LIBUNWIND        LibUnwind::LibUnwind )
+ADD_MODULE_DEP( LibELF    UNIX_LIBDWLF          LibELF::DW )
+ADD_MODULE_DEP( LibBFD    UNIX_LIBBFD           LibBFD::LibBFD )
+ADD_MODULE_DEP( Execinfo  UNIX_GLIBC            Execinfo::Execinfo )
+ADD_MODULE_DEP( Execinfo  UNIX_EXTERNALFALLBACK Execinfo::Execinfo )
 
 run_git()
 
@@ -161,8 +162,8 @@ add_platform( OS WIN32 TARGET windows )
 add_platform(
   OS UNIX
   TARGET
-    libunwind glibc # Tracer
-    libdwlf libbfd  # Debug Info
+    libunwind glibc                 # Tracer
+    libdwlf libbfd externalFallback # Debug Info
 )
 
 if( AUTO_ENABLE_MODULES )
@@ -181,13 +182,16 @@ foreach( I IN LISTS ALL_MODULES )
     endif( ${I}_FOUND )
   endif( AUTO_ENABLE_MODULES )
 
-  if( ${${I}_PL_TARGET} IN_LIST PLATFORM_TARGET )
-    if( NOT ${I}_FOUND )
-      message( SEND_ERROR "${${I}_PL_TARGET} is in list PLATFORM_TARGET but ${I} is not found!" )
-    endif( NOT ${I}_FOUND )
-  endif( ${${I}_PL_TARGET} IN_LIST PLATFORM_TARGET )
+  foreach( J IN LISTS ${I}_PL_TARGET )
+    if( ${J} IN_LIST PLATFORM_TARGET )
+      if( NOT ${I}_FOUND )
+        message( SEND_ERROR "${J} is in list PLATFORM_TARGET but ${I} is not found!" )
+      endif( NOT ${I}_FOUND )
+    endif( ${J} IN_LIST PLATFORM_TARGET )
+  endforeach( J IN LISTS ${I}_PL_TARGET )
 endforeach( I IN LISTS ALL_MODULES )
 
+list(REMOVE_DUPLICATES PLATFORM_TARGET)
 check_platform()
 
 ####################

@@ -44,6 +44,10 @@
 #include "DebugInfoBFD.hpp"
 #endif
 
+#if USE_FALLBACK
+#include "DebugInfoExternalFallback.hpp"
+#endif
+
 #if USE_WINDOWS
 #include "DebugInfoWIN32.hpp"
 #include "Win32Tracer.hpp"
@@ -83,6 +87,11 @@ Tracer::Tracer(TraceerEngines engine, DebuggerEngines debugger) {
 #if USE_WINDOWS
   if (debugger == DebuggerEngines::WIN32_INFO)
     debuggerEngine = new DebugInfoWIN32;
+#endif
+
+#if USE_FALLBACK
+  if (debugger == DebuggerEngines::EXTERNAL_FALLBACK)
+    debuggerEngine = new DebugInfoExternalFallback;
 #endif
 
   if (!tracerEngine) {
@@ -157,6 +166,10 @@ vector<DebuggerEngines> Tracer::getAvaliableDebuggers() {
 
 #if USE_WINDOWS
   engines.emplace_back(DebuggerEngines::WIN32_INFO);
+#endif
+
+#if USE_FALLBACK
+  engines.emplace_back(DebuggerEngines::EXTERNAL_FALLBACK);
 #endif
 
   return engines;

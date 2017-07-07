@@ -25,6 +25,8 @@
 
 include(FindPackageHandleStandardArgs)
 
+find_package( DLFCN )
+
 find_path(
   Execinfo_INC
     NAMES execinfo.h
@@ -41,7 +43,7 @@ find_library(
 
 find_package_handle_standard_args(
   Execinfo
-  REQUIRED_VARS Execinfo_INC Execinfo_LIB
+  REQUIRED_VARS Execinfo_INC Execinfo_LIB DLFCN_FOUND
 )
 
 if( Execinfo_FOUND )
@@ -53,6 +55,7 @@ if( Execinfo_FOUND )
     set_target_properties( Execinfo::Execinfo
       PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${Execinfo_INCLUDE_DIRS}"
+        INTERFACE_LINK_LIBRARIES      "${DLFCN_LIBRARIES}"
         IMPORTED_LOCATION             "${Execinfo_LIBRARIES}"
     )
   endif( NOT TARGET Execinfo::Execinfo )
