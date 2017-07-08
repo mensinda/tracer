@@ -47,7 +47,9 @@ bool DebugInfoExternalFallback::processFrames(vector<Frame> &frames) {
   string temp;
 
   for (auto &i : frames) {
+#if VERBOSE_DEBUG
     cout << "==================================================" << endl;
+#endif
     Dl_info dlInfo;
     Address addr1 = i.frameAddr - 4;
 
@@ -62,7 +64,9 @@ bool DebugInfoExternalFallback::processFrames(vector<Frame> &frames) {
       continue; // dlInfo.dli_fname is required for the next step
     }
 
+#if VERBOSE_DEBUG
     cout << "dladdr passed: " << dlInfo.dli_fname << endl;
+#endif
 
     Address addr2 = addr1 - reinterpret_cast<Address>(dlInfo.dli_fbase);
 
@@ -79,8 +83,10 @@ bool DebugInfoExternalFallback::processFrames(vector<Frame> &frames) {
     contents[3].stream << "addr2line -fC -e " << dlInfo.dli_fname << " 0x" << hex << addr2 << " 2>&1" << endl;
 
     for (auto &j : contents) {
+#if VERBOSE_DEBUG
       cout << "--------------------------------------------------" << endl;
       cout << "NEW PASS: " << dlInfo.dli_fname << endl;
+#endif
       FILE *fd = popen(j.stream.str().c_str(), "r");
 
       if (fd) {
@@ -89,35 +95,43 @@ bool DebugInfoExternalFallback::processFrames(vector<Frame> &frames) {
         }
 
         if (pclose(fd) != 0) {
+#if VERBOSE_DEBUG
           cerr << "INVALID RETURN VALUE" << endl;
+#endif
           continue;
         }
       } else {
+#if VERBOSE_DEBUG
         cerr << "NO FD" << endl;
+#endif
         continue;
       }
 
+#if VERBOSE_DEBUG
       cout << "---------" << endl << j.output << endl << "---------" << endl;
+#endif
 
       if (regex_search(j.output, match, regFunc)) {
-        cout << "FNAME MATCH" << endl;
         temp = regex_replace(match.str(), regFunc, "$1");
 
         if (!temp.empty() && temp != "??") {
           i.flags |= FrameFlags::HAS_FUNC_NAME;
           i.funcName = temp;
+#if VERBOSE_DEBUG
           cout << "Valid func name: " << temp << endl;
+#endif
         }
       }
 
       if (regex_search(j.output, match, regLine)) {
-        cout << "LINE MATCH " << match.size() << endl;
         if (match.size() >= 5) {
           string file = match[1];
           string line = match[2];
           string colm = match[4];
 
+#if VERBOSE_DEBUG
           cout << "LN: '" << file << "' '" << line << "' '" << colm << "'" << endl;
+#endif
 
           if (!file.empty() && file != "??") {
             i.flags |= FrameFlags::HAS_LINE_INFO;

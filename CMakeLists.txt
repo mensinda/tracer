@@ -54,11 +54,18 @@ option( AUTO_ENABLE_MODULES "Automatically enable modules when found"           
 option( USE_CLANG_LIBCXX    "Build with libc++ instead of stdlibc++"                  OFF )
 option( BUILD_STATIC        "Build and link tracer static"                            OFF )
 option( DISABLE_FILESYSTEM  "Disables std::filesystem -- then only C++11 is required" OFF )
+option( VERBOSE_DEBUG       "Some additional debug messages"                          OFF )
 #option( PREFER_STATIC_LIBS  "Prefer linking to static libs"                           ON  )
 
 #####################
 # Check std C++ lib #
 #####################
+
+if( VERBOSE_DEBUG )
+  set( CM_VERBOSE_DEBUG 1 )
+else( VERBOSE_DEBUG )
+  set( CM_VERBOSE_DEBUG 0 )
+endif( VERBOSE_DEBUG )
 
 if( DISABLE_FILESYSTEM )
   set( CM_DISABLE_FILESYSTEM 1  )

@@ -156,12 +156,12 @@ vector<TraceerEngines> Tracer::getAvaliableEngines() {
 vector<DebuggerEngines> Tracer::getAvaliableDebuggers() {
   vector<DebuggerEngines> engines;
 
-#if USE_BFD
-  engines.emplace_back(DebuggerEngines::LIBBFD);
-#endif
-
 #if USE_DWFL
   engines.emplace_back(DebuggerEngines::LIBDWFL);
+#endif
+
+#if USE_BFD
+  engines.emplace_back(DebuggerEngines::LIBBFD);
 #endif
 
 #if USE_WINDOWS

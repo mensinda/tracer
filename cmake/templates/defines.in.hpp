@@ -41,6 +41,8 @@
 #define USE_BFD       @CM_UNIX_LIBBFD@
 #define USE_FALLBACK  @CM_UNIX_EXTERNALFALLBACK@
 
+#define VERBOSE_DEBUG @CM_VERBOSE_DEBUG@
+
 #if !USE_GLIBC && !USE_LIBUNWIND && !USE_WINDOWS
 #error "No Backend (tracer engine) enabled"
 #endif
