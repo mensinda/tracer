@@ -33,6 +33,7 @@
 using namespace tracer;
 
 Win32Tracer::Win32Tracer() {}
+Win32Tracer::~Win32Tracer() {}
 
 std::vector<Frame> Win32Tracer::backtrace() {
   std::vector<Frame> frames;

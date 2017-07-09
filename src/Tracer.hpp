@@ -33,8 +33,8 @@
 
 namespace tracer {
 
-enum class TraceerEngines { LIBUNWIND, GLIBC, WIN32_TRACER };
-enum class DebuggerEngines { LIBDWFL, LIBBFD, WIN32_INFO, EXTERNAL_FALLBACK };
+enum class TraceerEngines { LIBUNWIND, GLIBC, WIN32_TRACER, DUMMY };
+enum class DebuggerEngines { LIBDWFL, LIBBFD, WIN32_INFO, EXTERNAL_FALLBACK, DUMMY };
 
 class Tracer {
  private:

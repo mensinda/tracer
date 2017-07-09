@@ -31,6 +31,7 @@
 using namespace tracer;
 
 GlibCTracer::GlibCTracer() {}
+GlibCTracer::~GlibCTracer() {}
 
 std::vector<Frame> GlibCTracer::backtrace() {
   void *addrs[constants::MAX_TRACE_DEPTH];

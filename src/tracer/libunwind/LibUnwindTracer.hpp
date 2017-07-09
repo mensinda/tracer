@@ -42,6 +42,7 @@ class LibUnwindTracer : public AbstractTracer {
 
  public:
   LibUnwindTracer();
+  virtual ~LibUnwindTracer();
 
   std::vector<Frame> backtrace() override;
   void setContext(void *ctx) override;

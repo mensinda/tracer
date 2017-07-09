@@ -31,10 +31,10 @@
 
 namespace tracer {
 
-class GlibCTracer : public AbstractTracer {
+class DummyTracer : public AbstractTracer {
  public:
-  GlibCTracer();
-  virtual ~GlibCTracer();
+  DummyTracer();
+  virtual ~DummyTracer();
 
   std::vector<Frame> backtrace() override;
 };

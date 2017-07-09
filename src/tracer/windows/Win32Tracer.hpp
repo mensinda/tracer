@@ -35,6 +35,7 @@ class Win32Tracer : public AbstractTracer {
  private:
  public:
   Win32Tracer();
+  virtual ~Win32Tracer();
 
   std::vector<Frame> backtrace() override;
 };

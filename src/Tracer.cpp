@@ -26,6 +26,8 @@
 
 #include "defines.hpp"
 #include "Tracer.hpp"
+#include "DebugInfoDummy.hpp"
+#include "DummyTracer.hpp"
 #include <iostream>
 
 #if USE_LIBUNWIND
@@ -59,6 +61,7 @@ using namespace std;
 Tracer::Tracer() : Tracer(getAvaliableEngines()[0], getAvaliableDebuggers()[0]) {}
 
 Tracer::Tracer(TraceerEngines engine, DebuggerEngines debugger) {
+// Tracer
 #if USE_LIBUNWIND
   if (engine == TraceerEngines::LIBUNWIND)
     tracerEngine = new LibUnwindTracer;
@@ -74,6 +77,10 @@ Tracer::Tracer(TraceerEngines engine, DebuggerEngines debugger) {
     tracerEngine = new Win32Tracer;
 #endif
 
+  if (engine == TraceerEngines::DUMMY)
+    tracerEngine = new DummyTracer;
+
+// Debugger
 #if USE_DWFL
   if (debugger == DebuggerEngines::LIBDWFL)
     debuggerEngine = new DebugInfoDWFL;
@@ -94,13 +101,21 @@ Tracer::Tracer(TraceerEngines engine, DebuggerEngines debugger) {
     debuggerEngine = new DebugInfoExternalFallback;
 #endif
 
+  if (debugger == DebuggerEngines::DUMMY)
+    debuggerEngine = new DebugInfoDummy;
+
+
   if (!tracerEngine) {
-    cerr << "[TRACER] Unable to initialize tracer engine" << endl;
+    cerr << "[TRACER] Unable to initialize tracer engine; Falling back to the dummy engine" << endl;
+    cerr << "[TRACER] No stack trace will be genereted!" << endl;
+    tracerEngine = new DummyTracer;
     return;
   }
 
   if (!debuggerEngine) {
-    cerr << "[TRACER] Unable to initialize debugger engine" << endl;
+    cerr << "[TRACER] Unable to initialize debugger engine; Falling back to the dummy engine" << endl;
+    cerr << "[TRACER] No debug information will be parsed!" << endl;
+    debuggerEngine = new DebugInfoDummy;
     return;
   }
 }
@@ -150,6 +165,8 @@ vector<TraceerEngines> Tracer::getAvaliableEngines() {
   engines.emplace_back(TraceerEngines::WIN32_TRACER);
 #endif
 
+  engines.emplace_back(TraceerEngines::DUMMY);
+
   return engines;
 }
 
@@ -171,6 +188,8 @@ vector<DebuggerEngines> Tracer::getAvaliableDebuggers() {
 #if USE_FALLBACK
   engines.emplace_back(DebuggerEngines::EXTERNAL_FALLBACK);
 #endif
+
+  engines.emplace_back(DebuggerEngines::DUMMY);
 
   return engines;
 }

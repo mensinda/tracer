@@ -27,15 +27,15 @@
 #pragma once
 
 #include "defines.hpp"
-#include "AbstractTracer.hpp"
+#include "AbstractDebugInfo.hpp"
 
 namespace tracer {
 
-class GlibCTracer : public AbstractTracer {
+class DebugInfoDummy : public AbstractDebugInfo {
  public:
-  GlibCTracer();
-  virtual ~GlibCTracer();
+  DebugInfoDummy();
+  virtual ~DebugInfoDummy();
 
-  std::vector<Frame> backtrace() override;
+  bool processFrames(std::vector<Frame> &frames) override;
 };
 }

@@ -31,6 +31,7 @@
 using namespace tracer;
 
 LibUnwindTracer::LibUnwindTracer() {}
+LibUnwindTracer::~LibUnwindTracer() {}
 
 std::vector<Frame> LibUnwindTracer::backtrace() {
   std::vector<Frame> frames;

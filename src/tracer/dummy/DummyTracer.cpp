@@ -24,18 +24,13 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma once
-
 #include "defines.hpp"
-#include "AbstractTracer.hpp"
+#include "DummyTracer.hpp"
 
-namespace tracer {
+using namespace tracer;
+using namespace std;
 
-class GlibCTracer : public AbstractTracer {
- public:
-  GlibCTracer();
-  virtual ~GlibCTracer();
+DummyTracer::DummyTracer() {}
+DummyTracer::~DummyTracer() {}
 
-  std::vector<Frame> backtrace() override;
-};
-}
+vector<Frame> DummyTracer::backtrace() { return vector<Frame>(); }
