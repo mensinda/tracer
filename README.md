@@ -1,4 +1,5 @@
 # Tracer                                {#mainpage}
+
 *nix / Windows Stack trace generator
 
 ## Build Status
@@ -19,12 +20,16 @@ Config (TracerHandler::Config)
 TracerHandler::getTracer()->defaultSetup();
 ```
 
-## More advanded setup
+This will generate the following output for the segFaultTest (in test/segFaultTest):
+
+![Tracer Screenshot][sc1]
+
+## More advanced setup
 
 With this setup it is possible to customize the output and signal handler.
 
 ```cpp
-auto *tHandler = TracerHandler::getTracer(); // Get the singelton
+auto *tHandler = TracerHandler::getTracer(); // Get the singleton
 auto  cfg      = tHandler->getConfig();      // Get the current config
 // Edit cfg
 
@@ -42,7 +47,7 @@ tHandler->setup(std::move(printer));         // Sets things up. Now the signal h
  - Linux
  - Windows
 
-It currently does not work on Mac OS because of ASLR. Pull requests are welcome :D.
+It currently does not work on Mac OS because of ASLR. Pull requests are welcome :D
 
 FreeBSD is currently not tested.
 
@@ -66,3 +71,5 @@ Status:
   - :heavy_check_mark: works and testet
   - :warning: works but not recommended
   - :heavy_exclamation_mark: broken
+
+[sc1]: https://raw.githubusercontent.com/mensinda/tracer/master/docs/screenshot1.png

@@ -55,12 +55,12 @@ namespace tracer {
  * TracerHandler::getTracer()->defaultSetup();
  * ```
  *
- * ## More advanded setup
+ * ## More advanced setup
  *
  * With this setup it is possible to customize the output and signal handler.
  *
  * ```cpp
- * auto *tHandler = TracerHandler::getTracer(); // Get the singelton
+ * auto *tHandler = TracerHandler::getTracer(); // Get the singleton
  * auto  cfg      = tHandler->getConfig();      // Get the current config
  * // Edit cfg
  *
