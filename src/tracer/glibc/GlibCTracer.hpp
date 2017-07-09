@@ -31,9 +31,12 @@
 
 namespace tracer {
 
+/*!
+ * \brief Tracer based on glibc's backtrace (execinfo.h)
+ */
 class GlibCTracer : public AbstractTracer {
  public:
-  GlibCTracer();
+  GlibCTracer() = default;
   virtual ~GlibCTracer();
 
   std::vector<Frame> backtrace() override;

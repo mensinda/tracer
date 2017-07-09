@@ -32,7 +32,6 @@
 using namespace tracer;
 using namespace std;
 
-DebugInfoWIN32::DebugInfoWIN32() {}
 DebugInfoWIN32::~DebugInfoWIN32() {}
 
 bool DebugInfoWIN32::processFrames(vector<Frame> &frames) {

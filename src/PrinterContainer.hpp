@@ -31,6 +31,11 @@
 
 namespace tracer {
 
+/*!
+ * \brief A container for printers (like std::unique_ptr)
+ *
+ * Automatically deletes the printer in the destructor
+ */
 class PrinterContainer final {
  private:
   AbstractPrinter *printer = nullptr;
@@ -41,15 +46,15 @@ class PrinterContainer final {
   ~PrinterContainer();
 
   PrinterContainer(const PrinterContainer &) = delete;
-  PrinterContainer(PrinterContainer &&);
+  PrinterContainer(PrinterContainer &&moveFrom);
 
   PrinterContainer &operator=(const PrinterContainer &) = delete;
 
   PrinterContainer &operator=(PrinterContainer &&);
 
-  AbstractPrinter *get();
-  AbstractPrinter *operator()();
-  AbstractPrinter *operator->() { return printer; }
+  AbstractPrinter *get();        //!< \brief Returns the printer
+  AbstractPrinter *operator()(); //!< \brief Returns the printer
+  AbstractPrinter *operator->(); //!< \brief Access the printer
 
   static PrinterContainer fancy();
   static PrinterContainer file();

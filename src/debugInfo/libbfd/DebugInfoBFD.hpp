@@ -34,55 +34,65 @@
 
 namespace tracer {
 
+//! \brief Some internally used classes to make things easiers
 namespace internal {
+
+//!< \brief Manages the bfd object (using RAII)
 class abfdRAII {
  public:
-  bfd *abfd = nullptr;
+  bfd *abfd = nullptr; //!< \brief The bfd object to manage
 
   ~abfdRAII() {
     if (abfd)
       bfd_close(abfd);
   }
 
-  inline bfd *operator()() const noexcept { return abfd; }
+  inline bfd *operator()() const noexcept { return abfd; } //!< \brief Returns the bfd object
 };
 
+//! \brief Manages the bfd_symbol(s)
 class asymbolRAII {
  public:
-  bfd_symbol **symbols = nullptr;
+  bfd_symbol **symbols = nullptr; //!< \brief The bfd_symbol to manage
 
   ~asymbolRAII() {
     if (symbols)
       free(symbols);
   }
 
-  inline bfd_symbol **operator()() const noexcept { return symbols; }
+  inline bfd_symbol **operator()() const noexcept { return symbols; } //!< \brief Returns the symbols
 };
 }
 
+/*!
+ * \brief Generates debug information using libbfd
+ */
 class DebugInfoBFD : public AbstractDebugInfo {
  private:
-  static bool isBfdInit;
+  static bool isBfdInit; //!< \brief Whether libbfd is init or not (default false)
 
   static void findInSection(bfd *abfd, bfd_section *sec, void *ctx);
 
+  /*!
+   * \brief Internal data structure for libbfd debug information generation
+   */
   struct FindInSectionContext {
-    bool found = false;
+    bool found = false; //!< \brief Whether the line information in the DWARF section was already found
 
-    Address addr     = 0;
-    Address baseAddr = 0;
+    Address addr     = 0; //!< \brief The address of the frame (the instruction pointer)
+    Address baseAddr = 0; //!< \brief The base address in the library
 
-    internal::asymbolRAII *secSym    = nullptr;
-    internal::asymbolRAII *dynSecSym = nullptr;
+    internal::asymbolRAII *secSym    = nullptr; //!< \brief Programm section symbols
+    internal::asymbolRAII *dynSecSym = nullptr; //!< \brief Shared object symbols
 
-    std::string fileName;
-    std::string funcName;
-    int         line = 0;
-    int         col  = 0;
+    std::string fileName; //!< \brief The name of the source file [output]
+    std::string funcName; //!< \brief The name of the function [output]
+    int         line = 0; //!< \brief The line in the source file [output]
+    int         col  = 0; //!< \brief The column in the source file [output]
   } ctx;
 
  public:
-  DebugInfoBFD();
+  DebugInfoBFD() = default;
   virtual ~DebugInfoBFD();
 
   bool processFrames(std::vector<Frame> &frames) override;

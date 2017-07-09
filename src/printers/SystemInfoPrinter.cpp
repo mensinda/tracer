@@ -62,7 +62,6 @@ namespace fs = std::filesystem;
 using namespace tracer;
 using namespace std;
 
-SystemInfoPrinter::SystemInfoPrinter(Tracer *t) : AbstractPrinter(t), DefaultPrinter(t) { setupOsInfo(); }
 SystemInfoPrinter::SystemInfoPrinter() { setupOsInfo(); }
 
 void tracer::SystemInfoPrinter::setupOsInfo() {
@@ -229,6 +228,11 @@ void tracer::SystemInfoPrinter::setupOsInfo() {
 #endif
 }
 
+/*!
+ * \brief Converts a signal number to a string
+ * \param sNum The number to convert
+ * \returns The resulting string
+ */
 string SystemInfoPrinter::sigNum2Str(int sNum) {
   switch (sNum) {
 #if _WIN32

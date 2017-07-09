@@ -32,11 +32,14 @@
 
 namespace tracer {
 
+/*!
+ * \brief Base class / interface of all tracers
+ */
 class AbstractTracer {
  public:
   virtual ~AbstractTracer();
 
-  virtual std::vector<Frame> backtrace() = 0;
+  virtual std::vector<Frame> backtrace() = 0; //!< \brief Generates the backtrace
   virtual void               setContext(void *);
 };
 }

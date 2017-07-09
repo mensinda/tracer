@@ -46,7 +46,8 @@ int f4() { return f5(); }
 int f5() {
   Tracer t1;
   t1.trace();
-  FancyPrinter p1(&t1);
+  FancyPrinter p1;
+  p1.setTrace(&t1);
   p1.printToStdOut();
   return 5;
 }

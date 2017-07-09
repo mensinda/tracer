@@ -30,9 +30,12 @@
 
 using namespace tracer;
 
-GlibCTracer::GlibCTracer() {}
 GlibCTracer::~GlibCTracer() {}
 
+/*!
+ * \brief Generates the backtrace
+ * \returns The frames with the address set
+ */
 std::vector<Frame> GlibCTracer::backtrace() {
   void *addrs[constants::MAX_TRACE_DEPTH];
   int   numTrace = ::backtrace(addrs, constants::MAX_TRACE_DEPTH);

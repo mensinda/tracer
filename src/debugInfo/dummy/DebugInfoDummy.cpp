@@ -30,7 +30,9 @@
 using namespace tracer;
 using namespace std;
 
-DebugInfoDummy::DebugInfoDummy() {}
 DebugInfoDummy::~DebugInfoDummy() {}
 
+/*!
+ * \brief Does nothing
+ */
 bool DebugInfoDummy::processFrames(vector<Frame> &) { return true; }

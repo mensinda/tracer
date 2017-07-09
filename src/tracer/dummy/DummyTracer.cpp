@@ -30,7 +30,6 @@
 using namespace tracer;
 using namespace std;
 
-DummyTracer::DummyTracer() {}
 DummyTracer::~DummyTracer() {}
 
-vector<Frame> DummyTracer::backtrace() { return vector<Frame>(); }
+vector<Frame> DummyTracer::backtrace() { return vector<Frame>(); } //!< \brief Does nothing

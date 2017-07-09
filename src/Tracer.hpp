@@ -36,12 +36,18 @@ namespace tracer {
 enum class TraceerEngines { LIBUNWIND, GLIBC, WIN32_TRACER, DUMMY };
 enum class DebuggerEngines { LIBDWFL, LIBBFD, WIN32_INFO, EXTERNAL_FALLBACK, DUMMY };
 
+/*!
+ * \brief Backtrace generator
+ *
+ * This class generates a Backtrace using different backends and stores it in
+ * the platform independent Frame struct
+ */
 class Tracer {
  private:
-  AbstractTracer *   tracerEngine   = nullptr;
-  AbstractDebugInfo *debuggerEngine = nullptr;
+  AbstractTracer *   tracerEngine   = nullptr; //!< \brief The tracer engine
+  AbstractDebugInfo *debuggerEngine = nullptr; //!< \brief The debug information engine
 
-  std::vector<Frame> frames;
+  std::vector<Frame> frames; //!< \brief The generated frames
 
  public:
   Tracer(TraceerEngines engine, DebuggerEngines debugger);
@@ -57,12 +63,11 @@ class Tracer {
   std::vector<Frame> *trace();
   std::vector<Frame> *getFrames();
 
-  std::vector<Frame> *operator()() { return trace(); }
+  std::vector<Frame> *operator()() { return trace(); } //!< \brief Wrapper for trace
 
   AbstractTracer *   getTracerEngine();
   AbstractDebugInfo *getDebuggerEngine();
 
-  void                                print();
   static std::vector<TraceerEngines>  getAvaliableEngines();
   static std::vector<DebuggerEngines> getAvaliableDebuggers();
 };

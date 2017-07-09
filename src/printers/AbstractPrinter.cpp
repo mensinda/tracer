@@ -34,13 +34,15 @@
 using namespace tracer;
 using namespace std;
 
-AbstractPrinter::AbstractPrinter() {}
-AbstractPrinter::AbstractPrinter(Tracer *t) : trace(t) {}
+AbstractPrinter::AbstractPrinter() {} //!< \brief Default constructor
 AbstractPrinter::~AbstractPrinter() {}
 
 void AbstractPrinter::setupTrace() {}
 
-
+/*!
+ * \brief Generates a string for the complete stack trace
+ * \returns The generated string
+ */
 std::string tracer::AbstractPrinter::generateString() {
   if (!trace)
     return "";
@@ -62,9 +64,14 @@ std::string tracer::AbstractPrinter::generateString() {
   return outSTR;
 }
 
-string AbstractPrinter::genStringPreFrameIMPL(size_t) { return ""; }
-string AbstractPrinter::genStringPostFrameIMPL(size_t) { return ""; }
+string AbstractPrinter::genStringPreFrameIMPL(size_t) { return ""; }  //!< \brief Default implementation
+string AbstractPrinter::genStringPostFrameIMPL(size_t) { return ""; } //!< \brief Default implementation
 
+/*!
+ * \brief Generates a string for the frame information (prefix)
+ * \param frameNum The number off the frame to process
+ * \returns The generated string
+ */
 std::string tracer::AbstractPrinter::genStringPreFrame(size_t frameNum) {
   if (!trace)
     return "";
@@ -72,6 +79,11 @@ std::string tracer::AbstractPrinter::genStringPreFrame(size_t frameNum) {
   return genStringPreFrameIMPL(frameNum);
 }
 
+/*!
+ * \brief Generates a string for the frame information
+ * \param frameNum The number off the frame to process
+ * \returns The generated string
+ */
 std::string tracer::AbstractPrinter::genStringForFrame(size_t frameNum) {
   if (!trace)
     return "";
@@ -79,6 +91,11 @@ std::string tracer::AbstractPrinter::genStringForFrame(size_t frameNum) {
   return genStringForFrameIMPL(frameNum);
 }
 
+/*!
+ * \brief Generates a string for the frame information (suffix)
+ * \param frameNum The number off the frame to process
+ * \returns The generated string
+ */
 std::string tracer::AbstractPrinter::genStringPostFrame(size_t frameNum) {
   if (!trace)
     return "";
@@ -87,7 +104,13 @@ std::string tracer::AbstractPrinter::genStringPostFrame(size_t frameNum) {
 }
 
 
-
+/*!
+ * \brief Prints the stack trace to a file
+ * \param file   The file to print to
+ * \param append Whether to append the stack trace to the file or not
+ *
+ * \note The contents of file will be removed when append is false.
+ */
 void tracer::AbstractPrinter::printToFile(std::string file, bool append) {
   if (!trace)
     return;
@@ -106,8 +129,18 @@ void tracer::AbstractPrinter::printToFile(std::string file, bool append) {
   outStream.close();
 }
 
+//! \brief prints the stack trace to STDERR
 void tracer::AbstractPrinter::printToStdErr() { cerr << generateString() << endl; }
+
+//! \brief prints the stack trace to STDOUT
 void tracer::AbstractPrinter::printToStdOut() { cout << generateString() << endl; }
+
+/*!
+ * \brief Sets the trace to print
+ * \param t The trace to print
+ *
+ * \warning This function MUST be called before a trace string can be generated!
+ */
 void tracer::AbstractPrinter::setTrace(tracer::Tracer *t) {
   trace = t;
   setupTrace();

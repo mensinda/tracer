@@ -31,9 +31,12 @@
 
 namespace tracer {
 
+/*!
+ * \brief Debug indormation based on the WIN32 API
+ */
 class DebugInfoWIN32 : public AbstractDebugInfo {
  public:
-  DebugInfoWIN32();
+  DebugInfoWIN32() = default;
   virtual ~DebugInfoWIN32();
 
   bool processFrames(std::vector<Frame> &frames) override;

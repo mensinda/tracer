@@ -35,8 +35,6 @@
 using namespace tracer;
 using namespace std;
 
-FilePrinter::FilePrinter(Tracer *t) : AbstractPrinter(t), DefaultPrinter(t) {}
-FilePrinter::FilePrinter() {}
 FilePrinter::~FilePrinter() {}
 
 #if !DISABLE_STD_FILESYSTEM
@@ -63,6 +61,14 @@ bool FilePrinter::findPath(unsigned int depth, fs::path current, fs::path &out, 
 }
 
 
+/*!
+ * \brief Searches a file
+ * \param file The file to find
+ *
+ * Searches the file recursively
+ *
+ * \returns The file if found or an empty path if not
+ */
 fs::path FilePrinter::findFile(string file) {
   // Absolute paths are easy
   fs::path filePath(file);

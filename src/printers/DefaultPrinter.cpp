@@ -44,7 +44,6 @@ namespace fs = std::filesystem;
 using namespace tracer;
 using namespace std;
 
-DefaultPrinter::DefaultPrinter(Tracer *t) : AbstractPrinter(t) {}
 DefaultPrinter::DefaultPrinter() {}
 DefaultPrinter::~DefaultPrinter() {}
 

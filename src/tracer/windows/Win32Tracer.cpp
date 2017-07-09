@@ -32,9 +32,12 @@
 
 using namespace tracer;
 
-Win32Tracer::Win32Tracer() {}
 Win32Tracer::~Win32Tracer() {}
 
+/*!
+ * \brief Generates the frames for the bactrace
+ * \returns The generated frames with the address set
+ */
 std::vector<Frame> Win32Tracer::backtrace() {
   std::vector<Frame> frames;
   PVOID              rawTrace[1024];

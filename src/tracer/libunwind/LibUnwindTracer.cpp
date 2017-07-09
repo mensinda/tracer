@@ -30,9 +30,12 @@
 
 using namespace tracer;
 
-LibUnwindTracer::LibUnwindTracer() {}
 LibUnwindTracer::~LibUnwindTracer() {}
 
+/*!
+ * \brief Generates the backtrace with libunwind
+ * \returns The frames with the address set
+ */
 std::vector<Frame> LibUnwindTracer::backtrace() {
   std::vector<Frame> frames;
   unw_cursor_t       cursor;
@@ -63,6 +66,10 @@ std::vector<Frame> LibUnwindTracer::backtrace() {
   return frames;
 }
 
+/*!
+ * \brief Sets the execution context
+ * \param ctx The context to set (must point to a ucontext_t struct)
+ */
 void LibUnwindTracer::setContext(void *ctx) {
   if (typeid(unw_context_t) == typeid(ucontext_t)) {
     context       = *reinterpret_cast<unw_context_t *>(ctx);

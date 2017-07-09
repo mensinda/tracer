@@ -34,14 +34,17 @@
 
 namespace tracer {
 
+/*!
+ * \brief Backtrace generator based on libunwind
+ */
 class LibUnwindTracer : public AbstractTracer {
  private:
-  unw_context_t context;
+  unw_context_t context; //!< A custom context provided py the user
 
-  bool custonContext = false;
+  bool custonContext = false; //!< Whether to use the provided context or not
 
  public:
-  LibUnwindTracer();
+  LibUnwindTracer() = default;
   virtual ~LibUnwindTracer();
 
   std::vector<Frame> backtrace() override;

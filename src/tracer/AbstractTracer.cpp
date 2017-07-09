@@ -31,4 +31,4 @@ using namespace tracer;
 
 AbstractTracer::~AbstractTracer() {}
 
-void AbstractTracer::setContext(void *) {}
+void AbstractTracer::setContext(void *) {} //!< \brief Empty default implementation of setContext

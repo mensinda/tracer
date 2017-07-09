@@ -258,6 +258,32 @@ foreach( I IN LISTS tracer_SUBDIR_LIST )
   add_subdirectory( "${I}" )
 endforeach( I IN LISTS tracer_SUBDIR_LIST )
 
+###########
+# Doxygen #
+###########
+
+find_package( Doxygen COMPONENTS dot )
+if( Doxygen_FOUND )
+  if( NOT TARGET Doxygen::doxygen )
+    add_executable(Doxygen::doxygen IMPORTED GLOBAL)
+    set_target_properties(Doxygen::doxygen PROPERTIES
+        IMPORTED_LOCATION "${DOXYGEN_EXECUTABLE}"
+    )
+  endif()
+
+  set( DOXYGEN_TARGET_FILE "${PROJECT_SOURCE_DIR}/doxygen/doxygen.tmp" )
+  configure_file( "${PROJECT_SOURCE_DIR}/Doxyfile.in" "${PROJECT_SOURCE_DIR}/Doxyfile" @ONLY )
+  add_custom_command(
+    OUTPUT          "${DOXYGEN_TARGET_FILE}"
+    COMMAND          Doxygen::doxygen ARGS "${PROJECT_SOURCE_DIR}/Doxyfile"
+    COMMAND          ${CMAKE_COMMAND} ARGS -E touch "${DOXYGEN_TARGET_FILE}"
+    MAIN_DEPENDENCY "${PROJECT_SOURCE_DIR}/Doxyfile"
+    VERBATIM
+  )
+
+  add_custom_target( doc DEPENDS "${DOXYGEN_TARGET_FILE}" COMMAND ${CMAKE_COMMAND} -E remove "${DOXYGEN_TARGET_FILE}" )
+endif( Doxygen_FOUND )
+
 ##################
 # Generate Files #
 ##################

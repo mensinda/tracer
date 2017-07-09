@@ -33,21 +33,23 @@ namespace tracer {
 
 class Tracer;
 
+/*!
+ * \brief Basic class for all printers
+ */
 class AbstractPrinter {
  protected:
-  Tracer *trace         = nullptr;
-  bool    disableColorB = false;
+  Tracer *trace         = nullptr; //!< \brief Pointer to the trace
+  bool    disableColorB = false;   //!< \brief Whether to disable colored output or not
 
-  virtual void setupTrace();
+  virtual void setupTrace(); //!< \brief This function will be called when the trace is sets
 
-  virtual std::string genStringPreFrameIMPL(size_t frameNum);
-  virtual std::string genStringForFrameIMPL(size_t frameNum) = 0;
-  virtual std::string genStringPostFrameIMPL(size_t frameNum);
+  virtual std::string genStringPreFrameIMPL(size_t frameNum);     //!< \brief Generate string for the frame info prefix
+  virtual std::string genStringForFrameIMPL(size_t frameNum) = 0; //!< \brief Generate string for the frame info
+  virtual std::string genStringPostFrameIMPL(size_t frameNum);    //!< \brief Generate string for the frame info suffix
 
  public:
   virtual ~AbstractPrinter();
   AbstractPrinter();
-  AbstractPrinter(Tracer *t);
 
   std::string genStringPreFrame(size_t frameNum);
   std::string genStringForFrame(size_t frameNum);
@@ -58,8 +60,8 @@ class AbstractPrinter {
   void printToStdOut();
   void printToStdErr();
 
-  void enableColor() { disableColorB = false; }
-  void disableColor() { disableColorB = true; }
+  void enableColor() { disableColorB = false; } //!< \brief Enables colored output (ANSI escape sequences)
+  void disableColor() { disableColorB = true; } //!< \brief Disables colored output (ANSI escape sequences)
 
   void setTrace(Tracer *t);
 };

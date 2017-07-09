@@ -47,12 +47,13 @@ namespace tracer {
  */
 class FilePrinter : virtual public DefaultPrinter {
  public:
+  //! \brief User configuration
   struct FileConfig {
-    unsigned int maxRecursionDepth = 4;
-    unsigned int linesBefore       = 4;
-    unsigned int linesAfter        = 4;
+    unsigned int maxRecursionDepth = 4; //!< \brief Search for relative files recursively for maxRecursionDepth steps
+    unsigned int linesBefore       = 4; //!< \brief Number of lines to print before the actual line
+    unsigned int linesAfter        = 4; //!< \brief Number of lines to print after the actual line
 
-    std::string lineHighlightColor = "\x1b[1;31m";
+    std::string lineHighlightColor = "\x1b[1;31m"; //!< \brief ANSI escape sequence color for the line
   };
 
  private:
@@ -67,16 +68,15 @@ class FilePrinter : virtual public DefaultPrinter {
   std::string genStringPostFrameIMPL(size_t frameNum) override;
 
  public:
-  FilePrinter();
-  FilePrinter(Tracer *t);
+  FilePrinter() = default;
   virtual ~FilePrinter();
 
 #if !DISABLE_STD_FILESYSTEM
   fs::path findFile(std::string file);
 #endif
 
-  void setFilePrinterConfig(FileConfig d) { fCFG = d; }
+  void setFilePrinterConfig(FileConfig d) { fCFG = d; } //!< \brief Sets the new configuration
 
-  FileConfig getFilePrinterConfig() { return fCFG; }
+  FileConfig getFilePrinterConfig() { return fCFG; } //!< \brief Returns the current configuration
 };
 }

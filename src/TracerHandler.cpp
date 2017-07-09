@@ -36,11 +36,11 @@
 using namespace tracer;
 using namespace std;
 
-TracerHandler::TracerHandler() : printer(nullptr) {}
+TracerHandler::TracerHandler() : printer(nullptr) {} //!< \brief Initalizes the printer with nullptr
 TracerHandler::~TracerHandler() { tracer = nullptr; }
 
 /*!
- * \brief Resets the singelton
+ * \brief Resets the singleton
  */
 void TracerHandler::reset() {
   if (tracer)
@@ -49,7 +49,7 @@ void TracerHandler::reset() {
   tracer = nullptr;
 }
 
-
+//! \brief Returns a pointer to the TracerHandler object
 TracerHandler *TracerHandler::getTracer() {
   if (!tracer)
     tracer = new TracerHandler();
@@ -57,6 +57,8 @@ TracerHandler *TracerHandler::getTracer() {
   return tracer;
 }
 
+
+//! \brief The internal signal handler
 void TracerHandler::sigHandler(int sigNum) {
   TracerHandler *th  = TracerHandler::getTracer();
   auto           cfg = th->getConfig();
@@ -129,7 +131,10 @@ error:
 }
 
 
+//! \brief Basic setup, sufficient for most use cases
 bool TracerHandler::defaultSetup() { return setup(PrinterContainer::fancy()); }
+
+//! \brief Sets everything up with a custom printer
 bool TracerHandler::setup(PrinterContainer printerToUse) {
   printer = std::move(printerToUse);
 

@@ -31,9 +31,14 @@
 
 namespace tracer {
 
+/*!
+ * \brief This tracer does nothing.
+ *
+ * This tracer will automatically be used when no other tracer is available
+ */
 class DummyTracer : public AbstractTracer {
  public:
-  DummyTracer();
+  DummyTracer() = default;
   virtual ~DummyTracer();
 
   std::vector<Frame> backtrace() override;

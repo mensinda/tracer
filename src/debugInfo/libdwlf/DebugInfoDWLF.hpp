@@ -31,9 +31,12 @@
 
 namespace tracer {
 
+/*!
+ * \brief Debug information generator based on libdwfl
+ */
 class DebugInfoDWFL : public AbstractDebugInfo {
  public:
-  DebugInfoDWFL();
+  DebugInfoDWFL() = default;
   virtual ~DebugInfoDWFL();
 
   bool processFrames(std::vector<Frame> &frames) override;

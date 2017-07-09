@@ -32,10 +32,13 @@
 
 namespace tracer {
 
+/*!
+ * \brief Base class for all debug information generators
+ */
 class AbstractDebugInfo {
  public:
   virtual ~AbstractDebugInfo();
 
-  virtual bool processFrames(std::vector<Frame> &frames) = 0;
+  virtual bool processFrames(std::vector<Frame> &frames) = 0; //!< \brief Generates the debug information
 };
 }

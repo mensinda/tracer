@@ -31,8 +31,14 @@
 
 namespace tracer {
 
+/*!
+ * \brief Uses the addr2line system tool (hopefully) installed on the system
+ *
+ * This generator is a fallback generator and should NOT be the generator of choice.
+ */
 class DebugInfoExternalFallback : public AbstractDebugInfo {
  public:
+  DebugInfoExternalFallback() = default;
   virtual ~DebugInfoExternalFallback();
 
   bool processFrames(std::vector<Frame> &frames) override;

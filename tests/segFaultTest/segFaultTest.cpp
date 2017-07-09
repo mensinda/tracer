@@ -59,7 +59,16 @@ int main(int argc, char *argv[]) {
   (void)argc;
   (void)argv;
 
-  TracerHandler::getTracer()->defaultSetup();
+  //   TracerHandler::getTracer()->defaultSetup();
+
+  auto *tHandler = TracerHandler::getTracer(); // Get the singelton
+  auto  cfg      = tHandler->getConfig();      // Get the current config
+  // Edit cfg
+  tHandler->setConfig(cfg);                 // Update the config
+  auto printer = PrinterContainer::fancy(); // Generates a printer
+  // Edit printer config
+  tHandler->setup(std::move(printer)); // Sets things up. Now the signal handler is setup
+
   f1(42);
 
   return 0;

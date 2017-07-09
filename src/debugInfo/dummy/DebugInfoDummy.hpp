@@ -31,9 +31,14 @@
 
 namespace tracer {
 
+/*!
+ * \brief Dummy debug information "generator"
+ *
+ * This generator does nothing. It is used when no other generator is available
+ */
 class DebugInfoDummy : public AbstractDebugInfo {
  public:
-  DebugInfoDummy();
+  DebugInfoDummy() = default;
   virtual ~DebugInfoDummy();
 
   bool processFrames(std::vector<Frame> &frames) override;

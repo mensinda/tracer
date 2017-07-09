@@ -36,12 +36,19 @@ using namespace tracer;
 using namespace tracer::internal;
 using namespace std;
 
-DebugInfoBFD::DebugInfoBFD() {}
 DebugInfoBFD::~DebugInfoBFD() {}
 
 bool DebugInfoBFD::isBfdInit = false;
 
-
+/*!
+ * \brief Callback for libbfd (bfd_map_over_sections)
+ *
+ * Checks whether the section and the address matches and extracts the information.
+ *
+ * \param abfd    The current bfd context
+ * \param section The current processed section
+ * \param ctx     Used supplied data (here a pointer to the DebugInfoBFD object)
+ */
 void DebugInfoBFD::findInSection(bfd *abfd, bfd_section *section, void *ctx) {
   DebugInfoBFD *obj = reinterpret_cast<DebugInfoBFD *>(ctx);
 
@@ -114,6 +121,10 @@ void DebugInfoBFD::findInSection(bfd *abfd, bfd_section *section, void *ctx) {
 
 
 
+/*!
+ * \brief Generates the debug information with libbfd
+ * \param frames The frames to process
+ */
 bool DebugInfoBFD::processFrames(std::vector<Frame> &frames) {
   if (!isBfdInit) {
     bfd_init();

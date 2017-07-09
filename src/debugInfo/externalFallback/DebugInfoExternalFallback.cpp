@@ -39,7 +39,10 @@ DebugInfoExternalFallback::~DebugInfoExternalFallback() {}
 
 const size_t EXEC_TRIES = 4;
 
-
+/*!
+ * \brief Generates debug information with the addr2line tool (and regex)
+ * \param frames The frames to process
+ */
 bool DebugInfoExternalFallback::processFrames(vector<Frame> &frames) {
   regex  regFunc("^([^\n]*)", regex_constants::ECMAScript);
   regex  regLine("([^\n:]+):([0-9?]+)(:([0-9?]+))?", regex_constants::ECMAScript);

@@ -35,11 +35,13 @@
 using namespace tracer;
 using namespace std;
 
-DebugInfoDWFL::DebugInfoDWFL() {}
-
 DebugInfoDWFL::~DebugInfoDWFL() {}
 
 
+/*!
+ * \brief Generates debug information with libdwfl
+ * \param frames The frames to process
+ */
 bool DebugInfoDWFL::processFrames(vector<Frame> &frames) {
   char *debuginfo_path = nullptr;
 

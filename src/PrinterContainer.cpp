@@ -30,17 +30,30 @@
 using namespace tracer;
 using namespace std;
 
+
+/*!
+ * \brief Constructor sets the printer
+ * \param p The printer to store
+ */
 PrinterContainer::PrinterContainer(AbstractPrinter *p) : printer(p) {}
 PrinterContainer::~PrinterContainer() {
   if (printer)
     delete printer;
 }
 
+/*!
+ * \brief Move constructor
+ * \param moveFrom object to move from
+ */
 PrinterContainer::PrinterContainer(PrinterContainer &&moveFrom) {
   printer          = moveFrom.printer;
   moveFrom.printer = nullptr;
 }
 
+/*!
+ * \brief Move assignment operator
+ * \param moveFrom Object to move from
+ */
 PrinterContainer &PrinterContainer::operator=(PrinterContainer &&moveFrom) {
   if (this != &moveFrom) {
     printer          = moveFrom.printer;
@@ -49,11 +62,30 @@ PrinterContainer &PrinterContainer::operator=(PrinterContainer &&moveFrom) {
   return *this;
 }
 
-
+/*!
+ * \brief Returns a container with a tracer::FancyPrinter object
+ * \returns Returns the constructed container
+ */
 PrinterContainer PrinterContainer::fancy() { return PrinterContainer(new FancyPrinter); }
+
+/*!
+ * \brief Returns a container with a tracer::FilePrinter object
+ * \returns Returns the constructed container
+ */
 PrinterContainer PrinterContainer::file() { return PrinterContainer(new FilePrinter); }
+
+/*!
+ * \brief Returns a container with a tracer::SystemInfoPrinter object
+ * \returns Returns the constructed container
+ */
 PrinterContainer PrinterContainer::system() { return PrinterContainer(new SystemInfoPrinter); }
+
+/*!
+ * \brief Returns a container with a tracer::DefaultPrinter object
+ * \returns Returns the constructed container
+ */
 PrinterContainer PrinterContainer::plain() { return PrinterContainer(new DefaultPrinter); }
 
-AbstractPrinter *PrinterContainer::get() { return printer; }
-AbstractPrinter *PrinterContainer::operator()() { return printer; }
+AbstractPrinter *PrinterContainer::get() { return printer; }        //!< \returns the stored printer
+AbstractPrinter *PrinterContainer::operator()() { return printer; } //!< \returns the stored printer
+AbstractPrinter *PrinterContainer::operator->() { return printer; } //!< \returns the stored printer

@@ -58,8 +58,17 @@
 using namespace tracer;
 using namespace std;
 
+//! \brief Default constructor; uses the first entrie from getAvaliableEngines and getAvaliableDebuggers
 Tracer::Tracer() : Tracer(getAvaliableEngines()[0], getAvaliableDebuggers()[0]) {}
 
+/*!
+ * \brief Constructor, Sets the engines
+ * \param engine   The tracer engine to use
+ * \param debugger The debugger engine to use
+ *
+ * \note Both engine and debugger must be in the list returned form getAvaliableEngines and getAvaliableDebuggers
+ * \note If not the dummy engines will be used
+ */
 Tracer::Tracer(TraceerEngines engine, DebuggerEngines debugger) {
 // Tracer
 #if USE_LIBUNWIND
@@ -128,6 +137,10 @@ Tracer::~Tracer() {
     delete debuggerEngine;
 }
 
+/*!
+ * \brief Generates the stack trace
+ * \returns A pointer to the generated frames
+ */
 vector<Frame> *Tracer::trace() {
   if (!tracerEngine || !debuggerEngine) {
     cerr << "[TRACER] Can not generate a backtrace without a tracerEngine or debuggerEngine" << endl;
@@ -140,18 +153,14 @@ vector<Frame> *Tracer::trace() {
   return &frames;
 }
 
-vector<Frame> *Tracer::getFrames() { return &frames; }
+vector<Frame> *Tracer::getFrames() { return &frames; } //!< \brief Returns a pointer to the stack frames
 
 
-void Tracer::print() {
-  if (!tracerEngine)
-    return;
-}
-
-AbstractTracer *   Tracer::getTracerEngine() { return tracerEngine; }
-AbstractDebugInfo *Tracer::getDebuggerEngine() { return debuggerEngine; }
+AbstractTracer *   Tracer::getTracerEngine() { return tracerEngine; }     //!< \brief Returns the internal tracer engine
+AbstractDebugInfo *Tracer::getDebuggerEngine() { return debuggerEngine; } //!< \brief Returns the internal debug engine
 
 
+//! \brief Returns a list of available tracer engines
 vector<TraceerEngines> Tracer::getAvaliableEngines() {
   vector<TraceerEngines> engines;
 
@@ -170,6 +179,7 @@ vector<TraceerEngines> Tracer::getAvaliableEngines() {
   return engines;
 }
 
+//! \brief Returns a list of available debug info engines
 vector<DebuggerEngines> Tracer::getAvaliableDebuggers() {
   vector<DebuggerEngines> engines;
 

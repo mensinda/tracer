@@ -31,25 +31,35 @@
 
 namespace tracer {
 
+/*!
+ * \brief Gnerates strings from the frame structure
+ *
+ * The generated string has the form (by default)
+ *
+ * #[numOfFrame] in functionName at fileLocation -- binaryFile [address]
+ *
+ * This cam be configured with the DefaultPrinter::Config struct
+ */
 class DefaultPrinter : virtual public AbstractPrinter {
  public:
+  //! \brief User configuration structure
   struct Config {
-    std::string prefix = " \x1b[0;33min ";
-    std::string seper1 = " \x1b[0;33mat ";
-    std::string seper2 = " \x1b[0;33m-- ";
-    std::string seper3 = " \x1b[0;33m[";
-    std::string suffix = "\x1b[0;33m]\x1b[0m";
+    std::string prefix = " \x1b[0;33min ";     //!< \brief Perefix (prefix [functionName])
+    std::string seper1 = " \x1b[0;33mat ";     //!< \brief 1st seperator
+    std::string seper2 = " \x1b[0;33m-- ";     //!< \brief 2nd seperator
+    std::string seper3 = " \x1b[0;33m[";       //!< \brief 3rd seperator
+    std::string suffix = "\x1b[0;33m]\x1b[0m"; //!< \brief suffix
 
-    std::string colorFrameNum = "\x1b[1;36m";
-    std::string colorNotFound = "\x1b[1;33m";
-    std::string colorAddress  = "\x1b[0;36m";
-    std::string colorFuncName = "\x1b[1;31m";
-    std::string colorLineInfo = "\x1b[1;32m";
-    std::string colorModule   = "\x1b[1;35m";
+    std::string colorFrameNum = "\x1b[1;36m"; //!< \brief ANSI escape sequence for the Frame number color
+    std::string colorNotFound = "\x1b[1;33m"; //!< \brief ANSI escape sequence for the "Not Found" color
+    std::string colorAddress  = "\x1b[0;36m"; //!< \brief ANSI escape sequence for the Address color
+    std::string colorFuncName = "\x1b[1;31m"; //!< \brief ANSI escape sequence for the Function Name color
+    std::string colorLineInfo = "\x1b[1;32m"; //!< \brief ANSI escape sequence for the Line information color
+    std::string colorModule   = "\x1b[1;35m"; //!< \brief ANSI escape sequence for the Frame number color
 
-    bool shortenFiles      = false; // The source file path
-    bool shortenModules    = true;  // The executable module (.so/.dll/.exe)
-    bool canonicalizePaths = true;
+    bool shortenFiles      = false; //!< \brief The source file path
+    bool shortenModules    = true;  //!< \brief The executable module (.so/.dll/.exe)
+    bool canonicalizePaths = true;  //!< \brief Fixes path names if they contain "/../" or are relative
   };
 
  private:
@@ -70,11 +80,10 @@ class DefaultPrinter : virtual public AbstractPrinter {
 
  public:
   DefaultPrinter();
-  DefaultPrinter(Tracer *t);
   virtual ~DefaultPrinter();
 
-  void setConfig(Config newCfg) { cfg = newCfg; }
+  void setConfig(Config newCfg) { cfg = newCfg; } //!< \brief Sets the new config
 
-  Config getConfig() const { return cfg; }
+  Config getConfig() const { return cfg; } //!< \brief Returns the current
 };
 }

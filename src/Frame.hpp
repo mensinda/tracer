@@ -60,14 +60,15 @@ inline FrameFlags &operator^=(FrameFlags &a, FrameFlags b) {
   return reinterpret_cast<FrameFlags &>(reinterpret_cast<uint16_t &>(a) ^= static_cast<uint16_t>(b));
 }
 
+//! \brief Describes a frame
 struct Frame {
-  FrameFlags flags = FrameFlags::NONE;
+  FrameFlags flags = FrameFlags::NONE; //!< \brief Describes which fields are set
 
-  Address     frameAddr = 0;
-  std::string funcName;
-  std::string moduleName;
-  std::string fileName;
-  int         line   = 0;
-  int         column = 0;
+  Address     frameAddr = 0; //!< \brief The instruction pointer of the stack frame
+  std::string funcName;      //!< \brief The name of the function
+  std::string moduleName;    //!< \brief The name / path of the binary file
+  std::string fileName;      //!< \brief The name / path of the source file
+  int         line   = 0;    //!< \brief The line number in the source file
+  int         column = 0;    //!< \brief The column in the source file
 };
 }

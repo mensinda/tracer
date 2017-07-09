@@ -33,29 +33,21 @@
 
 #include <stdint.h>
 
-#define USE_GLIBC     @CM_UNIX_GLIBC@
-#define USE_LIBUNWIND @CM_UNIX_LIBUNWIND@
-#define USE_WINDOWS   @CM_WIN32_WINDOWS@
+#define USE_GLIBC     @CM_UNIX_GLIBC@ //!< Whether GLIBC's execinfo.h (backtrace) was found or not
+#define USE_LIBUNWIND @CM_UNIX_LIBUNWIND@ //!< Whether libunwind was found or not
+#define USE_WINDOWS   @CM_WIN32_WINDOWS@ //!< Whether the project is build on windows
 
-#define USE_DWFL      @CM_UNIX_LIBDWLF@
-#define USE_BFD       @CM_UNIX_LIBBFD@
-#define USE_FALLBACK  @CM_UNIX_EXTERNALFALLBACK@
+#define USE_DWFL      @CM_UNIX_LIBDWLF@ //!< Whether libdwfl was found or not
+#define USE_BFD       @CM_UNIX_LIBBFD@ //!< Whether libbfd was found or not
+#define USE_FALLBACK  @CM_UNIX_EXTERNALFALLBACK@ //!< Whether we can use the addr2line fallback
 
-#define VERBOSE_DEBUG @CM_VERBOSE_DEBUG@
-
-#if !USE_GLIBC && !USE_LIBUNWIND && !USE_WINDOWS
-#error "No Backend (tracer engine) enabled"
-#endif
-
-#if !USE_DWFL && !USE_BFD && !USE_WINDOWS && !USE_FALLBACK
-#error "No Backend (debugging engine) enabled"
-#endif
+#define VERBOSE_DEBUG @CM_VERBOSE_DEBUG@ //!< Whether or not extra debug messages should be enabled
 
 #if _WIN32
 #include <Windows.h>
 #endif
 
-#define DISABLE_STD_FILESYSTEM @CM_DISABLE_FILESYSTEM@
+#define DISABLE_STD_FILESYSTEM @CM_DISABLE_FILESYSTEM@ //!< Disables std::filesystem functions. Usefull when C++17 is not available
 
 namespace tracer {
 
@@ -69,14 +61,14 @@ typedef uint64_t Address;
 
 namespace constants {
 
-const unsigned int MAX_FUNC_NAME   = 128;
-const unsigned int MAX_TRACE_DEPTH = 512;
+const unsigned int MAX_FUNC_NAME   = 1024; //!< \brief The maximum length of a function name
+const unsigned int MAX_TRACE_DEPTH = 512;  //!< \brief The maximum length of a stack trace
 
-const int         VERSION_MAJOR     = @CM_VERSION_MAJOR@;
-const int         VERSION_MINOR     = @CM_VERSION_MINOR@;
-const int         VERSION_PATCH     = @CM_VERSION_PATCH@;
-const int         GIT_LAST_TAG_DIFF = @CM_TAG_DIFF@;
-const char *const VERSION_GIT       = "@CM_VERSION_GIT@";
-const char *const INSTALL_PREFIX    = "@CMAKE_INSTALL_PREFIX@";
+const int         VERSION_MAJOR     = @CM_VERSION_MAJOR@; //!< \brief The major version of Tracer
+const int         VERSION_MINOR     = @CM_VERSION_MINOR@; //!< \brief The minor version of Tracer
+const int         VERSION_PATCH     = @CM_VERSION_PATCH@; //!< \brief The patch version of Tracer
+const int         GIT_LAST_TAG_DIFF = @CM_TAG_DIFF@; //!< \brief Number of commits since last tag
+const char *const VERSION_GIT       = "@CM_VERSION_GIT@";  //!< \brief Git commit hash
+const char *const INSTALL_PREFIX    = "@CMAKE_INSTALL_PREFIX@"; //!< \brief The CMake intall prefix
 }
 }

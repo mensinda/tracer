@@ -45,11 +45,17 @@
 
 namespace tracer {
 
+/*!
+ * \brief Prints additional information before the first stack frame
+ *
+ * Automatically detects the current operating system
+ */
 class SystemInfoPrinter : virtual public DefaultPrinter {
  public:
+  //! \brief An system information entry (library version, etc)
   struct InfoEntry {
-    std::string name;
-    std::string value;
+    std::string name;  //!< \brief Name of the entry
+    std::string value; //!< \brief Value of the entry
   };
 
  private:
@@ -65,15 +71,14 @@ class SystemInfoPrinter : virtual public DefaultPrinter {
 
  public:
   SystemInfoPrinter();
-  SystemInfoPrinter(Tracer *t);
 
   static std::string sigNum2Str(int sNum);
 
-  void setSignum(int sNum) { sigNum = sNum; }
+  void setSignum(int sNum) { sigNum = sNum; } //!< \brief Sets the signal number to display
 
-  void addSystemEntry(InfoEntry e) { entries.push_back(e); }
+  void addSystemEntry(InfoEntry e) { entries.push_back(e); } //!< \brief Adds a new entry to print
 
 
-  std::string getOSString() { return OS; }
+  std::string getOSString() { return OS; } //!< Returns a string with the name and version of the current OS
 };
 }
