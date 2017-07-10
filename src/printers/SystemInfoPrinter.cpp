@@ -32,8 +32,6 @@
 #include <regex>
 
 #if _WIN32
-#include <windows.h>
-
 #include <VersionHelpers.h>
 #include <strsafe.h>
 #endif

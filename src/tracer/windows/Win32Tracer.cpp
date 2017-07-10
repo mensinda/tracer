@@ -29,7 +29,6 @@
 
 #include "defines.hpp"
 #include "Win32Tracer.hpp"
-#include <Windows.h>
 
 using namespace tracer;
 

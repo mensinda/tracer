@@ -47,6 +47,7 @@
 
 #if _WIN32
 #include <Windows.h>
+#undef max // WHY Windows WHYYYYY!?!? Please dont break functions in std!
 #endif
 
 #define DISABLE_STD_FILESYSTEM @CM_DISABLE_FILESYSTEM@ //!< Disables std::filesystem functions. Usefull when C++17 is not available
