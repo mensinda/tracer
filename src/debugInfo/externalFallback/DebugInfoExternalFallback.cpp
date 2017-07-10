@@ -23,6 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+//! \file DebugInfoExternalFallback.cpp
 
 #include "defines.hpp"
 #include "DebugInfoExternalFallback.hpp"
@@ -37,7 +38,7 @@ using namespace std;
 
 DebugInfoExternalFallback::~DebugInfoExternalFallback() {}
 
-const size_t EXEC_TRIES = 4;
+const size_t EXEC_TRIES = 4; //!< \brief size of the buffer buff in DebugInfoExternalFallback::processFrames
 
 /*!
  * \brief Generates debug information with the addr2line tool (and regex)

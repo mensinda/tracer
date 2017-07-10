@@ -23,18 +23,21 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+//! \file Tracer.hpp
 
 #pragma once
 
 #include "defines.hpp"
 #include "AbstractDebugInfo.hpp"
 #include "AbstractTracer.hpp"
-#include <vector>
 
 namespace tracer {
 
-enum class TraceerEngines { LIBUNWIND, GLIBC, WIN32_TRACER, DUMMY };
-enum class DebuggerEngines { LIBDWFL, LIBBFD, WIN32_INFO, EXTERNAL_FALLBACK, DUMMY };
+//! \brief All available tracer backends
+enum class TraceerEngines { LIBUNWIND = 1, GLIBC, WIN32_TRACER, DUMMY };
+
+//! \brief All available debug information backends
+enum class DebuggerEngines { LIBDWFL = 1, LIBBFD, WIN32_INFO, EXTERNAL_FALLBACK, DUMMY };
 
 /*!
  * \brief Backtrace generator
@@ -68,7 +71,7 @@ class Tracer {
   AbstractTracer *   getTracerEngine();
   AbstractDebugInfo *getDebuggerEngine();
 
-  static std::vector<TraceerEngines>  getAvaliableEngines();
-  static std::vector<DebuggerEngines> getAvaliableDebuggers();
+  static std::vector<TraceerEngines>  getAvailableEngines();
+  static std::vector<DebuggerEngines> getAvailableDebuggers();
 };
 }

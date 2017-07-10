@@ -23,12 +23,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+//! \file AbstractTracer.hpp
 
 #pragma once
 
 #include "defines.hpp"
 #include "Frame.hpp"
-#include <vector>
 
 namespace tracer {
 

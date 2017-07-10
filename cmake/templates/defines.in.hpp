@@ -32,6 +32,8 @@
 #pragma once
 
 #include <stdint.h>
+#include <vector>
+#include <string>
 
 #define USE_GLIBC     @CM_UNIX_GLIBC@ //!< Whether GLIBC's execinfo.h (backtrace) was found or not
 #define USE_LIBUNWIND @CM_UNIX_LIBUNWIND@ //!< Whether libunwind was found or not

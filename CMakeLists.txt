@@ -271,7 +271,7 @@ if( Doxygen_FOUND )
     )
   endif()
 
-  set( DOXYGEN_TARGET_FILE "${PROJECT_SOURCE_DIR}/doxygen/doxygen.tmp" )
+  set( DOXYGEN_TARGET_FILE "${PROJECT_SOURCE_DIR}/docs/doxygen.tmp" )
   configure_file( "${PROJECT_SOURCE_DIR}/Doxyfile.in" "${PROJECT_SOURCE_DIR}/Doxyfile" @ONLY )
   add_custom_command(
     OUTPUT          "${DOXYGEN_TARGET_FILE}"

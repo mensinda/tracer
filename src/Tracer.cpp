@@ -23,6 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+//! \file Tracer.cpp
 
 #include "defines.hpp"
 #include "Tracer.hpp"
@@ -59,7 +60,7 @@ using namespace tracer;
 using namespace std;
 
 //! \brief Default constructor; uses the first entrie from getAvaliableEngines and getAvaliableDebuggers
-Tracer::Tracer() : Tracer(getAvaliableEngines()[0], getAvaliableDebuggers()[0]) {}
+Tracer::Tracer() : Tracer(getAvailableEngines()[0], getAvailableDebuggers()[0]) {}
 
 /*!
  * \brief Constructor, Sets the engines
@@ -161,7 +162,7 @@ AbstractDebugInfo *Tracer::getDebuggerEngine() { return debuggerEngine; } //!< \
 
 
 //! \brief Returns a list of available tracer engines
-vector<TraceerEngines> Tracer::getAvaliableEngines() {
+vector<TraceerEngines> Tracer::getAvailableEngines() {
   vector<TraceerEngines> engines;
 
 #if USE_LIBUNWIND
@@ -180,7 +181,7 @@ vector<TraceerEngines> Tracer::getAvaliableEngines() {
 }
 
 //! \brief Returns a list of available debug info engines
-vector<DebuggerEngines> Tracer::getAvaliableDebuggers() {
+vector<DebuggerEngines> Tracer::getAvailableDebuggers() {
   vector<DebuggerEngines> engines;
 
 #if USE_DWFL

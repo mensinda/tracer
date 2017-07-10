@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['line',['line',['../structtracer_1_1_frame.html#a14f140034d2e182a939c4f7b8c672045',1,'tracer::Frame']]],
-  ['linehighlightcolor',['lineHighlightColor',['../structtracer_1_1_file_printer_1_1_file_config.html#aeab3c7804134707320c9c49a36f62dc6',1,'tracer::FilePrinter::FileConfig']]],
-  ['linesafter',['linesAfter',['../structtracer_1_1_file_printer_1_1_file_config.html#ad75e8f6caf145bf3008ae6b2e0ecfaab',1,'tracer::FilePrinter::FileConfig']]],
-  ['linesbefore',['linesBefore',['../structtracer_1_1_file_printer_1_1_file_config.html#a09754247cd712f17996992eb6ea40ecb',1,'tracer::FilePrinter::FileConfig']]],
-  ['logfile',['logFile',['../structtracer_1_1_tracer_handler_1_1_config.html#aba4ff169eb3362c03bf8ca0ac31c3c00',1,'tracer::TracerHandler::Config']]]
+  ['filename',['fileName',['../structtr___frame.html#a33efe4b0658290c2eabcb6474a82992e',1,'tr_Frame::fileName()'],['../structtracer_1_1_frame.html#a035ea22d84be1cdd6eecade7bd6174db',1,'tracer::Frame::fileName()']]],
+  ['flags',['flags',['../structtracer_1_1_frame.html#aa9d8b5e4b4b68836c1587e416d3bd05c',1,'tracer::Frame']]],
+  ['frameaddr',['frameAddr',['../structtr___frame.html#a03e8bdcb8a5a94a86d016ad15d3d51cb',1,'tr_Frame::frameAddr()'],['../structtracer_1_1_frame.html#a3cebae4e17d9bb05b38fad37ef207255',1,'tracer::Frame::frameAddr()']]],
+  ['funcname',['funcName',['../structtr___frame.html#ab1e213195df8f5880c1a7200071fbfa1',1,'tr_Frame::funcName()'],['../structtracer_1_1_frame.html#ac5c49b8f3830a7fc9f269d686d546a5f',1,'tracer::Frame::funcName()']]]
 ];

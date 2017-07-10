@@ -23,6 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+//! \file TracerHandler.cpp
 
 #include "defines.hpp"
 #include "TracerHandler.hpp"
@@ -74,8 +75,8 @@ void TracerHandler::sigHandler(int sigNum) {
 #endif
   }
 
-  auto tracerEngines   = Tracer::getAvaliableEngines();
-  auto debuggerEngines = Tracer::getAvaliableDebuggers();
+  auto tracerEngines   = Tracer::getAvailableEngines();
+  auto debuggerEngines = Tracer::getAvailableDebuggers();
 
   TraceerEngines  tEngine  = tracerEngines[0];
   DebuggerEngines tDebuger = debuggerEngines[0];
@@ -102,13 +103,18 @@ void TracerHandler::sigHandler(int sigNum) {
 
   t.trace();
 
-  AbstractPrinter *p = th->printer.get();
+  AbstractPrinter *  p    = th->printer.get();
+  SystemInfoPrinter *sysP = nullptr;
   if (!p) {
     cerr << "[TRACER] (sigHandler) Fatal error: Printer not set (this code should never be executed)" << endl;
     goto error;
   }
 
   p->setTrace(&t);
+  sysP = dynamic_cast<SystemInfoPrinter *>(p);
+  if (sysP) {
+    sysP->setSignum(sigNum);
+  }
 
   if (cfg.autoPrintToStdErr) {
     p->printToStdErr();

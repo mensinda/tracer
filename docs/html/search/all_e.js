@@ -1,21 +1,15 @@
 var searchData=
 [
-  ['seper1',['seper1',['../structtracer_1_1_default_printer_1_1_config.html#a980e39262b006f9d10851d6c8592bfba',1,'tracer::DefaultPrinter::Config']]],
-  ['seper2',['seper2',['../structtracer_1_1_default_printer_1_1_config.html#af0b7ca7d1b12aff63588bfb64b053d0a',1,'tracer::DefaultPrinter::Config']]],
-  ['seper3',['seper3',['../structtracer_1_1_default_printer_1_1_config.html#a077bb9dbb40cc3d8e8a7f52e654f6943',1,'tracer::DefaultPrinter::Config']]],
-  ['setconfig',['setConfig',['../classtracer_1_1_default_printer.html#a2981a8d6c4cb6f58ca5cb1738470fbcf',1,'tracer::DefaultPrinter::setConfig()'],['../classtracer_1_1_tracer_handler.html#add3e3ebc8029b9889825d302fc7a3000',1,'tracer::TracerHandler::setConfig()']]],
-  ['setcontext',['setContext',['../classtracer_1_1_abstract_tracer.html#a371249b459c5d3ba220f28a4e8623462',1,'tracer::AbstractTracer::setContext()'],['../classtracer_1_1_lib_unwind_tracer.html#a119180523f10e1a6fc217ef696ed91d3',1,'tracer::LibUnwindTracer::setContext()']]],
-  ['setfileprinterconfig',['setFilePrinterConfig',['../classtracer_1_1_file_printer.html#ae7f9de3154b7300970e310ffee9a00da',1,'tracer::FilePrinter']]],
-  ['setsignum',['setSignum',['../classtracer_1_1_system_info_printer.html#a9937500fdaf0cee7bd0f8ad8d7939c99',1,'tracer::SystemInfoPrinter']]],
-  ['settrace',['setTrace',['../classtracer_1_1_abstract_printer.html#ab059ec7feff3887489effa2bd2781b55',1,'tracer::AbstractPrinter']]],
-  ['setup',['setup',['../classtracer_1_1_tracer_handler.html#a57bb16ed2df0675b55ec0a07a1d8149d',1,'tracer::TracerHandler']]],
-  ['setuptrace',['setupTrace',['../classtracer_1_1_abstract_printer.html#a6797b963c5641707f31567d6bef587c2',1,'tracer::AbstractPrinter::setupTrace()'],['../classtracer_1_1_default_printer.html#adebf8ea58f0dce7bd0776fa1d37b717d',1,'tracer::DefaultPrinter::setupTrace()']]],
-  ['shortenfiles',['shortenFiles',['../structtracer_1_1_default_printer_1_1_config.html#af81ace649a93c774c1db45deb02700b8',1,'tracer::DefaultPrinter::Config']]],
-  ['shortenmodules',['shortenModules',['../structtracer_1_1_default_printer_1_1_config.html#acea03026d40cfcaf8fc8eaf94f42fa0f',1,'tracer::DefaultPrinter::Config']]],
-  ['signum2str',['sigNum2Str',['../classtracer_1_1_system_info_printer.html#a20a9d4e6d73d9e372029934230ae87e1',1,'tracer::SystemInfoPrinter']]],
-  ['signums',['signums',['../structtracer_1_1_tracer_handler_1_1_config.html#ae12b3e1fd06890f6111b121282a3fc86',1,'tracer::TracerHandler::Config']]],
-  ['suffix',['suffix',['../structtracer_1_1_default_printer_1_1_config.html#a44496e56c49aa4842c90c30c629b9a1e',1,'tracer::DefaultPrinter::Config']]],
-  ['symbols',['symbols',['../classtracer_1_1internal_1_1asymbol_r_a_i_i.html#a273f43303dfdc0ee6e593963dfaff0e1',1,'tracer::internal::asymbolRAII']]],
-  ['system',['system',['../classtracer_1_1_printer_container.html#a640284a30d232b5e13ffcd42ebe8ba98',1,'tracer::PrinterContainer']]],
-  ['systeminfoprinter',['SystemInfoPrinter',['../classtracer_1_1_system_info_printer.html',1,'tracer']]]
+  ['plain',['plain',['../classtracer_1_1_printer_container.html#ae3e6b1a5f1c43260824623d8c884196e',1,'tracer::PrinterContainer']]],
+  ['preferreddebuggerengines',['preferredDebuggerEngines',['../structtracer_1_1_tracer_handler_1_1_config.html#a329b1191e7d5dccd06dbb54b8f7bf7fe',1,'tracer::TracerHandler::Config']]],
+  ['preferredtracerengines',['preferredTracerEngines',['../structtracer_1_1_tracer_handler_1_1_config.html#ac2e7d82f159c33fb5ebcbd7e8834bebf',1,'tracer::TracerHandler::Config']]],
+  ['prefix',['prefix',['../structtr___default_printer___config.html#a75b413a771b7f0fb5d5b0748d3d8a0b3',1,'tr_DefaultPrinter_Config::prefix()'],['../structtracer_1_1_default_printer_1_1_config.html#ae483af9ab03c86a4579364fd242116c9',1,'tracer::DefaultPrinter::Config::prefix()']]],
+  ['printer_5fcaster',['PRINTER_CASTER',['../c_printers_8cpp.html#a404c8f7d49f49521c0e3a81bd811f62a',1,'cPrinters.cpp']]],
+  ['printercontainer',['PrinterContainer',['../classtracer_1_1_printer_container.html',1,'tracer::PrinterContainer'],['../classtracer_1_1_printer_container.html#a8dc111440ee3cbf4fa97590dc71cd373',1,'tracer::PrinterContainer::PrinterContainer(AbstractPrinter *p)'],['../classtracer_1_1_printer_container.html#a2d3d3b86813b099a832ba88b553371c9',1,'tracer::PrinterContainer::PrinterContainer(PrinterContainer &amp;&amp;moveFrom)']]],
+  ['printercontainer_2ecpp',['PrinterContainer.cpp',['../_printer_container_8cpp.html',1,'']]],
+  ['printercontainer_2ehpp',['PrinterContainer.hpp',['../_printer_container_8hpp.html',1,'']]],
+  ['printtofile',['printToFile',['../classtracer_1_1_abstract_printer.html#a7f48a43dad76a3bc383f83a1b78dfd7a',1,'tracer::AbstractPrinter']]],
+  ['printtostderr',['printToStdErr',['../classtracer_1_1_abstract_printer.html#acace5d6c355d87546bb194c8972b2121',1,'tracer::AbstractPrinter']]],
+  ['printtostdout',['printToStdOut',['../classtracer_1_1_abstract_printer.html#aefe7aeaaa724b75a05ac70f131c6a808',1,'tracer::AbstractPrinter']]],
+  ['processframes',['processFrames',['../classtracer_1_1_abstract_debug_info.html#a7a851d1aaf189e90888b807bd306da52',1,'tracer::AbstractDebugInfo::processFrames()'],['../classtracer_1_1_debug_info_dummy.html#ab91630168cdb5653d02188ab84a913e6',1,'tracer::DebugInfoDummy::processFrames()'],['../classtracer_1_1_debug_info_external_fallback.html#a5875e2efcfd6fabb3800ea8a5844707a',1,'tracer::DebugInfoExternalFallback::processFrames()'],['../classtracer_1_1_debug_info_b_f_d.html#a3574a2de599453d8481d48fc6cfe8b3f',1,'tracer::DebugInfoBFD::processFrames()'],['../classtracer_1_1_debug_info_d_w_f_l.html#afdd7d374b3d94de88ebeb4f5d60a1371',1,'tracer::DebugInfoDWFL::processFrames()'],['../classtracer_1_1_debug_info_w_i_n32.html#a525dcf926e4d52cca2c6857d58be2feb',1,'tracer::DebugInfoWIN32::processFrames()']]]
 ];

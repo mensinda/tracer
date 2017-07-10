@@ -23,15 +23,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+//! \file TracerHandler.hpp
 
 #pragma once
 
 #include "defines.hpp"
-#include "AbstractPrinter.hpp"
 #include "PrinterContainer.hpp"
 #include "Tracer.hpp"
-#include <signal.h>
-#include <vector>
 
 namespace tracer {
 

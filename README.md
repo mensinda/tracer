@@ -1,6 +1,8 @@
-# Tracer                                {#mainpage}
+# Tracer
 
-*nix / Windows Stack trace generator
+A C / C++ *nix / Windows Stack trace generator.
+
+Full Doxygen documentation: https://mensinda.github.io/tracer/html/index.html
 
 ## Build Status
 
@@ -8,6 +10,15 @@
 |---------|--------|
 | Linux   | [![Build Status](https://travis-ci.org/mensinda/tracer.svg?branch=master)](https://travis-ci.org/mensinda/tracer) |
 | Windows | [![Build status](https://ci.appveyor.com/api/projects/status/lwnc7tv8qy2af7ck?svg=true)](https://ci.appveyor.com/project/mensinda/tracer) |
+
+# About the C wrapper
+
+Tracer is written in C++11, but has an integrated C wrapper. All (supported) C++ class objects can be acquired with
+`tr_get<ClassName>` functions and must be destroyed with `tr_free<ClassName>` functions.
+
+All (supported) methodes can then be called with `tr_<ClassName>__<functionName>`.
+
+The doxygen generated documentation can be found here: https://mensinda.github.io/tracer/html/tracer_8h.html
 
 # Usage
 
@@ -18,6 +29,12 @@ Config (TracerHandler::Config)
 
 ```cpp
 TracerHandler::getTracer()->defaultSetup();
+```
+
+or in C:
+
+```c
+tr_defaultSetup();
 ```
 
 This will generate the following output for the segFaultTest (in test/segFaultTest):
@@ -38,6 +55,24 @@ auto printer = PrinterContainer::fancy();    // Generates a printer
 // Edit printer config
 
 tHandler->setup(std::move(printer));         // Sets things up. Now the signal handler is setup
+```
+
+or using C:
+
+```c
+tr_TracerHandler_t *      trTH = tr_getTracerHandler();             // Get the handler
+tr_TracerHandler_Config_t cfg  = tr_TracerHandler__getConfig(trTH); // get the current config
+
+// edit cfg
+tr_TracerHandler__setConfig(trTH, cfg);                             // Update the config
+
+tr_Printer_t *systemPrinter = tr_getPrinter__system();              // Generates a printer
+// Edit printer config
+tr_TracerHandler__setup(trTH, systemPrinter);                       // Sets things up. Now the signal handler is setup
+
+// Do some cleanup
+tr_freePrinter(systemPrinter);
+tr_freeTracerHandler(trTH);
 ```
 
 # Status

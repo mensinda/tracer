@@ -23,13 +23,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+//! \file SystemInfoPrinter.hpp
 
 #pragma once
 
 #include "defines.hpp"
 #include "DefaultPrinter.hpp"
 #include <signal.h>
-#include <vector>
 
 #if _WIN32
 #define _NSIG NSIG
@@ -37,8 +37,10 @@
 
 #ifndef _NSIG
 #ifdef NSIG
+//! NSIG found
 #define _NSIG NSIG
 #else // NSIG
+//! Define as 0
 #define _NSIG 0
 #endif // NSIG
 #endif // _NSIG

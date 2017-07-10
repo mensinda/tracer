@@ -23,11 +23,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+//! \file AbstractPrinter.hpp
 
 #pragma once
 
 #include "defines.hpp"
-#include <string>
 
 namespace tracer {
 

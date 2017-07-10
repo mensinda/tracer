@@ -9,6 +9,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -44,6 +51,21 @@ $(function() {
 });
 </script>
 <div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('classtracer_1_1_tracer.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -58,11 +80,6 @@ $(function() {
 </iframe>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><b>tracer</b></li><li class="navelem"><a class="el" href="classtracer_1_1_tracer.html">Tracer</a></li>  </ul>
-</div>
-</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
@@ -80,7 +97,7 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a64d2e3d528876b9ce16b172fe0026d99"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracer_1_1_tracer.html#a64d2e3d528876b9ce16b172fe0026d99">Tracer</a> (TraceerEngines engine, DebuggerEngines debugger)</td></tr>
+<tr class="memitem:a64d2e3d528876b9ce16b172fe0026d99"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracer_1_1_tracer.html#a64d2e3d528876b9ce16b172fe0026d99">Tracer</a> (<a class="el" href="_tracer_8hpp.html#a307b0c89b3d0fc6422533a11f410b997">TraceerEngines</a> engine, <a class="el" href="_tracer_8hpp.html#a35bff3c105be579fa6797889dc9bd129">DebuggerEngines</a> debugger)</td></tr>
 <tr class="memdesc:a64d2e3d528876b9ce16b172fe0026d99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, Sets the engines.  <a href="#a64d2e3d528876b9ce16b172fe0026d99">More...</a><br /></td></tr>
 <tr class="separator:a64d2e3d528876b9ce16b172fe0026d99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2f5c45cce2ca297e44f746b9440b5b7"><td class="memItemLeft" align="right" valign="top"><a id="ab2f5c45cce2ca297e44f746b9440b5b7"></a>
@@ -121,20 +138,20 @@ std::vector&lt; <a class="el" href="structtracer_1_1_frame.html">Frame</a> &gt; 
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a47fbb26019159d0e066f0707858977ec"><td class="memItemLeft" align="right" valign="top"><a id="a47fbb26019159d0e066f0707858977ec"></a>
-static std::vector&lt; TraceerEngines &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracer_1_1_tracer.html#a47fbb26019159d0e066f0707858977ec">getAvaliableEngines</a> ()</td></tr>
-<tr class="memdesc:a47fbb26019159d0e066f0707858977ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of available tracer engines. <br /></td></tr>
-<tr class="separator:a47fbb26019159d0e066f0707858977ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90c0b652970e20858b59196dafef1233"><td class="memItemLeft" align="right" valign="top"><a id="a90c0b652970e20858b59196dafef1233"></a>
-static std::vector&lt; DebuggerEngines &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracer_1_1_tracer.html#a90c0b652970e20858b59196dafef1233">getAvaliableDebuggers</a> ()</td></tr>
-<tr class="memdesc:a90c0b652970e20858b59196dafef1233"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of available debug info engines. <br /></td></tr>
-<tr class="separator:a90c0b652970e20858b59196dafef1233"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a631bc3f997459cdb6da47b7371b50e14"><td class="memItemLeft" align="right" valign="top"><a id="a631bc3f997459cdb6da47b7371b50e14"></a>
+static std::vector&lt; <a class="el" href="_tracer_8hpp.html#a307b0c89b3d0fc6422533a11f410b997">TraceerEngines</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracer_1_1_tracer.html#a631bc3f997459cdb6da47b7371b50e14">getAvailableEngines</a> ()</td></tr>
+<tr class="memdesc:a631bc3f997459cdb6da47b7371b50e14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of available tracer engines. <br /></td></tr>
+<tr class="separator:a631bc3f997459cdb6da47b7371b50e14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74f6901f80b40169511de6b6887a6d2d"><td class="memItemLeft" align="right" valign="top"><a id="a74f6901f80b40169511de6b6887a6d2d"></a>
+static std::vector&lt; <a class="el" href="_tracer_8hpp.html#a35bff3c105be579fa6797889dc9bd129">DebuggerEngines</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtracer_1_1_tracer.html#a74f6901f80b40169511de6b6887a6d2d">getAvailableDebuggers</a> ()</td></tr>
+<tr class="memdesc:a74f6901f80b40169511de6b6887a6d2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of available debug info engines. <br /></td></tr>
+<tr class="separator:a74f6901f80b40169511de6b6887a6d2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Backtrace generator. </p>
 <p>This class generates a Backtrace using different backends and stores it in the platform independent <a class="el" href="structtracer_1_1_frame.html" title="Describes a frame. ">Frame</a> struct </p>
 
-<p class="definition">Definition at line <a class="el" href="_tracer_8hpp_source.html#l00045">45</a> of file <a class="el" href="_tracer_8hpp_source.html">Tracer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_tracer_8hpp_source.html#l00048">48</a> of file <a class="el" href="_tracer_8hpp_source.html">Tracer.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a64d2e3d528876b9ce16b172fe0026d99"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a64d2e3d528876b9ce16b172fe0026d99">&#9670;&nbsp;</a></span>Tracer()</h2>
@@ -145,13 +162,13 @@ static std::vector&lt; DebuggerEngines &gt;&#160;</td><td class="memItemRight" v
         <tr>
           <td class="memname">Tracer::Tracer </td>
           <td>(</td>
-          <td class="paramtype">TraceerEngines&#160;</td>
+          <td class="paramtype"><a class="el" href="_tracer_8hpp.html#a307b0c89b3d0fc6422533a11f410b997">TraceerEngines</a>&#160;</td>
           <td class="paramname"><em>engine</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">DebuggerEngines&#160;</td>
+          <td class="paramtype"><a class="el" href="_tracer_8hpp.html#a35bff3c105be579fa6797889dc9bd129">DebuggerEngines</a>&#160;</td>
           <td class="paramname"><em>debugger</em>&#160;</td>
         </tr>
         <tr>
@@ -174,7 +191,7 @@ static std::vector&lt; DebuggerEngines &gt;&#160;</td><td class="memItemRight" v
 <dd>
 If not the dummy engines will be used </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_tracer_8cpp_source.html#l00072">72</a> of file <a class="el" href="_tracer_8cpp_source.html">Tracer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_tracer_8cpp_source.html#l00073">73</a> of file <a class="el" href="_tracer_8cpp_source.html">Tracer.cpp</a>.</p>
 
 </div>
 </div>
@@ -197,17 +214,21 @@ If not the dummy engines will be used </dd></dl>
 <p>Generates the stack trace. </p>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the generated frames </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_tracer_8cpp_source.html#l00144">144</a> of file <a class="el" href="_tracer_8cpp_source.html">Tracer.cpp</a>.</p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
+<p class="definition">Definition at line <a class="el" href="_tracer_8cpp_source.html#l00145">145</a> of file <a class="el" href="_tracer_8cpp_source.html">Tracer.cpp</a>.</p>
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><iframe scrolling="no" frameborder="0" src="classtracer_1_1_tracer_a5b6a1b83631ff1e10c8b83a8297e2346_cgraph.svg" width="396" height="118"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classtracer_1_1_tracer_a5b6a1b83631ff1e10c8b83a8297e2346_icgraph.svg" width="366" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classtracer_1_1_tracer_a5b6a1b83631ff1e10c8b83a8297e2346_icgraph.svg" width="564" height="122"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -218,11 +239,15 @@ Here is the caller graph for this function:</div>
 <li>/home/daniel/projects/tracer/src/<a class="el" href="_tracer_8cpp_source.html">Tracer.cpp</a></li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.13
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>tracer</b></li><li class="navelem"><a class="el" href="classtracer_1_1_tracer.html">Tracer</a></li>
+    <li class="footer">Generated on Mon Jul 10 2017 16:51:05 for Tracer by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
+  </ul>
+</div>
 </body>
 </html>

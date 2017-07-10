@@ -9,6 +9,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -44,6 +51,21 @@ $(function() {
 });
 </script>
 <div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('classtracer_1_1_abstract_printer.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -58,11 +80,6 @@ $(function() {
 </iframe>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><b>tracer</b></li><li class="navelem"><a class="el" href="classtracer_1_1_abstract_printer.html">AbstractPrinter</a></li>  </ul>
-</div>
-</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
@@ -78,18 +95,22 @@ $(function() {
  <a href="classtracer_1_1_abstract_printer.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_abstract_printer_8hpp_source.html">AbstractPrinter.hpp</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for tracer::AbstractPrinter:</div>
-<div class="dyncontent">
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for tracer::AbstractPrinter:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><iframe scrolling="no" frameborder="0" src="classtracer_1_1_abstract_printer__inherit__graph.svg" width="355" height="262"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for tracer::AbstractPrinter:</div>
-<div class="dyncontent">
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for tracer::AbstractPrinter:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
 <div class="center"><iframe scrolling="no" frameborder="0" src="classtracer_1_1_abstract_printer__coll__graph.svg" width="176" height="127"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -183,7 +204,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <p>Generates a string for the complete stack trace. </p>
 <dl class="section return"><dt>Returns</dt><dd>The generated string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00046">46</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00047">47</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
 
 </div>
 </div>
@@ -212,7 +233,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The generated string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00087">87</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00088">88</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
 
 </div>
 </div>
@@ -241,7 +262,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The generated string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00099">99</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00100">100</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
 
 </div>
 </div>
@@ -274,7 +295,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 <p>Reimplemented in <a class="el" href="classtracer_1_1_file_printer.html#a665379ea293460790b89ed01bf9d9caa">tracer::FilePrinter</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00068">68</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00069">69</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
 
 </div>
 </div>
@@ -303,7 +324,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The generated string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00075">75</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00076">76</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
 
 </div>
 </div>
@@ -336,7 +357,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 <p>Reimplemented in <a class="el" href="classtracer_1_1_system_info_printer.html#ab00eb0d8caa600613c393c42bd9b89fc">tracer::SystemInfoPrinter</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00067">67</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00068">68</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
 
 </div>
 </div>
@@ -376,11 +397,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </dl>
 <dl class="section note"><dt>Note</dt><dd>The contents of file will be removed when append is false. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00114">114</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classtracer_1_1_abstract_printer_a7f48a43dad76a3bc383f83a1b78dfd7a_icgraph.svg" width="383" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00115">115</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
+<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-2-content" class="dyncontent" style="display:none;">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classtracer_1_1_abstract_printer_a7f48a43dad76a3bc383f83a1b78dfd7a_icgraph.svg" width="582" height="88"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -411,11 +434,13 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="section warning"><dt>Warning</dt><dd>This function MUST be called before a trace string can be generated! </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00144">144</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classtracer_1_1_abstract_printer_ab059ec7feff3887489effa2bd2781b55_icgraph.svg" width="390" height="118"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<p class="definition">Definition at line <a class="el" href="_abstract_printer_8cpp_source.html#l00145">145</a> of file <a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a>.</p>
+<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classtracer_1_1_abstract_printer_ab059ec7feff3887489effa2bd2781b55_icgraph.svg" width="588" height="136"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -426,11 +451,15 @@ Here is the caller graph for this function:</div>
 <li>/home/daniel/projects/tracer/src/printers/<a class="el" href="_abstract_printer_8cpp_source.html">AbstractPrinter.cpp</a></li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.13
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>tracer</b></li><li class="navelem"><a class="el" href="classtracer_1_1_abstract_printer.html">AbstractPrinter</a></li>
+    <li class="footer">Generated on Mon Jul 10 2017 16:51:05 for Tracer by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
+  </ul>
+</div>
 </body>
 </html>
