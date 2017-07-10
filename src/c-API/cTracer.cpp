@@ -29,6 +29,7 @@
 #include "tracer.h"
 #include "tracerInternal.hpp"
 #include <limits>
+#include <stddef.h>
 #include <string.h>
 
 using namespace tracer;
