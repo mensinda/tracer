@@ -25,7 +25,7 @@
  */
 //! \file LibUnwindTracer.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "LibUnwindTracer.hpp"
 #include <iostream>
 

@@ -25,7 +25,7 @@
  */
 //! \file cPrinters.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "tracer.h"
 #include "tracerInternal.hpp"
 #include <string.h>

@@ -25,7 +25,7 @@
  */
 //! \file AbstractDebugInfo.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "AbstractDebugInfo.hpp"
 
 using namespace tracer;

@@ -24,7 +24,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "TracerHandler.hpp"
 #include <iostream>
 #include <signal.h>

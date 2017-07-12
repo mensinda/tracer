@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "AbstractPrinter.hpp"
 
 namespace tracer {

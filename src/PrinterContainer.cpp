@@ -25,7 +25,7 @@
  */
 //! \file PrinterContainer.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "PrinterContainer.hpp"
 
 using namespace tracer;

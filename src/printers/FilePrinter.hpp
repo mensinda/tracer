@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "DefaultPrinter.hpp"
 
 #if !DISABLE_STD_FILESYSTEM

@@ -25,7 +25,7 @@
  */
 //! \file DebugInfoExternalFallback.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "DebugInfoExternalFallback.hpp"
 #include <dlfcn.h>
 #include <iostream>

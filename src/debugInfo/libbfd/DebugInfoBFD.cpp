@@ -25,7 +25,7 @@
  */
 //! \file DebugInfoBFD.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "DebugInfoBFD.hpp"
 #include <cxxabi.h>
 #include <dlfcn.h>

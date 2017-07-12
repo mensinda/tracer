@@ -25,7 +25,7 @@
  */
 //! \file AbstractPrinter.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "AbstractPrinter.hpp"
 #include "Tracer.hpp"
 #include <fstream>

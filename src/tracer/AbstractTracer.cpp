@@ -25,7 +25,7 @@
  */
 //! \file AbstractTracer.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "AbstractTracer.hpp"
 
 using namespace tracer;

@@ -25,7 +25,7 @@
  */
 //! \file TracerHandler.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "TracerHandler.hpp"
 #include "FancyPrinter.hpp"
 #include <iostream>

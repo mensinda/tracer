@@ -25,7 +25,7 @@
  */
 //! \file DebugInfoDummy.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "DebugInfoDummy.hpp"
 
 using namespace tracer;

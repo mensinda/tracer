@@ -25,7 +25,7 @@
  */
 //! \file DebugInfoDWLF.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "DebugInfoDWLF.hpp"
 #include <cxxabi.h>
 #include <dwarf.h>

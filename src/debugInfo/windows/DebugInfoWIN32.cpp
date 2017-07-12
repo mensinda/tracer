@@ -25,7 +25,7 @@
  */
 //! \file DebugInfoWIN32.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "DebugInfoWIN32.hpp"
 #include <dbghelp.h>
 #include <iostream>

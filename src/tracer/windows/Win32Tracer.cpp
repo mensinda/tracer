@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "Win32Tracer.hpp"
 
 using namespace tracer;

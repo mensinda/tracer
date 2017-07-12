@@ -27,9 +27,13 @@
 
 #pragma once
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "PrinterContainer.hpp"
 #include "Tracer.hpp"
+
+#ifndef USE_GLIBC
+#error "TRACER DEFINES NOT FOUND"
+#endif
 
 namespace tracer {
 

@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "FilePrinter.hpp"
 #include "SystemInfoPrinter.hpp"
 

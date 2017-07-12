@@ -29,7 +29,7 @@
 
 #define UNW_LOCAL_ONLY
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "AbstractTracer.hpp"
 #include <libunwind.h>
 

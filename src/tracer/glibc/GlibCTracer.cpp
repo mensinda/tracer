@@ -25,7 +25,7 @@
  */
 //! \file GlibCTracer.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "GlibCTracer.hpp"
 #include <execinfo.h>
 

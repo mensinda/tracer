@@ -25,7 +25,7 @@
  */
 //! \file FancyPrinter.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "FancyPrinter.hpp"
 
 using namespace tracer;

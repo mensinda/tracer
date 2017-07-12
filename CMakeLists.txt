@@ -24,7 +24,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 cmake_minimum_required( VERSION 3.5 )
-project( tracer LANGUAGES CXX )
+project( Tracer LANGUAGES CXX )
 
 message( STATUS "Using CMake version: ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}\n" )
 include( ${PROJECT_SOURCE_DIR}/cmake/cmakeBuildTools/cmakeBuildTools.cmake )
@@ -119,7 +119,7 @@ add_compiler(
              "-Wno-gnu-anonymous-struct -Wno-nested-anon-types -Wno-exit-time-destructors"
              "-Wno-global-constructors -Wno-switch-enum -Wno-reserved-id-macro"
              "-Wno-documentation-unknown-command -Wno-unknown-pragmas"
-             "-Wno-disabled-macro-expansion -Wno-undef -save-temps"
+             "-Wno-disabled-macro-expansion -Wno-undef"
   DEBUG      "-Werror -gline-tables-only"
   RELEASE    "-O3 -gline-tables-only"
 
@@ -246,7 +246,7 @@ include_directories( SYSTEM
 )
 
 include_directories(
-  ${tracer_LIB_INCLUDE_DIRECTORIES}
+  ${Tracer_LIB_INCLUDE_DIRECTORIES}
   ${PROJECT_BINARY_DIR}
 )
 
@@ -254,9 +254,17 @@ include_directories(
 # Add subdirectories #
 ######################
 
-foreach( I IN LISTS tracer_SUBDIR_LIST )
+foreach( I IN LISTS Tracer_SUBDIR_LIST )
   add_subdirectory( "${I}" )
-endforeach( I IN LISTS tracer_SUBDIR_LIST )
+endforeach( I IN LISTS Tracer_SUBDIR_LIST )
+
+# Fix include dirs for parent projects
+foreach( I IN LISTS Tracer_LIB_INCLUDE_DIRECTORIES PROJECT_BINARY_DIR )
+  target_include_directories(tracer PUBLIC
+      $<BUILD_INTERFACE:${I}>
+      $<INSTALL_INTERFACE:include/tracer>
+  )
+endforeach()
 
 ###########
 # Doxygen #
@@ -288,7 +296,7 @@ endif( Doxygen_FOUND )
 # Generate Files #
 ##################
 
-configure_file( "${PROJECT_SOURCE_DIR}/cmake/templates/defines.in.hpp" "${PROJECT_BINARY_DIR}/defines.hpp" @ONLY )
+configure_file( "${PROJECT_SOURCE_DIR}/cmake/templates/defines.in.hpp" "${PROJECT_BINARY_DIR}/tracerDef.hpp" @ONLY )
 
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Version.cmake"
@@ -303,5 +311,4 @@ install(
   DESTINATION lib/cmake/${PROJECT_NAME}
 )
 
-install( EXPORT ${PROJECT_NAME}Targets             DESTINATION lib/cmake/${PROJECT_NAME} )
-install( FILES "${PROJECT_BINARY_DIR}/defines.hpp" DESTINATION include/tracer )
+install( EXPORT ${PROJECT_NAME}Targets DESTINATION lib/cmake/${PROJECT_NAME} )

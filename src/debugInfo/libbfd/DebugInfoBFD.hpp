@@ -29,7 +29,7 @@
 
 #define PACKAGE // required by bfd.h
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "AbstractDebugInfo.hpp"
 #include <bfd.h>
 

@@ -25,7 +25,7 @@
  */
 //! \file DefaultPrinter.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "DefaultPrinter.hpp"
 #include "Tracer.hpp"
 #include <iomanip>

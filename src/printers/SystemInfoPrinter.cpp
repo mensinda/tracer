@@ -25,7 +25,7 @@
  */
 //! \file SystemInfoPrinter.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "SystemInfoPrinter.hpp"
 #include <fstream>
 #include <iostream>

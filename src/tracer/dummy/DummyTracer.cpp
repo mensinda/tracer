@@ -25,7 +25,7 @@
  */
 //! \file DummyTracer.cpp
 
-#include "defines.hpp"
+#include "tracerDef.hpp"
 #include "DummyTracer.hpp"
 
 using namespace tracer;
