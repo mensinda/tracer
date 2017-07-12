@@ -49,7 +49,7 @@ ExperimentalAutoDetectBinPacking: false
 ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH ]
 
 IncludeCategories:
- - Regex: 'defines|tracer.h'
+ - Regex: 'tracerDef.hpp|tracer.h'
    Priority: -1
  - Regex: '[A-Z][a-zA-Z0-9]*\.hpp'
    Priority: 10

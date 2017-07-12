@@ -25,8 +25,8 @@
  */
 //! \file cTracer.cpp
 
-#include "tracerDef.hpp"
 #include "tracer.h"
+#include "tracerDef.hpp"
 #include "tracerInternal.hpp"
 #include <limits>
 #include <stddef.h>

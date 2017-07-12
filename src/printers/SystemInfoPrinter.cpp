@@ -283,7 +283,7 @@ string SystemInfoPrinter::genStringPreFrameIMPL(size_t frameNum) {
   string outStr = "\x1b[33mGenerating backtrace\x1b[0m";
 
   if (sigNum != _NSIG)
-    outStr += " \x1b[1m[Recieved Signal \x1b[31;1m" + sigNum2Str(sigNum) + "\x1b[39;1m]\x1b[0m";
+    outStr += " \x1b[1m[Received Signal \x1b[31;1m" + sigNum2Str(sigNum) + "\x1b[39;1m]\x1b[0m";
 
   outStr += "\n\n\x1b[33mSystem Information:\x1b[0m\n";
 
